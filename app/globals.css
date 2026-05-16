@@ -1060,3 +1060,62 @@ html, body {
   transition: transform 200ms;
 }
 .panel-label .arrow { display: inline-block; transition: transform 200ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-card,
+  .cta,
+  .hud .dot,
+  .bg-burst,
+  .bg-burst.alt,
+  .reveal,
+  .reveal.d1,
+  .reveal.d2,
+  .reveal.d3,
+  .reveal.d4 {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .reveal,
+  .reveal.d1,
+  .reveal.d2,
+  .reveal.d3,
+  .reveal.d4 {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .world {
+    transition: none !important;
+  }
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .scene { perspective: none; }
+  .scene-scaler { transform: none !important; }
+  .world {
+    transform: none !important;
+    transform-style: flat;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 80px 16px;
+  }
+  .deco, .hero { display: none; }
+  .panel {
+    position: relative !important;
+    transform: none !important;
+    top: auto; left: auto;
+  }
+  .panel-card {
+    position: relative;
+    transform: none;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    animation: none;
+  }
+  .hud .corner.bl { display: none; }
+  .section-inner { padding: 60px 20px 40px 20px; }
+  .section-body { grid-template-columns: 1fr !important; gap: 24px !important; }
+}
