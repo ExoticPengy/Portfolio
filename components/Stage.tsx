@@ -1,0 +1,35 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { useTweaks } from "@/hooks/useTweaks";
+import type { View } from "@/lib/types";
+
+export default function Stage() {
+  const { tweaks } = useTweaks();
+  const [view, setView] = useState<View>("home");
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
+  const worldRef = useRef<HTMLDivElement | null>(null);
+  const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseRef.current.tx = e.clientX / rect.width - 0.5;
+    mouseRef.current.ty = e.clientY / rect.height - 0.5;
+  };
+
+  return (
+    <div className="app" onMouseMove={onMouseMove}>
+      <div className="bg-grid" />
+      <div className="bg-vignette" />
+
+      <div className={`scene ${view !== "home" && view !== "flying" ? "hidden" : ""}`}>
+        <div className="scene-scaler">
+          <div ref={worldRef} className="world">
+            <div style={{ color: "var(--fg)", padding: 40 }}>STAGE SHELL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
