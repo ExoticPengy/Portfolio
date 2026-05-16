@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useTweaks } from "@/hooks/useTweaks";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
+import Decor from "./Decor";
 
 export default function Stage() {
   const { tweaks } = useTweaks();
@@ -27,6 +28,7 @@ export default function Stage() {
       <div className={`scene ${view !== "home" && view !== "flying" ? "hidden" : ""}`}>
         <div className="scene-scaler">
           <div ref={worldRef} className="world">
+            <Decor />
             <Hero fading={view !== "home"} />
           </div>
         </div>
