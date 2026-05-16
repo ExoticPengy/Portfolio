@@ -5,6 +5,7 @@ import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
 import { useParallax } from "@/hooks/useParallax";
 import { useFlyTransition } from "@/hooks/useFlyTransition";
+import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -42,6 +43,8 @@ export default function Stage() {
     worldRef, flashRef, streakRef,
     motionIntensity: tweaks.motionIntensity,
   });
+
+  useKeyboardNav({ view, keyboardIdx, setKeyboardIdx, fly, back });
 
   return (
     <div className="app" onMouseMove={onMouseMove}>
