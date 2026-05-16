@@ -5,6 +5,8 @@ import { useTweaks } from "@/hooks/useTweaks";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
+import Panel from "./Panel";
+import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
   const { tweaks } = useTweaks();
@@ -30,6 +32,15 @@ export default function Stage() {
           <div ref={worldRef} className="world">
             <Decor />
             <Hero fading={view !== "home"} />
+            {PANELS.map((p, i) => (
+              <Panel
+                key={p.id}
+                panel={p}
+                focused={view === "home" && (focusedId === p.id || keyboardIdx === i)}
+                onActivate={() => { /* wired in Task 17 */ }}
+                onHover={() => setFocusedId(p.id)}
+              />
+            ))}
           </div>
         </div>
       </div>
