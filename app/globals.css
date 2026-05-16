@@ -1,11 +1,6 @@
 /* === ML Portfolio — Kinetic 3D menu === */
 
 :root {
-  /* fonts */
-  --font-display: 'Archivo Black', sans-serif;
-  --font-body: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
-
   /* default palette: PURPLE · CYAN (synthwave) */
   --bg-0: #0a0418;
   --bg-1: #150830;
