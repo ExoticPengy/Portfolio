@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
+import { useParallax } from "@/hooks/useParallax";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -18,6 +19,8 @@ export default function Stage() {
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
   const worldRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+
+  useParallax(worldRef, mouseRef, view, tweaks.motionIntensity);
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
