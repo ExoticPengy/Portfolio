@@ -13,6 +13,7 @@ import Hero from "./Hero";
 import Decor from "./Decor";
 import Panel from "./Panel";
 import Hud from "./Hud";
+import TweaksPanel from "./TweaksPanel";
 import { BackgroundBurst, BackgroundFx } from "./Background";
 import FxOverlays from "./FxOverlays";
 import About from "./sections/About";
@@ -96,6 +97,7 @@ export default function Stage() {
       <BackgroundFx />
 
       <Hud focused={focusedId !== null && view === "home"} />
+      <TweaksPanel />
     </div>
   );
 }
