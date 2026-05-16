@@ -6,6 +6,7 @@ import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
 import Panel from "./Panel";
+import Hud from "./Hud";
 import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
@@ -44,6 +45,8 @@ export default function Stage() {
           </div>
         </div>
       </div>
+
+      <Hud focused={focusedId !== null && view === "home"} />
     </div>
   );
 }
