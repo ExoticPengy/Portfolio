@@ -9,6 +9,7 @@ import Hero from "./Hero";
 import Decor from "./Decor";
 import Panel from "./Panel";
 import Hud from "./Hud";
+import Background from "./Background";
 import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
@@ -32,6 +33,7 @@ export default function Stage() {
     <div className="app" onMouseMove={onMouseMove}>
       <div className="bg-grid" />
       <div className="bg-vignette" />
+      <Background />
 
       <div className={`scene ${view !== "home" && view !== "flying" ? "hidden" : ""}`}>
         <div className="scene-scaler">
