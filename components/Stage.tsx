@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
@@ -10,6 +11,7 @@ import Hud from "./Hud";
 import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
+  useResponsiveScale();
   const { tweaks } = useTweaks();
   const [view, setView] = useState<View>("home");
   const [focusedId, setFocusedId] = useState<string | null>(null);
