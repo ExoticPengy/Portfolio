@@ -12,13 +12,15 @@ export function useAudio(soundEnabled: boolean) {
   // Init AudioContext on first user gesture
   useEffect(() => {
     const handler = () => {
+      window.removeEventListener("click", handler);
+      window.removeEventListener("keydown", handler);
       if (!ready.current) {
         init();
         ready.current = true;
       }
     };
-    window.addEventListener("click", handler, { once: true });
-    window.addEventListener("keydown", handler, { once: true });
+    window.addEventListener("click", handler);
+    window.addEventListener("keydown", handler);
     return () => {
       window.removeEventListener("click", handler);
       window.removeEventListener("keydown", handler);

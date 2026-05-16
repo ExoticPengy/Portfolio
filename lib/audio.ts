@@ -10,7 +10,7 @@ function getCtx(): AudioContext | null {
       return null;
     }
   }
-  if (ctx.state === "suspended") ctx.resume();
+  if (ctx.state === "suspended") ctx.resume().catch(() => {});
   return ctx;
 }
 
