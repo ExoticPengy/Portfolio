@@ -10,6 +10,7 @@ import Decor from "./Decor";
 import Panel from "./Panel";
 import Hud from "./Hud";
 import { BackgroundBurst, BackgroundFx } from "./Background";
+import FxOverlays from "./FxOverlays";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
@@ -24,6 +25,8 @@ export default function Stage() {
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
   const worldRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const flashRef = useRef<HTMLDivElement | null>(null);
+  const streakRef = useRef<HTMLDivElement | null>(null);
 
   useParallax(worldRef, mouseRef, view, tweaks.motionIntensity);
 
@@ -75,6 +78,7 @@ export default function Stage() {
         {view === "contact" && <Contact onBack={back} />}
       </div>
 
+      <FxOverlays flashRef={flashRef} streakRef={streakRef} />
       <BackgroundFx />
 
       <Hud focused={focusedId !== null && view === "home"} />
