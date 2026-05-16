@@ -9,7 +9,11 @@ import Hero from "./Hero";
 import Decor from "./Decor";
 import Panel from "./Panel";
 import Hud from "./Hud";
-import Background from "./Background";
+import { BackgroundBurst, BackgroundFx } from "./Background";
+import About from "./sections/About";
+import Projects from "./sections/Projects";
+import Skills from "./sections/Skills";
+import Contact from "./sections/Contact";
 import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
@@ -29,11 +33,16 @@ export default function Stage() {
     mouseRef.current.ty = e.clientY / rect.height - 0.5;
   };
 
+  const back = () => {
+    setView("home");
+    setFocusedId(null);
+  };
+
   return (
     <div className="app" onMouseMove={onMouseMove}>
       <div className="bg-grid" />
       <div className="bg-vignette" />
-      <Background />
+      <BackgroundBurst />
 
       <div className={`scene ${view !== "home" && view !== "flying" ? "hidden" : ""}`}>
         <div className="scene-scaler">
@@ -45,13 +54,28 @@ export default function Stage() {
                 key={p.id}
                 panel={p}
                 focused={view === "home" && (focusedId === p.id || keyboardIdx === i)}
-                onActivate={() => { /* wired in Task 17 */ }}
+                onActivate={(p) => setView(p.id)}
                 onHover={() => setFocusedId(p.id)}
               />
             ))}
           </div>
         </div>
       </div>
+
+      <div className={`section-view ${view === "about" ? "visible" : ""}`}>
+        {view === "about" && <About onBack={back} />}
+      </div>
+      <div className={`section-view ${view === "projects" ? "visible" : ""}`}>
+        {view === "projects" && <Projects onBack={back} />}
+      </div>
+      <div className={`section-view ${view === "skills" ? "visible" : ""}`}>
+        {view === "skills" && <Skills onBack={back} />}
+      </div>
+      <div className={`section-view ${view === "contact" ? "visible" : ""}`}>
+        {view === "contact" && <Contact onBack={back} />}
+      </div>
+
+      <BackgroundFx />
 
       <Hud focused={focusedId !== null && view === "home"} />
     </div>
