@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { TweaksProvider } from "@/context/TweaksContext";
 
 const archivoBlack = Archivo_Black({
   subsets: ["latin"],
@@ -31,7 +32,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${archivoBlack.variable} ${spaceGrotesk.variable} ${spaceMono.variable}`}>
-      <body data-palette="purple">{children}</body>
+      <body data-palette="purple">
+        <TweaksProvider>{children}</TweaksProvider>
+      </body>
     </html>
   );
 }
