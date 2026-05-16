@@ -6,6 +6,8 @@ import { useTweaks } from "@/hooks/useTweaks";
 import { useParallax } from "@/hooks/useParallax";
 import { useFlyTransition } from "@/hooks/useFlyTransition";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
+import { useAudio } from "@/hooks/useAudio";
+import { whoosh, click, hover as hoverSfx, thud } from "@/lib/audio";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -22,6 +24,7 @@ import { PANELS } from "@/lib/panels";
 export default function Stage() {
   useResponsiveScale();
   const { tweaks } = useTweaks();
+  useAudio(tweaks.soundEnabled);
   const [view, setView] = useState<View>("home");
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
@@ -42,9 +45,15 @@ export default function Stage() {
     view, setView, setFocusedId,
     worldRef, flashRef, streakRef,
     motionIntensity: tweaks.motionIntensity,
+    onFlyStart: (i) => { whoosh(0.5 + i / 14); click(900); },
+    onFlyEnd: () => thud(),
+    onBackStart: () => { click(440); whoosh(0.4); },
   });
 
-  useKeyboardNav({ view, keyboardIdx, setKeyboardIdx, fly, back });
+  useKeyboardNav({
+    view, keyboardIdx, setKeyboardIdx, fly, back,
+    onMove: () => hoverSfx(),
+  });
 
   return (
     <div className="app" onMouseMove={onMouseMove}>
@@ -63,7 +72,7 @@ export default function Stage() {
                 panel={p}
                 focused={view === "home" && (focusedId === p.id || keyboardIdx === i)}
                 onActivate={fly}
-                onHover={() => setFocusedId(p.id)}
+                onHover={() => { hoverSfx(); setFocusedId(p.id); }}
               />
             ))}
           </div>
