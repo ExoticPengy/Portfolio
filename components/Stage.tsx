@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
 import { useParallax } from "@/hooks/useParallax";
+import { useFlyTransition } from "@/hooks/useFlyTransition";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -36,10 +37,11 @@ export default function Stage() {
     mouseRef.current.ty = e.clientY / rect.height - 0.5;
   };
 
-  const back = () => {
-    setView("home");
-    setFocusedId(null);
-  };
+  const { fly, back } = useFlyTransition({
+    view, setView, setFocusedId,
+    worldRef, flashRef, streakRef,
+    motionIntensity: tweaks.motionIntensity,
+  });
 
   return (
     <div className="app" onMouseMove={onMouseMove}>
@@ -57,7 +59,7 @@ export default function Stage() {
                 key={p.id}
                 panel={p}
                 focused={view === "home" && (focusedId === p.id || keyboardIdx === i)}
-                onActivate={(p) => setView(p.id)}
+                onActivate={fly}
                 onHover={() => setFocusedId(p.id)}
               />
             ))}
