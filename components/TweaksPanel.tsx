@@ -15,7 +15,7 @@ export default function TweaksPanel() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         style={{
-          position: "fixed", right: 24, bottom: 24, zIndex: 50,
+          position: "fixed", right: 24, bottom: 64, zIndex: 50,
           fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em",
           padding: "8px 14px", color: "var(--accent-2)",
           background: "color-mix(in oklab, var(--bg-0) 70%, transparent)",
@@ -31,7 +31,7 @@ export default function TweaksPanel() {
           role="dialog"
           aria-label="Tweaks"
           style={{
-            position: "fixed", right: 24, bottom: 70, zIndex: 50,
+            position: "fixed", right: 24, bottom: 110, zIndex: 50,
             width: 280, padding: 18,
             background: "color-mix(in oklab, var(--bg-0) 92%, transparent)",
             border: "1px solid color-mix(in oklab, var(--accent) 35%, transparent)",

@@ -29,6 +29,7 @@ export default function Stage() {
   const [view, setView] = useState<View>("home");
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
+  const [kbActive, setKbActive] = useState<boolean>(false);
   const worldRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
   const flashRef = useRef<HTMLDivElement | null>(null);
@@ -66,7 +67,7 @@ export default function Stage() {
 
   useKeyboardNav({
     view, keyboardIdx, setKeyboardIdx, fly, back,
-    onMove: () => hoverSfx(),
+    onMove: () => { setKbActive(true); hoverSfx(); },
   });
 
   return (
@@ -84,9 +85,9 @@ export default function Stage() {
               <Panel
                 key={p.id}
                 panel={p}
-                focused={view === "home" && (focusedId === p.id || keyboardIdx === i)}
+                focused={view === "home" && (focusedId === p.id || (kbActive && keyboardIdx === i))}
                 onActivate={fly}
-                onHover={() => { hoverSfx(); setFocusedId(p.id); }}
+                onHover={() => { hoverSfx(); setFocusedId(p.id); setKbActive(false); }}
                 onLeave={() => setFocusedId((cur) => (cur === p.id ? null : cur))}
               />
             ))}
