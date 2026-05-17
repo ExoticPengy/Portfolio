@@ -38,19 +38,6 @@ export default function Stage() {
   useParallax(worldRef, mouseRef, view, tweaks.motionIntensity);
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const panels = e.currentTarget.querySelectorAll<HTMLElement>(".panel");
-    const pad = 60;
-    for (const p of panels) {
-      const pr = p.getBoundingClientRect();
-      if (
-        e.clientX >= pr.left - pad && e.clientX <= pr.right + pad &&
-        e.clientY >= pr.top - pad && e.clientY <= pr.bottom + pad
-      ) {
-        mouseRef.current.tx = mouseRef.current.x;
-        mouseRef.current.ty = mouseRef.current.y;
-        return;
-      }
-    }
     const rect = e.currentTarget.getBoundingClientRect();
     mouseRef.current.tx = e.clientX / rect.width - 0.5;
     mouseRef.current.ty = e.clientY / rect.height - 0.5;

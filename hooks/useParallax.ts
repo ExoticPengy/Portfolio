@@ -26,7 +26,7 @@ export function useParallax(
       } else if (view === "home" && worldRef.current) {
         const k = motionIntensity / 10;
         worldRef.current.style.transform =
-          `rotateX(${-m.y * 12 * k}deg) rotateY(${m.x * 18 * k}deg) translate3d(${m.x * 60 * k}px, ${m.y * 40 * k}px, 0)`;
+          `rotateX(${-m.y * 5 * k}deg) rotateY(${m.x * 7 * k}deg) translate3d(${m.x * 20 * k}px, ${m.y * 14 * k}px, 0)`;
       }
       raf = requestAnimationFrame(tick);
     };
