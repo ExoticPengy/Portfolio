@@ -311,6 +311,10 @@ html, body {
 .panel {
   position: absolute;
   top: 50%; left: 50%;
+  width: 300px;
+  height: 360px;
+  margin-left: -150px;
+  margin-top: -180px;
   transform-style: preserve-3d;
   cursor: pointer;
   user-select: none;
@@ -319,15 +323,14 @@ html, body {
 
 .panel-card {
   position: relative;
-  width: 300px;
-  height: 360px;
+  width: 100%;
+  height: 100%;
   background: var(--panel);
   border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
   box-shadow:
     0 0 0 1px rgba(0,0,0,0.6) inset,
     0 30px 80px -20px rgba(0,0,0,0.8),
     0 0 60px -10px color-mix(in oklab, var(--accent) 60%, transparent);
-  transform: translate(-50%, -50%);
   transition: border-color 200ms, box-shadow 200ms, filter 200ms;
   overflow: hidden;
   top: 0;

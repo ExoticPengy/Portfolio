@@ -7,9 +7,10 @@ type Props = {
   focused: boolean;
   onActivate: (panel: PanelData) => void;
   onHover: () => void;
+  onLeave?: () => void;
 };
 
-export default function Panel({ panel, focused, onActivate, onHover }: Props) {
+export default function Panel({ panel, focused, onActivate, onHover, onLeave }: Props) {
   return (
     <div
       className="panel"
@@ -17,6 +18,7 @@ export default function Panel({ panel, focused, onActivate, onHover }: Props) {
         transform: `translate3d(${panel.x}px, ${panel.y}px, ${panel.z}px) rotateY(${panel.ry}deg) rotateX(${panel.rx}deg)`,
       }}
       onMouseEnter={onHover}
+      onMouseLeave={onLeave}
       onClick={() => onActivate(panel)}
     >
       <div
