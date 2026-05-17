@@ -14,6 +14,7 @@ import Decor from "./Decor";
 import Panel from "./Panel";
 import Hud from "./Hud";
 import TweaksPanel from "./TweaksPanel";
+import PokemonRunners from "./PokemonRunners";
 import { BackgroundBurst, BackgroundFx } from "./Background";
 import FxOverlays from "./FxOverlays";
 import About from "./sections/About";
@@ -100,6 +101,7 @@ export default function Stage() {
 
       <Hud focused={focusedId !== null && view === "home"} />
       <TweaksPanel />
+      <PokemonRunners />
     </div>
   );
 }
