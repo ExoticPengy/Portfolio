@@ -27,5 +27,13 @@
     "typescript": "^5",
     "vercel": "^54.0.0",
     "wrangler": "^4.91.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "unrs-resolver",
+      "workerd"
+    ]
   }
 }
