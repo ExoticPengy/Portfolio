@@ -120,7 +120,7 @@ export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) 
           left: 0;
           right: 0;
           height: 80px;
-          z-index: 1;
+          z-index: 5;
           pointer-events: none;
           overflow: hidden;
         }
