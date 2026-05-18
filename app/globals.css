@@ -123,6 +123,13 @@
 
 * { box-sizing: border-box; }
 
+/* === Themed scrollbar === */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--accent) 50%, transparent); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar-corner { background: transparent; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -131,6 +138,8 @@ html, body {
   color: var(--fg);
   font-family: var(--font-body);
   overflow: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
