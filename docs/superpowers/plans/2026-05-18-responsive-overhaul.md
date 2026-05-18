@@ -325,7 +325,7 @@ Add this rule AFTER the sm block closing `}`:
 
 /* Tweaks button — mobile reposition (beats inline style via !important) */
 @media (max-width: 639px) {
-  body > div > button[style*="bottom: 64px"] {
+  body > div > button[style*="bottom:64px"] {
     bottom: 16px !important;
     right: 16px !important;
     font-size: 10px !important;
