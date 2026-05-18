@@ -169,7 +169,6 @@ export interface MoveFxHandle {
 
 interface CooldownState {
   until: number;
-  pool: MovePool | null;
 }
 
 export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
@@ -179,6 +178,8 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
   const cooldownsRef = useRef<Map<string, CooldownState>>(new Map());
   const rafRef = useRef(0);
   const poolsRef = useRef<Map<string, MovePool>>(new Map());
+  const mountedRef = useRef(true);
+  const inFlightRef = useRef<Set<string>>(new Set());
 
   // ---- Animation loop -------------------------------------------------------
 
@@ -222,6 +223,8 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
     }
 
     // Text bubbles
+    ctx.font = "bold 14px var(--font-mono, monospace)";
+    ctx.textAlign = "center";
     const bs = bubblesRef.current;
     for (let i = bs.length - 1; i >= 0; i--) {
       const b = bs[i];
@@ -235,8 +238,6 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
 
       const y = b.yOffset - 60;
       ctx.globalAlpha = b.alpha;
-      ctx.font = "bold 14px var(--font-mono, monospace)";
-      ctx.textAlign = "center";
 
       // Outline
       ctx.strokeStyle = "#000";
@@ -281,18 +282,25 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
       const key = pokemonName.toLowerCase();
       const now = performance.now();
 
+      // Guard: prevent double-spawn race when fetch exceeds cooldown
+      if (inFlightRef.current.has(key)) return;
+
       const cd = cooldownsRef.current.get(key);
       if (cd && now < cd.until) return;
 
       // Set cooldown before async fetch so rapid clicks don't stack requests
       const until = now + 800;
-      const existingCd = cd ?? { until: 0, pool: null };
-      cooldownsRef.current.set(key, { until, pool: existingCd.pool });
+      cooldownsRef.current.set(key, { until });
+
+      // Mark in-flight before await
+      inFlightRef.current.add(key);
 
       // Use cached pool if available
       let pool = poolsRef.current.get(key) ?? null;
       if (!pool) {
         pool = await fetchMovePool(pokemonName);
+        // Guard against unmount during async fetch
+        if (!mountedRef.current) return;
         poolsRef.current.set(key, pool);
       }
 
@@ -313,6 +321,9 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
         yOffset: spawnY,
       });
 
+      // Clear in-flight after spawn
+      inFlightRef.current.delete(key);
+
       // Start animation if not already running
       if (rafRef.current === 0) {
         rafRef.current = requestAnimationFrame(animate);
@@ -327,6 +338,7 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
 
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
