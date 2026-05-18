@@ -19,7 +19,10 @@ export default function Contact({ onBack }: { onBack: () => void }) {
           </a>
           <div className="contact-row">
             <span className="k">◆ LOCATION</span>
-            <span className="v">Kuala Lumpur, Malaysia</span>
+            <span className="v">
+              <span className="loc-full">Kuala Lumpur, </span>
+              <span className="loc-short">KL, </span>Malaysia
+            </span>
           </div>
           <div className="contact-row">
             <span className="k">◆ REMOTE</span>

@@ -922,6 +922,8 @@ html, body {
 }
 .contact-row:hover .v { color: var(--accent); }
 
+.loc-short { display: none; }
+
 .contact-cta {
   background: var(--panel);
   border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
@@ -1257,6 +1259,8 @@ html, body {
   .contact-row { padding-bottom: 10px; }
   .contact-row .k { font-size: 10px; }
   .contact-row .v { font-size: clamp(20px, 5vw, 28px); }
+  .loc-full { display: none; }
+  .loc-short { display: inline; }
   .contact-cta { padding: 24px; }
   .contact-cta .big { font-size: clamp(28px, 7vw, 48px); }
   .contact-cta .small { font-size: 13px; }
