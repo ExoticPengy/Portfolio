@@ -1094,7 +1094,34 @@ html, body {
   }
 }
 
-@media (max-width: 767px), (pointer: coarse) {
+/* === Responsive: Touch devices === */
+@media (pointer: coarse) {
+  .hud .corner.bl { display: none; }
+  .panel-stage,
+  .panel-glyph,
+  .panel-img,
+  .panel-label,
+  .panel-corner { pointer-events: none; }
+  .panel:hover .panel-card {
+    animation-play-state: running;
+    top: auto;
+  }
+  .panel:active .panel-card {
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.6) inset,
+      0 40px 100px -10px rgba(0,0,0,0.9),
+      0 0 100px -5px var(--accent);
+    filter: brightness(1.1);
+  }
+  .panel:active .panel-num { color: var(--fg); text-shadow: 0 0 20px var(--accent); }
+  .panel:active .panel-label .arrow { transform: translateX(6px); }
+  .panel:active .panel-stage { color: color-mix(in oklab, var(--accent-2) 32%, transparent); }
+}
+
+/* === Responsive: Phones (sm ≤ 639px) === */
+@media (max-width: 639px) {
+  /* Scene — flatten */
   .scene { perspective: none; }
   .scene-scaler { transform: none !important; }
   .world {
@@ -1102,24 +1129,176 @@ html, body {
     transform-style: flat;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 80px 16px;
+    gap: 16px;
+    padding: 60px 16px;
   }
-  .deco, .hero { display: none; }
+
+  /* Decor — hidden */
+  .deco { display: none; }
+
+  /* Hero — condensed, visible */
+  .hero {
+    position: relative;
+    top: auto; left: auto;
+    transform: none;
+    max-width: 100%;
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+  .hero.fading { opacity: 1; }
+  .hero .name {
+    font-size: clamp(32px, 8vw, 56px);
+  }
+  .hero .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    margin-bottom: 10px;
+  }
+  .hero .eyebrow::before,
+  .hero .eyebrow::after { width: 20px; }
+  .hero .tag {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+  .hero .cta {
+    font-size: 13px;
+    margin-top: 18px;
+    padding: 6px 12px;
+    gap: 6px;
+    pointer-events: auto;
+  }
+
+  /* Panels — flat, full-width cards */
   .panel {
     position: relative !important;
     transform: none !important;
-    top: auto; left: auto;
+    top: auto !important;
+    left: auto !important;
+    width: 100%;
+    height: auto;
+    margin: 0;
   }
   .panel-card {
     position: relative;
     transform: none;
     width: 100%;
-    max-width: 360px;
-    margin: 0 auto;
+    max-width: none;
+    height: auto;
+    margin: 0;
     animation: none;
   }
-  .hud .corner.bl { display: none; }
-  .section-inner { padding: 60px 20px 40px 20px; }
+  .panel-img { height: 100px; }
+  .panel-stage {
+    font-size: 120px;
+    top: -20px;
+    right: -8px;
+  }
+  .panel-label .big { font-size: 28px; }
+  .panel-num { font-size: 9px; }
+  .panel-card .panel-corner { display: none; }
+
+  /* Section views */
+  .section-inner { padding: 40px 16px 32px 16px; }
   .section-body { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .section-view { overflow-y: auto; }
+
+  /* Section head */
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+  }
+  .section-head h1 { font-size: clamp(36px, 8vw, 64px); }
+  .section-head .back {
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+
+  /* Ghost text */
+  .section-ghost { font-size: clamp(80px, 25vw, 40vw); }
+
+  /* About */
+  .about-bio { font-size: 14px; }
+  .about-stats { gap: 12px; }
+  .stat-card { padding: 16px; }
+  .stat-card .value { font-size: 40px; }
+  .headshot { aspect-ratio: 3/2; }
+
+  /* Projects */
+  .projects-grid { grid-template-columns: 1fr; gap: 20px; }
+  .project-img { height: 160px; }
+  .project-title { font-size: clamp(24px, 6vw, 38px); }
+  .project-body { padding: 16px 20px 20px 20px; }
+  .project-desc { font-size: 13px; }
+
+  /* Skills */
+  .skills-grid { grid-template-columns: 1fr; gap: 16px; }
+  .skill-cat { padding: 20px; }
+  .skill-cat h3 { font-size: 18px; }
+  .skill-cat li { font-size: 13px; }
+
+  /* Contact */
+  .contact-body { grid-template-columns: 1fr; gap: 24px; }
+  .contact-row { padding-bottom: 10px; }
+  .contact-row .k { font-size: 10px; }
+  .contact-row .v { font-size: clamp(20px, 5vw, 28px); }
+  .contact-cta { padding: 24px; }
+  .contact-cta .big { font-size: clamp(28px, 7vw, 48px); }
+  .contact-cta .small { font-size: 13px; }
+  .contact-cta button {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+
+  /* HUD */
+  .hud { font-size: 10px; }
+  .hud .corner { max-width: calc(100vw - 32px); }
+  .hud .corner.br { display: none; }
+  .hud .corner.bl { display: none; }
+  .hud .bracket { font-size: 12px; }
+
+  /* Pokemon track */
+  .poke-track { height: 60px; }
+}
+
+/* Tweaks button — mobile reposition (beats inline style via !important) */
+@media (max-width: 639px) {
+  body > div > button[style*="bottom:64px"] {
+    bottom: 16px !important;
+    right: 16px !important;
+    font-size: 10px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Pokemon — hide last 2 on small screens */
+  .poke-sprite:nth-child(n+4) { display: none; }
+}
+
+/* === Responsive: Tablets (md 640px – 1023px) === */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .section-inner { padding: 60px 40px 50px 40px; }
+  .section-head h1 { font-size: clamp(48px, 7vw, 100px); }
+
+  /* Skills: 2 columns, 3rd wraps */
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Projects: keep 2 columns, reduce image height */
+  .project-img { height: 200px; }
+  .project-title { font-size: 28px; }
+  .project-body { padding: 20px 24px 24px 24px; }
+
+  /* Contact: reduce gap */
+  .contact-body { gap: 32px; }
+  .contact-row .v { font-size: 22px; }
+  .contact-cta .big { font-size: 36px; }
+
+  /* Section ghost smaller */
+  .section-ghost { font-size: 25vw; }
+
+  /* HUD slightly smaller */
+  .hud { font-size: 10px; }
 }
