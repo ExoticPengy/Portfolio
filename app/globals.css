@@ -1122,7 +1122,7 @@ html, body {
 /* === Responsive: Phones (sm ≤ 639px) === */
 @media (max-width: 639px) {
   /* Scene — flatten */
-  .scene { perspective: none; }
+  .scene { perspective: none; overflow: visible; }
   .scene-scaler { transform: none !important; }
   .world {
     transform: none !important;
@@ -1130,7 +1130,9 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 60px 16px;
+    padding: 60px 16px 40px 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Decor — hidden */
@@ -1147,7 +1149,7 @@ html, body {
   }
   .hero.fading { opacity: 1; }
   .hero .name {
-    font-size: clamp(32px, 8vw, 56px);
+    font-size: clamp(36px, 10vw, 56px);
   }
   .hero .eyebrow {
     font-size: 10px;
@@ -1177,6 +1179,7 @@ html, body {
     width: 100%;
     height: auto;
     margin: 0;
+    flex-shrink: 0;
   }
   .panel-card {
     position: relative;
@@ -1184,17 +1187,18 @@ html, body {
     width: 100%;
     max-width: none;
     height: auto;
+    min-height: 260px;
     margin: 0;
     animation: none;
   }
-  .panel-img { height: 100px; }
+  .panel-img { height: 140px; }
   .panel-stage {
-    font-size: 120px;
-    top: -20px;
+    font-size: 160px;
+    top: -28px;
     right: -8px;
   }
-  .panel-label .big { font-size: 28px; }
-  .panel-num { font-size: 9px; }
+  .panel-label .big { font-size: clamp(32px, 9vw, 42px); }
+  .panel-num { font-size: 11px; }
   .panel-card .panel-corner { display: none; }
 
   /* Section views */
