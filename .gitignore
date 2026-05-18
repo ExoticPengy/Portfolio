@@ -46,3 +46,6 @@ node_modules
 .wrangler/
 *.log
 /.playwright-mcp
+/.superpowers
+/.claude
+/docs
