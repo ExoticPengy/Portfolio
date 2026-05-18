@@ -12,7 +12,6 @@ import {
   fetchMovePool,
   pickRandomMove,
   getTypeColor,
-  getFallbackPool,
 } from "@/lib/moves";
 
 // ---- Particle types --------------------------------------------------------
@@ -26,6 +25,7 @@ interface Particle {
   maxLife: number;
   color: string;
   size: number;
+  va?: number; // angular velocity (radians/frame) for spiral effects
 }
 
 interface TextBubble {
@@ -82,7 +82,7 @@ function spawnFire(x: number, y: number, color: string): Particle[] {
       vy: -2 - Math.random() * 4,
       life: 20 + Math.random() * 30,
       maxLife: 50,
-      color: Math.random() > 0.5 ? "#FF4500" : "#FFD700",
+      color: Math.random() > 0.5 ? color : "#FFD700",
       size: 3 + Math.random() * 5,
     });
   }
@@ -110,18 +110,24 @@ function spawnWater(x: number, y: number, color: string): Particle[] {
 
 function spawnGrass(x: number, y: number, color: string): Particle[] {
   const particles: Particle[] = [];
+  const baseAngle = Math.random() * Math.PI * 2; // random starting direction
   for (let i = 0; i < 25; i++) {
-    const angle = Math.random() * Math.PI * 2;
+    // Spread particles along a spiral: angle increases with i, so later
+    // particles trail behind earlier ones, forming an archimedean spiral.
+    const angleOffset = (i / 25) * Math.PI * 1.2; // ~216-degree fan
+    const angle = baseAngle + angleOffset;
+    const dist = 10 + Math.random() * 40;
     const speed = 1 + Math.random() * 3;
     particles.push({
-      x,
-      y,
+      x: x + Math.cos(angle) * dist * 0.3,
+      y: y + Math.sin(angle) * dist * 0.3,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed - 1.5,
       life: 30 + Math.random() * 35,
       maxLife: 65,
       color,
       size: 3 + Math.random() * 3,
+      va: 0.03 + Math.random() * 0.04, // spiral curl
     });
   }
   return particles;
@@ -190,6 +196,15 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
       const p = ps[i];
       p.x += p.vx;
       p.y += p.vy;
+      // Apply angular velocity for spiral effects (grass, etc.)
+      if (p.va) {
+        const cos = Math.cos(p.va);
+        const sin = Math.sin(p.va);
+        const rvx = p.vx * cos - p.vy * sin;
+        const rvy = p.vx * sin + p.vy * cos;
+        p.vx = rvx;
+        p.vy = rvy;
+      }
       p.vy += 0.08; // gravity
       p.life--;
 
