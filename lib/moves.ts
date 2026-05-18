@@ -113,6 +113,11 @@ export function pickRandomMove(pool: MovePool): string {
   return pool.moves[Math.floor(Math.random() * pool.moves.length)];
 }
 
+export function clearMoveCache(): void {
+  cache.clear();
+  pending.clear();
+}
+
 export function preloadAllPools(names: string[]): Promise<MovePool[]> {
   return Promise.all(names.map(fetchMovePool));
 }
