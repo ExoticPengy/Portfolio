@@ -15,6 +15,7 @@ import Panel from "./Panel";
 import Hud from "./Hud";
 import TweaksPanel from "./TweaksPanel";
 import PokemonRunners from "./PokemonRunners";
+import MoveFx, { type MoveFxHandle } from "./MoveFx";
 import { BackgroundBurst, BackgroundFx } from "./Background";
 import FxOverlays from "./FxOverlays";
 import About from "./sections/About";
@@ -35,6 +36,7 @@ export default function Stage() {
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
   const flashRef = useRef<HTMLDivElement | null>(null);
   const streakRef = useRef<HTMLDivElement | null>(null);
+  const moveFxRef = useRef<MoveFxHandle | null>(null);
 
   useParallax(worldRef, mouseRef, view, tweaks.motionIntensity);
 
@@ -101,7 +103,12 @@ export default function Stage() {
 
       <Hud focused={focusedId !== null && view === "home"} />
       <TweaksPanel />
-      <PokemonRunners />
+      <PokemonRunners
+        onPokemonClick={(name, x, y) => {
+          moveFxRef.current?.trigger(x, y, name);
+        }}
+      />
+      <MoveFx ref={moveFxRef} />
     </div>
   );
 }

@@ -10,6 +10,10 @@ const POKEMON = [
   { name: "Piplup",    src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/393.gif", baseSpeed: 33, y: 4, scale: 0.95 },
 ];
 
+interface PokemonRunnersProps {
+  onPokemonClick?: (name: string, x: number, y: number) => void;
+}
+
 function hash(s: string): number {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
@@ -25,7 +29,7 @@ type State = {
   stopTimer: number;
 };
 
-export default function PokemonRunners() {
+export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) {
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const statesRef = useRef<State[]>([]);
   const rafRef = useRef(0);
@@ -102,6 +106,11 @@ export default function PokemonRunners() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
+  const handleClick = (e: React.MouseEvent<HTMLImageElement>, name: string) => {
+    if (!onPokemonClick) return;
+    onPokemonClick(name, e.clientX, e.clientY);
+  };
+
   return (
     <>
       <style>{`
@@ -111,7 +120,7 @@ export default function PokemonRunners() {
           left: 0;
           right: 0;
           height: 80px;
-          z-index: 1;
+          z-index: 5;
           pointer-events: none;
           overflow: hidden;
         }
@@ -122,6 +131,7 @@ export default function PokemonRunners() {
           will-change: transform;
           opacity: 0.85;
           transition: opacity 0.3s;
+          pointer-events: auto;
         }
         .poke-sprite:hover {
           opacity: 1;
@@ -136,7 +146,8 @@ export default function PokemonRunners() {
             src={p.src}
             alt={p.name}
             title={p.name}
-            style={{ "--y": `${p.y}px` } as React.CSSProperties}
+            style={{ "--y": `${p.y}px`, cursor: "pointer" } as React.CSSProperties}
+            onClick={(e) => handleClick(e, p.name)}
           />
         ))}
       </div>
