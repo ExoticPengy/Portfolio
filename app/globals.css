@@ -589,7 +589,8 @@ html, body {
   pointer-events: none;
   background: var(--bg-0);
   transition: opacity 350ms;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .section-view.visible { opacity: 1; pointer-events: auto; }
 .section-view .bg-grid-inner {
@@ -1213,7 +1214,6 @@ html, body {
   /* Section views */
   .section-inner { padding: 40px 16px 32px 16px; }
   .section-body { grid-template-columns: 1fr !important; gap: 24px !important; }
-  .section-view { overflow-y: auto; }
 
   /* Section head */
   .section-head {
