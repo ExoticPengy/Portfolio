@@ -31,6 +31,7 @@ interface Particle {
 interface TextBubble {
   text: string;
   alpha: number;
+  x: number;
   yOffset: number;
 }
 
@@ -236,17 +237,18 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
         continue;
       }
 
-      const y = b.yOffset - 60;
+      const x = b.x;
+      const y = b.yOffset;
       ctx.globalAlpha = b.alpha;
 
       // Outline
       ctx.strokeStyle = "#000";
       ctx.lineWidth = 3;
-      ctx.strokeText(b.text, 0, y);
+      ctx.strokeText(b.text, x, y);
 
       // Fill
       ctx.fillStyle = "#FFF";
-      ctx.fillText(b.text, 0, y);
+      ctx.fillText(b.text, x, y);
     }
 
     ctx.globalAlpha = 1;
@@ -318,7 +320,8 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
       bubblesRef.current.push({
         text: `${pokemonName} used ${moveName}!`,
         alpha: 1,
-        yOffset: spawnY,
+        x: spawnX,
+        yOffset: spawnY - 50, // above the Pokémon sprite
       });
 
       // Clear in-flight after spawn
