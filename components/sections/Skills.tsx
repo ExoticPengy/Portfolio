@@ -53,7 +53,7 @@ const SKILLS = [
   },
 ];
 
-const ICONS: Record<string, ComponentType<{ className?: string }>> = {
+const ICONS: Record<string, ComponentType<{ className?: string; color?: string }>> = {
   Python: SiPython,
   TypeScript: SiTypescript,
   Kotlin: SiKotlin,
