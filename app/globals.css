@@ -865,12 +865,15 @@ html, body {
   border-bottom: 1px dashed color-mix(in oklab, var(--fg-dim) 30%, transparent);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 12px;
 }
 .skill-cat li:last-child { border-bottom: none; }
 .skill-cat li .bar {
   width: 80px;
   height: 4px;
+  flex-shrink: 0;
+  margin-top: 7px;
   background: color-mix(in oklab, var(--fg-dim) 30%, transparent);
   position: relative;
 }
@@ -881,6 +884,24 @@ html, body {
   background: var(--accent);
   width: var(--lvl, 70%);
   box-shadow: 0 0 8px var(--accent);
+}
+.skill-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.skill-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.skill-icon.ph {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in oklab, var(--fg-dim) 50%, transparent);
+  display: inline-block;
 }
 
 /* Contact */
@@ -1300,7 +1321,7 @@ html, body {
   .section-inner { padding: 60px 40px 50px 40px; }
   .section-head h1 { font-size: clamp(48px, 7vw, 100px); }
 
-  /* Skills: 2 columns, 3rd wraps */
+  /* Skills: 2 columns */
   .skills-grid { grid-template-columns: 1fr 1fr; }
 
   /* Projects: keep 2 columns, reduce image height */
