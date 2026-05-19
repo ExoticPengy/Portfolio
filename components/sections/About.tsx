@@ -7,36 +7,33 @@ export default function About({ onBack }: { onBack: () => void }) {
         <div className="about-bio">
           <p>
             <span className="dim">{"// player profile"}</span>
-            Hi, I&rsquo;m <span className="accent">Chong Ming Li</span> — a Software Developer
-            and Data Scientist who likes turning research into things people actually use.
-            I build production systems that move at the speed of research, and research that
-            survives contact with production.
+            <span className="accent">Chong Ming Li</span> — Software Developer · Data Scientist
+            <br />
+            Building things that ship and making sure they keep running.
           </p>
           <p>
             <span className="dim">{"// current quest"}</span>
-            Making models that are small, fast, and explainable — in that order.
-            Lately I&rsquo;ve been deep in retrieval systems, time-series forecasting,
-            and the very unglamorous plumbing that makes ML actually ship.
+            Full-stack generalist. Currently grinding through web systems,
+            data pipelines, and whatever interesting problem lands on my desk next.
           </p>
           <p>
             <span className="dim">{"// loadout"}</span>
-            The best code is the code you didn&rsquo;t need to write. The best model is the
-            one you didn&rsquo;t need to deploy. Ruthlessly delete; carefully add.
+            Ship early. Delete ruthlessly. Add only what you need.
           </p>
         </div>
         <div className="about-stats" style={{ marginTop: 36 }}>
           <div className="stat-card">
-            <div className="label">Models Shipped</div>
-            <div className="value">12+</div>
+            <div className="label">Products Shipped</div>
+            <div className="value">5+</div>
             <div className="unit">in production</div>
           </div>
           <div className="stat-card">
             <div className="label">XP · Years Coding</div>
-            <div className="value">07</div>
+            <div className="value">05</div>
             <div className="unit">and counting</div>
           </div>
           <div className="stat-card">
-            <div className="label">Coffee / Day</div>
+            <div className="label">Energy Drinks / Day</div>
             <div className="value">03</div>
             <div className="unit">averaged · cal.</div>
           </div>
