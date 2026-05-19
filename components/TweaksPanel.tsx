@@ -5,7 +5,7 @@ import { useTweaks } from "@/hooks/useTweaks";
 import { PALETTE_OPTIONS } from "@/lib/palettes";
 import type { PaletteName } from "@/lib/types";
 
-export default function TweaksPanel() {
+export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => void }) {
   const { tweaks, setTweak } = useTweaks();
   const [open, setOpen] = useState(false);
 
@@ -67,6 +67,30 @@ export default function TweaksPanel() {
 
           <Section label="AUDIO" />
           <Toggle label="UI Sounds" value={tweaks.soundEnabled} onChange={(v) => setTweak("soundEnabled", v)} />
+
+          {onResetLevel && (
+            <>
+              <Section label="POKEMON" />
+              <Row label="Evo Level">
+                <button
+                  type="button"
+                  onClick={onResetLevel}
+                  style={{
+                    background: "transparent",
+                    color: "var(--fg)",
+                    border: "1px solid color-mix(in oklab, var(--accent) 55%, transparent)",
+                    padding: "3px 10px",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10,
+                    cursor: "pointer",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  RESET
+                </button>
+              </Row>
+            </>
+          )}
         </div>
       )}
     </>

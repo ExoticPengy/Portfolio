@@ -1,16 +1,55 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
-const POKEMON = [
-  { name: "Pikachu",   src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif",  baseSpeed: 35, y: 4, scale: 0.95 },
-  { name: "Charmander", src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif",  baseSpeed: 30, y: 4, scale: 0.95 },
-  { name: "Squirtle",  src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/7.gif",  baseSpeed: 28, y: 4, scale: 0.95 },
-  { name: "Bulbasaur", src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/1.gif",  baseSpeed: 32, y: 4, scale: 0.95 },
-  { name: "Piplup",    src: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/393.gif", baseSpeed: 33, y: 4, scale: 0.95 },
+// Evolution chains: [base, stage1, stage2] — PokeAPI sprite IDs
+const EVO_CHAIN: Record<string, number[]> = {
+  bulbasaur:  [1, 2, 3],   // Bulbasaur → Ivysaur → Venusaur
+  charmander: [4, 5, 6],   // Charmander → Charmeleon → Charizard
+  squirtle:   [7, 8, 9],   // Squirtle → Wartortle → Blastoise
+};
+
+const SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated";
+
+function getEvoStage(name: string, level: number): number {
+  const chain = EVO_CHAIN[name.toLowerCase()];
+  if (!chain) return 0;
+  if (level >= 72) return 2;
+  if (level >= 32) return 1;
+  return 0;
+}
+
+function getSpriteUrl(name: string, level: number, fallbackId: number): string {
+  const chain = EVO_CHAIN[name.toLowerCase()];
+  if (!chain) return `${SPRITE_BASE}/${fallbackId}.gif`;
+  const stage = getEvoStage(name, level);
+  return `${SPRITE_BASE}/${chain[stage]}.gif`;
+}
+
+interface PokemonDef {
+  name: string;
+  fallbackId: number;
+  baseSpeed: number;
+  y: number;
+  scale: number;
+}
+
+const POKEMON: PokemonDef[] = [
+  { name: "Pikachu",   fallbackId: 25,  baseSpeed: 35, y: 4, scale: 0.95 },
+  { name: "Charmander", fallbackId: 4,  baseSpeed: 30, y: 4, scale: 0.95 },
+  { name: "Squirtle",  fallbackId: 7,  baseSpeed: 28, y: 4, scale: 0.95 },
+  { name: "Bulbasaur", fallbackId: 1,  baseSpeed: 32, y: 4, scale: 0.95 },
+  { name: "Piplup",    fallbackId: 393, baseSpeed: 33, y: 4, scale: 0.95 },
 ];
 
+const EVO_NAMES: Record<string, string[]> = {
+  bulbasaur:  ["Bulbasaur", "Ivysaur", "Venusaur"],
+  charmander: ["Charmander", "Charmeleon", "Charizard"],
+  squirtle:   ["Squirtle", "Wartortle", "Blastoise"],
+};
+
 interface PokemonRunnersProps {
+  level: number;
   onPokemonClick?: (name: string, x: number, y: number) => void;
 }
 
@@ -29,10 +68,53 @@ type State = {
   stopTimer: number;
 };
 
-export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) {
+export default function PokemonRunners({ level, onPokemonClick }: PokemonRunnersProps) {
+  const wrapperRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const statesRef = useRef<State[]>([]);
   const rafRef = useRef(0);
+  const prevStageRef = useRef<Record<string, number>>({});
+
+  // Compute current sprite URLs based on level
+  const sprites = useMemo(
+    () => POKEMON.map((p) => getSpriteUrl(p.name, level, p.fallbackId)),
+    [level]
+  );
+
+  // Track evolutions for flash effect
+  const displayNames = useMemo(
+    () => POKEMON.map((p) => {
+      const key = p.name.toLowerCase();
+      const chain = EVO_NAMES[key];
+      if (!chain) return p.name;
+      const stage = getEvoStage(p.name, level);
+      return chain[stage];
+    }),
+    [level]
+  );
+
+  // Detect evolution changes — CSS animation flash
+  useEffect(() => {
+    for (const p of POKEMON) {
+      const key = p.name.toLowerCase();
+      const chain = EVO_CHAIN[key];
+      if (!chain) continue;
+      const stage = getEvoStage(p.name, level);
+      const prev = prevStageRef.current[key] ?? 0;
+      if (stage > prev) {
+        const idx = POKEMON.indexOf(p);
+        const img = imgRefs.current[idx];
+        if (!img) continue;
+
+        // Trigger CSS animation: flash → glow → settle
+        img.classList.add("evo-flash");
+        setTimeout(() => {
+          img?.classList.remove("evo-flash");
+        }, 700);
+      }
+      prevStageRef.current[key] = stage;
+    }
+  }, [level]);
 
   useEffect(() => {
     const w = window.innerWidth;
@@ -55,8 +137,9 @@ export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) 
 
       for (let i = 0; i < POKEMON.length; i++) {
         const s = statesRef.current[i];
+        const wrapper = wrapperRefs.current[i];
         const img = imgRefs.current[i];
-        if (!img) continue;
+        if (!wrapper || !img) continue;
 
         s.changeTimer -= dt;
 
@@ -93,10 +176,14 @@ export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) 
 
         const flip = s.dir === 1 ? -1 : 1; // sprite faces left natively
         const idle = s.isStopped ? " grayscale(0.2)" : "";
-        img.style.transform =
+
+        wrapper.style.transform =
           `translateX(${s.x}px) scale(${POKEMON[i].scale}) scaleX(${flip})`;
-        img.style.filter =
-          `drop-shadow(0 2px 4px rgba(0,0,0,0.5))${idle}`;
+
+        if (!img.classList.contains("evo-flash")) {
+          img.style.filter =
+            `drop-shadow(0 2px 4px rgba(0,0,0,0.5))${idle}`;
+        }
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -106,8 +193,17 @@ export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) 
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  const handleClick = (e: React.MouseEvent<HTMLImageElement>, name: string) => {
+  const handleClick = (e: React.MouseEvent<HTMLSpanElement>, name: string) => {
     if (!onPokemonClick) return;
+
+    // Attack animation on inner target — force restart via reflow
+    const atk = e.currentTarget.firstElementChild;
+    if (atk) {
+      atk.classList.remove("poke-attack");
+      void (atk as HTMLElement).offsetWidth; // force reflow to restart animation
+      atk.classList.add("poke-attack");
+    }
+
     onPokemonClick(name, e.clientX, e.clientY);
   };
 
@@ -125,30 +221,65 @@ export default function PokemonRunners({ onPokemonClick }: PokemonRunnersProps) 
           overflow: hidden;
         }
         .poke-sprite {
-          position: absolute;
-          bottom: var(--y);
           image-rendering: pixelated;
-          will-change: transform;
           opacity: 0.85;
           transition: opacity 0.3s;
-          pointer-events: auto;
+          display: block;
         }
         .poke-sprite:hover {
           opacity: 1;
         }
+        .evo-flash {
+          animation: evo-pulse 0.7s ease-out;
+        }
+        @keyframes evo-pulse {
+          0%   { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(1); }
+          15%  { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(4) drop-shadow(0 0 30px white); }
+          30%  { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(3) drop-shadow(0 0 20px white); }
+          60%  { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.5)); }
+          100% { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(1); }
+        }
+        .poke-wrapper {
+          position: absolute;
+          bottom: var(--y);
+          will-change: transform;
+          pointer-events: auto;
+        }
+        .poke-attack-target {
+          display: inline-block;
+        }
+        .poke-attack-target.poke-attack {
+          animation: atk-lunge 0.5s ease-out;
+        }
+        @keyframes atk-lunge {
+          0%   { transform: translateY(0) scale(1); filter: brightness(1); }
+          15%  { transform: translateY(-12px) scale(1.25); filter: brightness(1.6); }
+          30%  { transform: translateX(6px) scale(0.9);  filter: brightness(1); }
+          45%  { transform: translateX(-6px) scale(1.05); }
+          60%  { transform: translateX(3px) scale(0.98); }
+          75%  { transform: translateX(-2px) scale(1); }
+          100% { transform: translateX(0) scale(1); }
+        }
       `}</style>
       <div className="poke-track">
         {POKEMON.map((p, i) => (
-          <img
+          <span
             key={p.name}
-            ref={(el) => { imgRefs.current[i] = el; }}
-            className="poke-sprite"
-            src={p.src}
-            alt={p.name}
-            title={p.name}
+            ref={(el) => { wrapperRefs.current[i] = el; }}
+            className="poke-wrapper"
             style={{ "--y": `${p.y}px`, cursor: "pointer" } as React.CSSProperties}
-            onClick={(e) => handleClick(e, p.name)}
-          />
+            onClick={(e) => handleClick(e, displayNames[i])}
+          >
+            <span className="poke-attack-target">
+              <img
+                ref={(el) => { imgRefs.current[i] = el; }}
+                className="poke-sprite"
+                src={sprites[i]}
+                alt={displayNames[i]}
+                title={displayNames[i]}
+              />
+            </span>
+          </span>
         ))}
       </div>
     </>

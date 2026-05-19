@@ -33,15 +33,42 @@ const MOVE_POOLS: Record<string, MovePool> = {
     moves: ["Thunderbolt", "Volt Tackle", "Electro Ball"],
     primaryType: "electric",
   },
+  // Kanto fire chain
   charmander: {
     moves: ["Flamethrower", "Fire Spin", "Ember"],
     primaryType: "fire",
   },
+  charmeleon: {
+    moves: ["Flamethrower", "Fire Spin", "Ember"],
+    primaryType: "fire",
+  },
+  charizard: {
+    moves: ["Flamethrower", "Fire Spin", "Ember"],
+    primaryType: "fire",
+  },
+  // Kanto water chain
   squirtle: {
     moves: ["Hydro Pump", "Surf", "Aqua Tail"],
     primaryType: "water",
   },
+  wartortle: {
+    moves: ["Hydro Pump", "Surf", "Aqua Tail"],
+    primaryType: "water",
+  },
+  blastoise: {
+    moves: ["Hydro Pump", "Surf", "Aqua Tail"],
+    primaryType: "water",
+  },
+  // Kanto grass chain
   bulbasaur: {
+    moves: ["Vine Whip", "Razor Leaf", "Solar Beam"],
+    primaryType: "grass",
+  },
+  ivysaur: {
+    moves: ["Vine Whip", "Razor Leaf", "Solar Beam"],
+    primaryType: "grass",
+  },
+  venusaur: {
     moves: ["Vine Whip", "Razor Leaf", "Solar Beam"],
     primaryType: "grass",
   },

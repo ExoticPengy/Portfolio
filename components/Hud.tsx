@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TICKER_BITS } from "@/lib/panels";
 
-type Props = { focused: boolean };
+type Props = {
+  focused: boolean;
+  level: number;
+  onTick: () => void;
+};
 
-export default function Hud({ focused }: Props) {
-  const [tick, setTick] = useState(0);
+export default function Hud({ focused, level, onTick }: Props) {
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 700);
+    const id = setInterval(onTick, 700);
     return () => clearInterval(id);
-  }, []);
+  }, [onTick]);
 
   return (
     <div className="hud">
@@ -22,7 +25,7 @@ export default function Hud({ focused }: Props) {
       <div className="corner tr">
         <span>PLAYER · PENGY</span>
         <span style={{ opacity: 0.5 }}>|</span>
-        <span>LV. {String(tick + 27).padStart(2, "0")}</span>
+        <span>LV. {String(level).padStart(2, "0")}</span>
       </div>
       <div className="corner bl">
         <span className="kbd">←</span>
@@ -39,7 +42,7 @@ export default function Hud({ focused }: Props) {
       </div>
       <div className="corner br ticker">
         {TICKER_BITS.map((b, i) => (
-          <span key={b} style={{ opacity: tick % TICKER_BITS.length === i ? 1 : 0.4 }}>
+          <span key={b} style={{ opacity: level % TICKER_BITS.length === i ? 1 : 0.4 }}>
             {b}
           </span>
         ))}

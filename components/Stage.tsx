@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
 import { useParallax } from "@/hooks/useParallax";
@@ -32,6 +32,12 @@ export default function Stage() {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
   const [kbActive, setKbActive] = useState<boolean>(false);
+  const [level, setLevel] = useState(1);
+
+  const handleLevelTick = useCallback(() => setLevel((l) => l + 1), []);
+  const handleLevelUp = useCallback(() => setLevel((l) => l + 1), []);
+  const handleResetLevel = useCallback(() => setLevel(1), []);
+
   const worldRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
   const flashRef = useRef<HTMLDivElement | null>(null);
@@ -101,10 +107,16 @@ export default function Stage() {
       <FxOverlays flashRef={flashRef} streakRef={streakRef} />
       <BackgroundFx />
 
-      <Hud focused={focusedId !== null && view === "home"} />
-      <TweaksPanel />
+      <Hud
+        focused={focusedId !== null && view === "home"}
+        level={level}
+        onTick={handleLevelTick}
+      />
+      <TweaksPanel onResetLevel={handleResetLevel} />
       <PokemonRunners
+        level={level}
         onPokemonClick={(name, x, y) => {
+          handleLevelUp();
           moveFxRef.current?.trigger(x, y, name);
         }}
       />
