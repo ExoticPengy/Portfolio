@@ -1,10 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
   getTypeColor,
-  getFallbackPool,
+  getPool,
   pickRandomMove,
-  fetchMovePool,
-  clearMoveCache,
 } from "@/lib/moves";
 
 describe("getTypeColor", () => {
@@ -19,15 +17,29 @@ describe("getTypeColor", () => {
   });
 });
 
-describe("getFallbackPool", () => {
-  it("returns hardcoded pool for pikachu", () => {
-    const pool = getFallbackPool("Pikachu");
+describe("getPool", () => {
+  it("returns iconic pool for pikachu", () => {
+    const pool = getPool("Pikachu");
     expect(pool.primaryType).toBe("electric");
     expect(pool.moves).toContain("Thunderbolt");
+    expect(pool.moves).toContain("Volt Tackle");
+  });
+
+  it("returns iconic pool for bulbasaur", () => {
+    const pool = getPool("bulbasaur");
+    expect(pool.primaryType).toBe("grass");
+    expect(pool.moves).toContain("Razor Leaf");
+    expect(pool.moves).toContain("Solar Beam");
+  });
+
+  it("returns all moves as iconic (no generic filler)", () => {
+    const pool = getPool("charmander");
+    expect(pool.moves).not.toContain("Tackle");
+    expect(pool.moves).not.toContain("Growl");
   });
 
   it("returns generic pool for unknown pokemon", () => {
-    const pool = getFallbackPool("MissingNo");
+    const pool = getPool("MissingNo");
     expect(pool.primaryType).toBe("normal");
     expect(pool.moves.length).toBeGreaterThan(0);
   });
@@ -37,64 +49,9 @@ describe("pickRandomMove", () => {
   it("returns a move from the pool", () => {
     const pool = { moves: ["Tackle", "Growl"], primaryType: "normal" };
     const results = new Set<string>();
-    // Run many times to confirm it picks from the pool
     for (let i = 0; i < 50; i++) {
       results.add(pickRandomMove(pool));
     }
     expect([...results].every((m) => pool.moves.includes(m))).toBe(true);
-  });
-});
-
-describe("fetchMovePool", () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-    clearMoveCache();
-  });
-
-  it("returns cached pool on second call (no re-fetch)", async () => {
-    const mockData = {
-      types: [{ type: { name: "electric" } }],
-      moves: [
-        {
-          move: { name: "thunder-punch" },
-          version_group_details: [
-            { level_learned_at: 1, move_learn_method: { name: "level-up" } },
-          ],
-        },
-      ],
-    };
-
-    const spy = vi
-      .spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify(mockData), { status: 200 })
-      );
-
-    const pool1 = await fetchMovePool("pikachu");
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(pool1.moves).toContain("Thunder Punch");
-
-    // Second call should use cache — no fetch
-    const pool2 = await fetchMovePool("pikachu");
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(pool2).toEqual(pool1);
-  });
-
-  it("falls back on fetch failure", async () => {
-    vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(new Error("Network error"));
-
-    const pool = await fetchMovePool("pikachu");
-    expect(pool.primaryType).toBe("electric");
-    expect(pool.moves.length).toBeGreaterThan(0);
-  });
-
-  it("falls back on non-200 response", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response("Not Found", { status: 404 })
-    );
-
-    const pool = await fetchMovePool("unknown-mon");
-    expect(pool.primaryType).toBe("normal");
-    expect(pool.moves.length).toBeGreaterThan(0);
   });
 });
