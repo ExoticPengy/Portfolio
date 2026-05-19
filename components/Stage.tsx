@@ -66,6 +66,8 @@ export default function Stage() {
     onMove: () => { setKbActive(true); hoverSfx(); },
   });
 
+  const effectiveFocusedId = kbActive ? PANELS[keyboardIdx]?.id ?? null : focusedId;
+
   return (
     <div className="app" onMouseMove={onMouseMove}>
       <div className="bg-grid" />
@@ -108,7 +110,9 @@ export default function Stage() {
       <BackgroundFx />
 
       <Hud
-        focused={focusedId !== null && view === "home"}
+        focused={effectiveFocusedId !== null && view === "home"}
+        focusedId={effectiveFocusedId}
+        view={view}
         level={level}
         onTick={handleLevelTick}
       />
