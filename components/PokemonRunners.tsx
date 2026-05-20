@@ -218,7 +218,7 @@ export default function PokemonRunners({ level, onPokemonClick }: PokemonRunners
           height: 80px;
           z-index: 5;
           pointer-events: none;
-          overflow: hidden;
+          overflow: visible;
         }
         .poke-sprite {
           image-rendering: pixelated;

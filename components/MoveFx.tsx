@@ -52,6 +52,10 @@ function randColor(...colors: string[]) {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
+function rngUpAngle() {
+  return -Math.PI + Math.random() * Math.PI; // upper 180° only
+}
+
 // ============================================================================
 // PIKACHU — Electric
 // ============================================================================
@@ -111,9 +115,9 @@ function spawnThunderbolt(x: number, y: number, _color: string): Particle[] {
     }
   }
 
-  // Spark scatter — wider fan
+  // Spark scatter — upward fan only
   for (let i = 0; i < 35; i++) {
-    const a = baseAngle + rng(-1.8, 1.8);
+    const a = baseAngle + rng(-1.2, 1.2);
     const spd = rng(2, 7);
     ps.push({
       x, y,
@@ -136,7 +140,7 @@ function spawnVoltTackle(x: number, y: number, _color: string): Particle[] {
     const ringRadius = 15 + ring * 25;
     const count = 12 + ring * 8;
     for (let i = 0; i < count; i++) {
-      const a = (Math.PI * 2 * i) / count;
+      const a = -Math.PI + (Math.PI * i) / Math.max(count - 1, 1);
       const r = ringRadius;
       ps.push({
         x: x + Math.cos(a) * r,
@@ -154,7 +158,7 @@ function spawnVoltTackle(x: number, y: number, _color: string): Particle[] {
 
   // Central flash burst
   for (let i = 0; i < 30; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const spd = rng(3, 8);
     ps.push({
       x, y,
@@ -168,7 +172,7 @@ function spawnVoltTackle(x: number, y: number, _color: string): Particle[] {
 
   // Trailing lightning streaks
   for (let i = 0; i < 14; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const spd = rng(4, 12);
     ps.push({
       x: x + rng(-15, 15), y: y + rng(-10, 10),
@@ -187,7 +191,7 @@ function spawnElectroBall(x: number, y: number, _color: string): Particle[] {
 
   // Concentrated spinning orb
   for (let i = 0; i < 24; i++) {
-    const a = (Math.PI * 2 * i) / 24;
+    const a = -Math.PI + (Math.PI * i) / 23;
     const r = rng(10, 35);
     ps.push({
       x: x + Math.cos(a) * r,
@@ -204,7 +208,7 @@ function spawnElectroBall(x: number, y: number, _color: string): Particle[] {
 
   // Outer spark ring
   for (let i = 0; i < 18; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const spd = rng(1.5, 3.5);
     ps.push({
       x, y,
@@ -224,7 +228,7 @@ function spawnElectroBall(x: number, y: number, _color: string): Particle[] {
 
 function spawnFlamethrower(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const jetAngle = Math.random() * Math.PI * 2;
+  const jetAngle = rngUpAngle();
 
   // Fire jet stream — longer, more particles
   for (let i = 0; i < 65; i++) {
@@ -309,7 +313,7 @@ function spawnEmber(x: number, y: number, _color: string): Particle[] {
 
 function spawnHydroPump(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const jetAngle = Math.random() * Math.PI * 2;
+  const jetAngle = rngUpAngle();
 
   // High-pressure water jet — longer, more particles
   for (let i = 0; i < 60; i++) {
@@ -457,7 +461,7 @@ function spawnVineWhip(x: number, y: number, _color: string): Particle[] {
 
     // Leaf cluster at tip
     for (let l = 0; l < 6; l++) {
-      const la = Math.random() * Math.PI * 2;
+      const la = rngUpAngle();
       const lspd = rng(1, 3);
       ps.push({
         x: cx, y: cy,
@@ -477,11 +481,11 @@ function spawnVineWhip(x: number, y: number, _color: string): Particle[] {
 
 function spawnRazorLeaf(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const baseAngle = Math.random() * Math.PI * 2;
+  const baseAngle = rngUpAngle();
 
   // Sharp spinning leaves shooting outward
   for (let i = 0; i < 35; i++) {
-    const a = baseAngle + (i / 35) * Math.PI * 2;
+    const a = baseAngle - Math.PI/2 + (i / 35) * Math.PI;
     const spd = rng(2, 6);
     ps.push({
       x, y,
@@ -497,7 +501,7 @@ function spawnRazorLeaf(x: number, y: number, _color: string): Particle[] {
 
   // Green streak trails
   for (let i = 0; i < 12; i++) {
-    const a = baseAngle + rng(0, Math.PI * 2);
+    const a = rngUpAngle();
     const spd = rng(3, 7);
     ps.push({
       x, y,
@@ -514,11 +518,11 @@ function spawnRazorLeaf(x: number, y: number, _color: string): Particle[] {
 
 function spawnSolarBeam(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const beamAngle = Math.random() * Math.PI * 2;
+  const beamAngle = rngUpAngle();
 
   // Charging glow at source
   for (let i = 0; i < 20; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const r = rng(3, 25);
     ps.push({
       x: x + Math.cos(a) * r, y: y + Math.sin(a) * r,
@@ -550,7 +554,7 @@ function spawnSolarBeam(x: number, y: number, _color: string): Particle[] {
 
   // Light ring at source
   for (let i = 0; i < 18; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     ps.push({
       x, y,
       vx: Math.cos(a) * rng(1, 3),
@@ -571,7 +575,7 @@ function spawnSolarBeam(x: number, y: number, _color: string): Particle[] {
 
 function spawnBubbleBeam(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const streamAngle = Math.random() * Math.PI * 2;
+  const streamAngle = rngUpAngle();
 
   // Stream of bubbles — wider, more particles, longer life
   for (let i = 0; i < 55; i++) {
@@ -625,12 +629,12 @@ function spawnWhirlpool(x: number, y: number, _color: string): Particle[] {
 
   // Center suction particles
   for (let i = 0; i < 12; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const r = rng(5, 25);
     ps.push({
       x: x + Math.cos(a) * r, y: y + Math.sin(a) * r,
       vx: -Math.cos(a) * rng(0.5, 1.5),
-      vy: -Math.sin(a) * rng(0.5, 1.5) - rng(0.5, 1),
+      vy: -Math.abs(Math.sin(a)) * rng(0.5, 1.5) - rng(0.5, 1),
       life: rng(15, 30), maxLife: 35,
       color: "#FFF",
       size: rng(1, 2),
@@ -643,7 +647,7 @@ function spawnWhirlpool(x: number, y: number, _color: string): Particle[] {
 
 function spawnAquaJet(x: number, y: number, _color: string): Particle[] {
   const ps: Particle[] = [];
-  const jetAngle = Math.random() * Math.PI * 2;
+  const jetAngle = rngUpAngle();
 
   // Fast water streak trail — longer, more particles
   for (let i = 0; i < 50; i++) {
@@ -663,7 +667,7 @@ function spawnAquaJet(x: number, y: number, _color: string): Particle[] {
 
   // Water envelopment burst at origin
   for (let i = 0; i < 25; i++) {
-    const a = Math.random() * Math.PI * 2;
+    const a = rngUpAngle();
     const spd = rng(2, 7);
     ps.push({
       x, y,
@@ -890,7 +894,7 @@ export default forwardRef<MoveFxHandle>(function MoveFx(_props, ref) {
           // Generic radial burst
           const ps: Particle[] = [];
           for (let i = 0; i < 25; i++) {
-            const a = Math.random() * Math.PI * 2;
+            const a = rngUpAngle();
             const spd = 1.5 + Math.random() * 3.5;
             ps.push({
               x: _x, y: _y,
