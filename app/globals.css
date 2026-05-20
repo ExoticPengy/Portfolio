@@ -760,11 +760,30 @@ html, body {
   display: flex;
   flex-direction: column;
   transition: transform 300ms, box-shadow 300ms, border-color 300ms;
+  cursor: pointer;
 }
 .project-card:hover {
   border-color: var(--accent);
   transform: translateY(-4px);
   box-shadow: 0 30px 80px -20px color-mix(in oklab, var(--accent) 50%, transparent);
+}
+.project-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.project-card-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: transparent;
+  text-transform: uppercase;
+  transition: color 200ms;
+}
+.project-card:hover .project-card-hint {
+  color: color-mix(in oklab, var(--accent) 60%, transparent);
 }
 .project-img {
   height: 280px;
@@ -830,6 +849,414 @@ html, body {
   border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
   padding: 4px 8px;
   text-transform: uppercase;
+}
+
+/* === Project detail transition wrapper === */
+.project-detail-wrapper {
+  width: 100%;
+  grid-column: 1 / -1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shared overlay base */
+.poke-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* === 1. TEAR (Ruby/Sapphire) — colored strips peel away in pairs === */
+.tear-strip {
+  flex: 1;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent-2) 40%, transparent);
+}
+.tear-strip:nth-child(1)  { background: linear-gradient(90deg, var(--accent) 0%, color-mix(in oklab, var(--accent) 40%, var(--bg-0)) 100%); }
+.tear-strip:nth-child(2)  { background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 70%, var(--bg-1)) 0%, var(--accent) 100%); }
+.tear-strip:nth-child(3)  { background: linear-gradient(90deg, var(--accent) 0%, color-mix(in oklab, var(--accent) 30%, var(--bg-0)) 100%); }
+.tear-strip:nth-child(4)  { background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 60%, var(--bg-1)) 0%, var(--accent) 100%); }
+.tear-strip:nth-child(5)  { background: linear-gradient(90deg, var(--accent) 0%, color-mix(in oklab, var(--accent) 20%, var(--bg-0)) 100%); }
+.tear-strip:nth-child(6)  { background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 50%, var(--bg-1)) 0%, var(--accent) 100%); }
+.tear-strip.tearing:nth-child(odd) {
+  animation: tear-right 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.tear-strip.tearing:nth-child(even) {
+  animation: tear-left 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.tear-strip.tearing:nth-child(1), .tear-strip.tearing:nth-child(2) { animation-delay: 0ms; }
+.tear-strip.tearing:nth-child(3), .tear-strip.tearing:nth-child(4) { animation-delay: 200ms; }
+.tear-strip.tearing:nth-child(5), .tear-strip.tearing:nth-child(6) { animation-delay: 400ms; }
+
+@keyframes tear-right {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(110%); opacity: 0; }
+}
+@keyframes tear-left {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-110%); opacity: 0; }
+}
+
+/* === 2. MOSAIC (Diamond/Pearl) — grid tiles flip away in wave === */
+.mosaic-tile {
+  border: 1px solid color-mix(in oklab, var(--accent-2) 35%, transparent);
+}
+/* Checkerboard — light/dark accent tiles */
+.mosaic-tile:nth-child(odd) {
+  background: linear-gradient(135deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 55%, var(--bg-1)) 100%
+  );
+}
+.mosaic-tile:nth-child(even) {
+  background: linear-gradient(135deg,
+    color-mix(in oklab, var(--accent) 75%, var(--bg-1)) 0%,
+    color-mix(in oklab, var(--accent) 25%, var(--bg-0)) 100%
+  );
+}
+.mosaic-tile.shattering {
+  animation: tile-flip 650ms ease-in-out forwards;
+}
+/* Wave from center outward */
+.mosaic-tile.shattering:nth-child(1)  { animation-delay: 0ms; }
+.mosaic-tile.shattering:nth-child(2)  { animation-delay: 0ms; }
+.mosaic-tile.shattering:nth-child(3)  { animation-delay: 0ms; }
+.mosaic-tile.shattering:nth-child(4)  { animation-delay: 0ms; }
+.mosaic-tile.shattering:nth-child(5)  { animation-delay: 80ms; }
+.mosaic-tile.shattering:nth-child(6)  { animation-delay: 80ms; }
+.mosaic-tile.shattering:nth-child(7)  { animation-delay: 80ms; }
+.mosaic-tile.shattering:nth-child(8)  { animation-delay: 80ms; }
+.mosaic-tile.shattering:nth-child(9)  { animation-delay: 160ms; }
+.mosaic-tile.shattering:nth-child(10) { animation-delay: 160ms; }
+.mosaic-tile.shattering:nth-child(11) { animation-delay: 160ms; }
+.mosaic-tile.shattering:nth-child(12) { animation-delay: 160ms; }
+
+@keyframes tile-flip {
+  0%   { transform: perspective(500px) rotateY(0) scale(1); opacity: 1; }
+  100% { transform: perspective(500px) rotateY(80deg) scale(0.6); opacity: 0; }
+}
+
+/* === 3. BLINDS — vertical strips rotate open like window blinds === */
+.blind-strip {
+  flex: 1;
+  transform-origin: left center;
+  border-right: 1px solid color-mix(in oklab, var(--accent-2) 35%, transparent);
+}
+.blind-strip:nth-child(odd) {
+  background: linear-gradient(180deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 40%, var(--bg-1)) 100%
+  );
+}
+.blind-strip:nth-child(even) {
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 60%, var(--bg-1)) 0%,
+    color-mix(in oklab, var(--accent) 20%, var(--bg-0)) 100%
+  );
+}
+.blind-strip.opening {
+  animation: blind-open 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.blind-strip.opening:nth-child(1)  { animation-delay: 0ms; }
+.blind-strip.opening:nth-child(2)  { animation-delay: 60ms; }
+.blind-strip.opening:nth-child(3)  { animation-delay: 120ms; }
+.blind-strip.opening:nth-child(4)  { animation-delay: 180ms; }
+.blind-strip.opening:nth-child(5)  { animation-delay: 240ms; }
+.blind-strip.opening:nth-child(6)  { animation-delay: 300ms; }
+.blind-strip.opening:nth-child(7)  { animation-delay: 360ms; }
+.blind-strip.opening:nth-child(8)  { animation-delay: 420ms; }
+
+@keyframes blind-open {
+  0%   { transform: perspective(600px) rotateY(0); opacity: 1; }
+  100% { transform: perspective(600px) rotateY(85deg); opacity: 0; }
+}
+
+/* === 4. SLASH (Black/White) — diagonal cut sweeps across === */
+.slash-half {
+  position: absolute;
+  inset: 0;
+}
+.slash-half.top {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: linear-gradient(135deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 50%, var(--bg-1)) 60%,
+    color-mix(in oklab, var(--accent) 15%, var(--bg-0)) 100%
+  );
+  border-bottom: 2px solid color-mix(in oklab, var(--accent-2) 60%, transparent);
+}
+.slash-half.bottom {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(315deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 50%, var(--bg-1)) 60%,
+    color-mix(in oklab, var(--accent) 15%, var(--bg-0)) 100%
+  );
+  border-top: 2px solid color-mix(in oklab, var(--accent-2) 60%, transparent);
+}
+.slash-half.top.slashing {
+  animation: slash-up 750ms cubic-bezier(0.5, 0, 0.3, 1) forwards;
+}
+.slash-half.bottom.slashing {
+  animation: slash-down 750ms cubic-bezier(0.5, 0, 0.3, 1) forwards;
+}
+
+@keyframes slash-up {
+  0%   { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(-15%, -15%); opacity: 0; }
+}
+@keyframes slash-down {
+  0%   { transform: translate(0, 0); opacity: 1; }
+  100% { transform: translate(15%, 15%); opacity: 0; }
+}
+
+/* === 5. CASCADE — strips drop downward like waterfall === */
+.cascade-strip {
+  flex: 1;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent-2) 30%, transparent);
+  background: linear-gradient(180deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--accent) 35%, var(--bg-1)) 100%
+  );
+}
+.cascade-strip.falling {
+  animation: cascade-drop 650ms cubic-bezier(0.5, 0, 0.7, 1) forwards;
+}
+.cascade-strip.falling:nth-child(1)  { animation-delay: 0ms; }
+.cascade-strip.falling:nth-child(2)  { animation-delay: 80ms; }
+.cascade-strip.falling:nth-child(3)  { animation-delay: 160ms; }
+.cascade-strip.falling:nth-child(4)  { animation-delay: 240ms; }
+.cascade-strip.falling:nth-child(5)  { animation-delay: 320ms; }
+.cascade-strip.falling:nth-child(6)  { animation-delay: 400ms; }
+
+@keyframes cascade-drop {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+
+/* === Detail entrance === */
+.project-detail {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+.project-detail.exiting {
+  animation: detail-swoosh-up 300ms ease-in forwards;
+}
+
+@keyframes detail-swoosh-up {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+/* Content stagger reveal after transition */
+.project-detail .project-detail-hero {
+  animation: reveal 500ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: 350ms;
+  opacity: 0;
+}
+.project-detail .project-detail-section {
+  animation: reveal 500ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  opacity: 0;
+}
+.project-detail .project-detail-section:nth-of-type(1) { animation-delay: 480ms; }
+.project-detail .project-detail-section:nth-of-type(2) { animation-delay: 610ms; }
+
+.project-detail-header {
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 20;
+}
+
+.project-detail-back {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: 1px solid color-mix(in oklab, var(--fg-dim) 40%, transparent);
+  padding: 10px 16px;
+  transition: all 200ms;
+}
+.project-detail-back:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+.project-detail-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+.project-detail-img {
+  aspect-ratio: 16/10;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--accent) 25%, transparent) 0px,
+      color-mix(in oklab, var(--accent) 25%, transparent) 8px,
+      transparent 8px,
+      transparent 20px
+    ),
+    color-mix(in oklab, var(--bg-1) 80%, var(--accent));
+  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  position: relative;
+}
+
+.project-detail-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.project-detail-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--fg);
+  text-transform: uppercase;
+}
+
+.project-detail-desc {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+/* Detail sections */
+.project-detail-section {
+  margin-bottom: 40px;
+}
+
+.project-detail-section-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+}
+
+.project-detail-log {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.project-detail-log-item {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px dashed color-mix(in oklab, var(--fg-dim) 20%, transparent);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.project-detail-log-item:last-child {
+  border-bottom: none;
+}
+
+.log-marker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  flex-shrink: 0;
+  min-width: 28px;
+}
+
+/* Project links */
+.project-detail-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.project-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--panel);
+  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  text-decoration: none;
+  transition: all 250ms;
+  flex: 1;
+  min-width: 240px;
+}
+
+.project-link:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 30px color-mix(in oklab, var(--accent) 35%, transparent);
+  transform: translateY(-2px);
+}
+
+.project-link .link-icon {
+  font-size: 18px;
+  color: var(--accent-2);
+  flex-shrink: 0;
+}
+
+.project-link .link-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.project-link .link-arrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--accent);
+  transition: transform 200ms;
+}
+
+.project-link:hover .link-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 639px) {
+  .project-detail-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .project-detail-img {
+    aspect-ratio: 16/9;
+  }
+  .project-detail-title {
+    font-size: clamp(28px, 7vw, 48px);
+  }
+  .project-detail-links {
+    flex-direction: column;
+  }
+  .project-link {
+    min-width: 0;
+  }
 }
 
 /* Skills */

@@ -6,12 +6,14 @@ type Props = {
   ghost?: string;
   onBack: () => void;
   children: ReactNode;
+  overlay?: ReactNode;
 };
 
-export default function SectionShell({ num, title, ghost, onBack, children }: Props) {
+export default function SectionShell({ num, title, ghost, onBack, children, overlay }: Props) {
   return (
     <div className="section-inner">
       {ghost && <div className="section-ghost">{ghost}</div>}
+      {overlay}
       <div className="section-head reveal">
         <div>
           <div className="meta">STAGE {num} · NOW LOADED</div>

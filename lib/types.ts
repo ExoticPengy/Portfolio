@@ -1,5 +1,16 @@
 export type View = "home" | "flying" | "about" | "projects" | "skills" | "contact";
 
+export interface ProjectData {
+  num: string;
+  title: string;
+  desc: string;
+  tags: string[];
+  img: string;
+  github?: string;
+  live?: string;
+  involvements?: string[];
+}
+
 export type PaletteName =
   | "purple"
   | "purple-gold"
