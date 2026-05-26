@@ -27,6 +27,7 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "Chong Ming Li — Software Developer · Data Scientist",
   description: "Personal portfolio. Stage select.",
+  icons: { icon: "/favicon.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

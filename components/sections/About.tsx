@@ -46,7 +46,7 @@ export default function About({ onBack }: { onBack: () => void }) {
       </div>
       <div className="reveal d2">
         <div className="headshot">
-          <span className="placeholder-label">[ HEADSHOT · 4:5 ]</span>
+          <img src="/headshot.png" alt="Chong Ming Li" className="headshot-img" />
         </div>
       </div>
     </SectionShell>

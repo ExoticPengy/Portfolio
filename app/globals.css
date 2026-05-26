@@ -719,7 +719,8 @@ html, body {
 /* Headshot placeholder */
 .headshot {
   position: relative;
-  aspect-ratio: 4/5;
+  aspect-ratio: 4/4;
+  align-self: end;
   background:
     repeating-linear-gradient(
       45deg,
@@ -742,6 +743,14 @@ html, body {
   text-transform: uppercase;
   background: var(--bg-0);
   padding: 4px 8px;
+}
+
+.headshot-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Projects */
@@ -811,6 +820,23 @@ html, body {
   padding: 4px 8px;
   text-transform: uppercase;
 }
+
+.project-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  position: absolute;
+  inset: 0;
+}
+
+.project-cover-detail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
 .project-body { padding: 24px 28px 28px 28px; }
 .project-num {
   font-family: var(--font-mono);
@@ -1104,10 +1130,10 @@ html, body {
       transparent 20px
     ),
     color-mix(in oklab, var(--bg-1) 80%, var(--accent));
-  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+  border: none;
   display: flex;
   align-items: flex-end;
-  padding: 16px;
+  padding: 0;
   position: relative;
 }
 
@@ -1216,6 +1242,19 @@ html, body {
   font-size: 18px;
   color: var(--accent-2);
   flex-shrink: 0;
+}
+
+.project-link .link-icon-svg {
+  font-size: 22px;
+  color: var(--accent-2);
+  flex-shrink: 0;
+}
+
+.project-link .link-favicon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 2px;
 }
 
 .project-link .link-label {

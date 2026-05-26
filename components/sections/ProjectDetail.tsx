@@ -1,3 +1,4 @@
+import { FaGithub } from "react-icons/fa";
 import type { ProjectData } from "@/lib/types";
 
 type Props = {
@@ -17,7 +18,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
 
       <div className="project-detail-hero">
         <div className="project-detail-img">
-          <span className="pl-tag">[ {project.img.toUpperCase()} ]</span>
+          <img src={project.img} alt={project.title} className="project-cover-detail" />
         </div>
         <div className="project-detail-meta">
           <div className="project-num">STAGE {project.num} · CLEARED</div>
@@ -55,7 +56,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
               rel="noopener noreferrer"
               className="project-link"
             >
-              <span className="link-icon">&#9650;</span>
+              <FaGithub className="link-icon-svg" />
               <span className="link-label">SOURCE CODE</span>
               <span className="link-arrow">→</span>
             </a>
@@ -67,8 +68,8 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
               rel="noopener noreferrer"
               className="project-link"
             >
-              <span className="link-icon">&#9670;</span>
-              <span className="link-label">LIVE DEPLOY</span>
+              <span className="link-icon"><img src="/images/tiandi-favicon.png" alt="" className="link-favicon" /></span>
+              <span className="link-label">LIVE DEPLOYMENT</span>
               <span className="link-arrow">→</span>
             </a>
           )}
