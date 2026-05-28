@@ -12,6 +12,7 @@ const PROJECTS: ProjectData[] = [
     tags: ["Next.js", "Tailwind CSS", "TypeScript", "LIVE"],
     img: "/images/projects/tiandi.png",
     live: "https://tiandi.app",
+    favicon: "/images/tiandi-favicon.png",
     involvements: [
       "Built the full landing page with hero, about, services, gallery, and contact sections",
       "Implemented booking flow and responsive navigation with mobile support",
@@ -64,7 +65,7 @@ const PROJECTS: ProjectData[] = [
     tags: ["JavaScript", "Node.js", "AI", "VERCEL"],
     img: "/images/projects/ai-image-generator.png",
     github: "https://github.com/ExoticPengy/AI-image-generator",
-    live: "https://ai-image-generator-jade-six.vercel.app",
+    live: "https://ai-image-generator.exoticpengy.me",
     involvements: [
       "Wired up a Node.js backend to an AI image generation API",
       "Built the client-side prompt-to-image flow with vanilla JavaScript",
@@ -78,7 +79,8 @@ const PROJECTS: ProjectData[] = [
     tags: ["SvelteKit", "TypeScript", "Firebase", "Vercel"],
     img: "/images/projects/profiles-sveltekit.png",
     github: "https://github.com/ExoticPengy/Profiles-Sveltekit",
-    live: "https://profile-vercel-lac.vercel.app",
+    live: "https://profiles.exoticpengy.me",
+    favicon: "/images/profiles-favicon.png",
     involvements: [
       "Built username registration with debounced Firestore availability checks and atomic batch writes",
       "Implemented profile editing with drag-and-drop link reordering and public/private toggle",

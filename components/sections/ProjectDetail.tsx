@@ -1,4 +1,4 @@
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaGlobe } from "react-icons/fa";
 import type { ProjectData } from "@/lib/types";
 
 type Props = {
@@ -68,7 +68,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
               rel="noopener noreferrer"
               className="project-link"
             >
-              <span className="link-icon"><img src="/images/tiandi-favicon.png" alt="" className="link-favicon" /></span>
+              {project.favicon ? <img src={project.favicon} alt="" className="link-favicon" /> : <FaGlobe className="link-icon-svg" />}
               <span className="link-label">LIVE DEPLOYMENT</span>
               <span className="link-arrow">→</span>
             </a>

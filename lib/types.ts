@@ -8,6 +8,7 @@ export interface ProjectData {
   img: string;
   github?: string;
   live?: string;
+  favicon?: string;
   involvements?: string[];
 }
 
