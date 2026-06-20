@@ -418,25 +418,29 @@ html, body {
   position: absolute;
   top: 50px; left: 16px; right: 16px;
   height: 160px;
+  --stage-tint: var(--accent);
   background:
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in oklab, var(--accent) 20%, transparent) 0px,
-      color-mix(in oklab, var(--accent) 20%, transparent) 6px,
-      transparent 6px,
-      transparent 14px
-    ),
-    color-mix(in oklab, var(--bg-1) 80%, var(--accent));
-  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+    radial-gradient(circle at 50% 38%, color-mix(in oklab, var(--stage-tint) 55%, transparent), transparent 70%),
+    color-mix(in oklab, var(--bg-1) 70%, var(--stage-tint));
+  border: 1px solid color-mix(in oklab, var(--stage-tint) 45%, transparent);
   display: flex;
-  align-items: flex-end;
-  padding: 10px 12px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  color: var(--fg-dim);
-  text-transform: uppercase;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
+  overflow: hidden;
+}
+
+/* ponytail: fixed per-stage hues, intentional clash with palette theming */
+.panel-img[data-stage="about"]    { --stage-tint: #4aa3ff; }
+.panel-img[data-stage="projects"] { --stage-tint: #ff4d9d; }
+.panel-img[data-stage="skills"]   { --stage-tint: #ffc83d; }
+.panel-img[data-stage="contact"]  { --stage-tint: #3ddc84; }
+
+.panel-img-icon {
+  width: 56px;
+  height: 56px;
+  color: color-mix(in oklab, var(--stage-tint) 75%, white);
+  filter: drop-shadow(0 0 12px color-mix(in oklab, var(--stage-tint) 60%, transparent));
 }
 
 .panel-label { z-index: 2; }
