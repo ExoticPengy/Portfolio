@@ -1,15 +1,7 @@
 "use client";
 
-import type { IconType } from "react-icons";
-import { FaUser, FaGamepad, FaBolt, FaEnvelope } from "react-icons/fa";
 import type { PanelData } from "@/lib/types";
-
-const STAGE_ICON: Record<PanelData["id"], IconType> = {
-  about: FaUser,
-  projects: FaGamepad,
-  skills: FaBolt,
-  contact: FaEnvelope,
-};
+import { StageIcon } from "@/lib/stageIcons";
 
 type Props = {
   panel: PanelData;
@@ -20,7 +12,6 @@ type Props = {
 };
 
 export default function Panel({ panel, focused, onActivate, onHover, onLeave }: Props) {
-  const Icon = STAGE_ICON[panel.id];
   return (
     <div
       className="panel"
@@ -45,9 +36,9 @@ export default function Panel({ panel, focused, onActivate, onHover, onLeave }: 
         <span className="panel-corner bl" />
         <span className="panel-corner br" />
         <div className="panel-num">STAGE {panel.num}</div>
-        <div className="panel-glyph">{panel.glyph}</div>
+        <div className="panel-glyph"><StageIcon id={panel.id} className="panel-glyph-icon" /></div>
         <div className="panel-img" data-stage={panel.id}>
-          <Icon className="panel-img-icon" />
+          <StageIcon id={panel.id} className="panel-img-icon" />
         </div>
         <div className="panel-label">
           <div className="big">{panel.label}</div>

@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { useResponsiveScale } from "@/hooks/useResponsiveScale";
 import { useTweaks } from "@/hooks/useTweaks";
 import { useParallax } from "@/hooks/useParallax";
 import { useFlyTransition } from "@/hooks/useFlyTransition";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
+import { useKonami } from "@/hooks/useKonami";
 import { useAudio } from "@/hooks/useAudio";
-import { whoosh, click, hover as hoverSfx, thud } from "@/lib/audio";
+import { whoosh, click, hover as hoverSfx, thud, jingle, startMusic, stopMusic, setSfxVolume, setMusicVolume } from "@/lib/audio";
+import BootSequence from "./BootSequence";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -26,19 +28,37 @@ import { PANELS } from "@/lib/panels";
 
 export default function Stage() {
   useResponsiveScale();
-  const { tweaks } = useTweaks();
+  const { tweaks, setTweak } = useTweaks();
   useAudio(tweaks.soundEnabled);
   const [view, setView] = useState<View>("home");
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
   const [kbActive, setKbActive] = useState<boolean>(false);
   const [level, setLevel] = useState(1);
+  const [shinyToast, setShinyToast] = useState(false);
+
+  const onKonami = useCallback(() => {
+    const next = !tweaks.shiny;
+    setTweak("shiny", next);
+    if (next) { jingle(); setShinyToast(true); setTimeout(() => setShinyToast(false), 2600); }
+  }, [tweaks.shiny, setTweak]);
+  useKonami(onKonami);
+
+  useEffect(() => { setSfxVolume(tweaks.sfxVolume / 100); }, [tweaks.sfxVolume]);
+  useEffect(() => { setMusicVolume(tweaks.musicVolume / 100); }, [tweaks.musicVolume]);
+
+  useEffect(() => {
+    if (tweaks.musicEnabled) startMusic();
+    else stopMusic();
+    return () => stopMusic();
+  }, [tweaks.musicEnabled]);
 
   const handleLevelTick = useCallback(() => setLevel((l) => l + 1), []);
   const handleLevelUp = useCallback(() => setLevel((l) => l + 1), []);
   const handleResetLevel = useCallback(() => setLevel(1), []);
 
   const worldRef = useRef<HTMLDivElement | null>(null);
+  const glowRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
   const flashRef = useRef<HTMLDivElement | null>(null);
   const streakRef = useRef<HTMLDivElement | null>(null);
@@ -50,6 +70,11 @@ export default function Stage() {
     const rect = e.currentTarget.getBoundingClientRect();
     mouseRef.current.tx = e.clientX / rect.width - 0.5;
     mouseRef.current.ty = e.clientY / rect.height - 0.5;
+    const g = glowRef.current;
+    if (g) {
+      g.style.setProperty("--mx", e.clientX + "px");
+      g.style.setProperty("--my", e.clientY + "px");
+    }
   };
 
   const { fly, back } = useFlyTransition({
@@ -70,6 +95,7 @@ export default function Stage() {
 
   return (
     <div className="app" onMouseMove={onMouseMove}>
+      <div ref={glowRef} className="cursor-glow" />
       <div className="bg-grid" />
       <div className="bg-vignette" />
       <BackgroundBurst />
@@ -125,6 +151,9 @@ export default function Stage() {
         }}
       />
       <MoveFx ref={moveFxRef} />
+
+      {shinyToast && <div className="shiny-toast">✦ SHINY MODE UNLOCKED</div>}
+      <BootSequence />
     </div>
   );
 }

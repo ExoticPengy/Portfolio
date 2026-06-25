@@ -67,6 +67,23 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
 
           <Section label="AUDIO" />
           <Toggle label="UI Sounds" value={tweaks.soundEnabled} onChange={(v) => setTweak("soundEnabled", v)} />
+          <Row label={`SFX Vol · ${tweaks.sfxVolume}`}>
+            <input
+              type="range" min={0} max={100} step={5}
+              value={tweaks.sfxVolume}
+              onChange={(e) => setTweak("sfxVolume", Number(e.target.value))}
+              style={{ flex: 1 }}
+            />
+          </Row>
+          <Toggle label="Music"     value={tweaks.musicEnabled} onChange={(v) => setTweak("musicEnabled", v)} />
+          <Row label={`Music Vol · ${tweaks.musicVolume}`}>
+            <input
+              type="range" min={0} max={100} step={5}
+              value={tweaks.musicVolume}
+              onChange={(e) => setTweak("musicVolume", Number(e.target.value))}
+              style={{ flex: 1 }}
+            />
+          </Row>
 
           {onResetLevel && (
             <>

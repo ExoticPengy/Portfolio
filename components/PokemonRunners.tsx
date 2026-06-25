@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useMemo } from "react";
+import { useTweaks } from "@/hooks/useTweaks";
 
 // Evolution chains: [base, stage1, stage2] — PokeAPI sprite IDs
 const EVO_CHAIN: Record<string, number[]> = {
@@ -19,11 +20,12 @@ function getEvoStage(name: string, level: number): number {
   return 0;
 }
 
-function getSpriteUrl(name: string, level: number, fallbackId: number): string {
+function getSpriteUrl(name: string, level: number, fallbackId: number, shiny: boolean): string {
+  const dir = shiny ? `${SPRITE_BASE}/shiny` : SPRITE_BASE;
   const chain = EVO_CHAIN[name.toLowerCase()];
-  if (!chain) return `${SPRITE_BASE}/${fallbackId}.gif`;
+  if (!chain) return `${dir}/${fallbackId}.gif`;
   const stage = getEvoStage(name, level);
-  return `${SPRITE_BASE}/${chain[stage]}.gif`;
+  return `${dir}/${chain[stage]}.gif`;
 }
 
 interface PokemonDef {
@@ -69,6 +71,8 @@ type State = {
 };
 
 export default function PokemonRunners({ level, onPokemonClick }: PokemonRunnersProps) {
+  const { tweaks } = useTweaks();
+  const shiny = tweaks.shiny;
   const wrapperRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const statesRef = useRef<State[]>([]);
@@ -77,8 +81,8 @@ export default function PokemonRunners({ level, onPokemonClick }: PokemonRunners
 
   // Compute current sprite URLs based on level
   const sprites = useMemo(
-    () => POKEMON.map((p) => getSpriteUrl(p.name, level, p.fallbackId)),
-    [level]
+    () => POKEMON.map((p) => getSpriteUrl(p.name, level, p.fallbackId, shiny)),
+    [level, shiny]
   );
 
   // Track evolutions for flash effect

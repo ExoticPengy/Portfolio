@@ -40,6 +40,7 @@ export default function Contact({ onBack }: { onBack: () => void }) {
           </button>
         </div>
       </div>
+      <span className="konami-hint" aria-hidden="true">↑↑↓↓←→←→BA</span>
     </SectionShell>
   );
 }
