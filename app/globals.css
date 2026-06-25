@@ -1993,7 +1993,9 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
 .nf-line b { color: var(--accent-2); }
 .nf-dim { color: var(--fg-dim); font-size: 14px; }
 .nf-run {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 14px;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -2004,6 +2006,7 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
   text-decoration: none;
   font-weight: 700;
 }
+.nf-run-icon { width: 16px; height: 16px; display: block; }
 .nf-run:hover { background: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
