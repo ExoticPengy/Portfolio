@@ -1877,20 +1877,37 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
 }
 .konami-hint:hover { opacity: 0.9; color: var(--accent-2); }
 
-/* === Boot / INSERT COIN intro === */
+/* === Boot intro: fullscreen video → crossfade into stage === */
 .boot {
   position: fixed;
   inset: 0;
   z-index: 10000;
+  background: #000;
+}
+/* fade-out is driven by WAAPI in BootSequence.tsx (see finish) */
+.boot-done { pointer-events: none; }
+
+.boot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Idle "insert coin" screen, sits over the video's first frame until clicked */
+.boot-idle {
+  position: absolute;
+  inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 28px;
   background: radial-gradient(circle at 50% 50%, var(--bg-1), var(--bg-0) 70%);
   cursor: pointer;
 }
-.boot-booting { animation: bootOut 1.5s forwards; cursor: default; }
-@keyframes bootOut { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
-.boot-inner { text-align: center; }
 .boot-logo {
   font-family: var(--font-display);
   font-style: italic;
@@ -1899,8 +1916,7 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
   letter-spacing: -0.02em;
   text-shadow: 0 0 32px color-mix(in oklab, var(--accent) 60%, transparent);
 }
-.boot-coin {
-  margin-top: 28px;
+.boot-prompt {
   font-family: var(--font-mono);
   font-size: 14px;
   letter-spacing: 0.3em;
@@ -1908,35 +1924,18 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
   animation: coinBlink 1s steps(2, start) infinite;
 }
 @keyframes coinBlink { 50% { opacity: 0; } }
-.boot-loading {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.boot-bar {
-  width: 200px;
-  height: 8px;
-  border: 1px solid var(--accent);
-  position: relative;
-  overflow: hidden;
-}
-.boot-bar::after {
-  content: "";
+
+.boot-skip {
   position: absolute;
-  inset: 1px;
-  background: var(--accent);
-  transform-origin: left;
-  animation: bootBar 1.2s ease forwards;
-}
-@keyframes bootBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.boot-ready {
+  bottom: 24px;
+  right: 24px;
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.4em;
-  color: var(--fg-dim);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: color-mix(in oklab, var(--fg) 55%, transparent);
+  cursor: pointer;
 }
+.boot-skip:hover { color: var(--fg); }
 
 /* === 404 — wild MISSINGNO === */
 .nf {
@@ -2014,3 +2013,42 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
   .boot-coin,
   .nf-glitch { animation: none; }
 }
+
+/* === Themed range sliders (Tweaks panel) === */
+.tw-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+.tw-range::-webkit-slider-runnable-track {
+  height: 4px;
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+}
+.tw-range::-moz-range-track {
+  height: 4px;
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+}
+.tw-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 14px;
+  margin-top: -6px;
+  background: var(--accent-2);
+  border: 1px solid var(--bg-0);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--accent-2) 70%, transparent);
+}
+.tw-range::-moz-range-thumb {
+  width: 10px;
+  height: 14px;
+  border: 1px solid var(--bg-0);
+  border-radius: 0;
+  background: var(--accent-2);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--accent-2) 70%, transparent);
+}
+.tw-range:hover::-webkit-slider-thumb { background: var(--accent); }
+.tw-range:hover::-moz-range-thumb { background: var(--accent); }

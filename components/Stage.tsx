@@ -36,6 +36,7 @@ export default function Stage() {
   const [kbActive, setKbActive] = useState<boolean>(false);
   const [level, setLevel] = useState(1);
   const [shinyToast, setShinyToast] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
 
   const onKonami = useCallback(() => {
     const next = !tweaks.shiny;
@@ -44,17 +45,18 @@ export default function Stage() {
   }, [tweaks.shiny, setTweak]);
   useKonami(onKonami);
 
-  useEffect(() => { setSfxVolume(tweaks.sfxVolume / 100); }, [tweaks.sfxVolume]);
-  useEffect(() => { setMusicVolume(tweaks.musicVolume / 100); }, [tweaks.musicVolume]);
+  useEffect(() => { setSfxVolume(tweaks.sfxVolume / 10); }, [tweaks.sfxVolume]);
+  useEffect(() => { setMusicVolume(tweaks.musicVolume / 10); }, [tweaks.musicVolume]);
 
   useEffect(() => {
+    if (!introDone) return; // don't clash with the intro video's audio
     if (tweaks.musicEnabled) startMusic();
     else stopMusic();
     return () => stopMusic();
-  }, [tweaks.musicEnabled]);
+  }, [introDone, tweaks.musicEnabled]);
 
-  const handleLevelTick = useCallback(() => setLevel((l) => l + 1), []);
-  const handleLevelUp = useCallback(() => setLevel((l) => l + 1), []);
+  const handleLevelTick = useCallback(() => { if (introDone) setLevel((l) => l + 1); }, [introDone]);
+  const handleLevelUp = useCallback(() => { if (introDone) setLevel((l) => l + 1); }, [introDone]);
   const handleResetLevel = useCallback(() => setLevel(1), []);
 
   const worldRef = useRef<HTMLDivElement | null>(null);
@@ -153,7 +155,7 @@ export default function Stage() {
       <MoveFx ref={moveFxRef} />
 
       {shinyToast && <div className="shiny-toast">✦ SHINY MODE UNLOCKED</div>}
-      <BootSequence />
+      <BootSequence onFinish={() => setIntroDone(true)} />
     </div>
   );
 }

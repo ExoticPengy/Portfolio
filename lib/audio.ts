@@ -145,6 +145,63 @@ export function jingle() {
   });
 }
 
+export function coinClink() {
+  if (!enabled) return;
+  const c = getCtx();
+  if (!c) return;
+  const bus = getSfxBus(c);
+  [988, 1319].forEach((f, i) => { // B5 → E6, classic coin ding
+    const t = c.currentTime + i * 0.08;
+    const osc = c.createOscillator();
+    osc.type = "square";
+    osc.frequency.setValueAtTime(f, t);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.12, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(g).connect(bus);
+    osc.start(t);
+    osc.stop(t + 0.13);
+  });
+}
+
+export function coinDrop() {
+  if (!enabled) return;
+  const c = getCtx();
+  if (!c) return;
+  const bus = getSfxBus(c);
+  // descending tone — the fall
+  const osc = c.createOscillator();
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(1200, c.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(220, c.currentTime + 1.1);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, c.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.07, c.currentTime + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.1);
+  osc.connect(g).connect(bus);
+  osc.start();
+  osc.stop(c.currentTime + 1.2);
+  // metallic rattles bouncing down the passage
+  for (let i = 0; i < 5; i++) {
+    const t = c.currentTime + 0.15 + i * 0.2;
+    const buf = noiseBuffer(0.05);
+    if (!buf) continue;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const f = c.createBiquadFilter();
+    f.type = "bandpass";
+    f.frequency.value = 2000 + Math.random() * 1500;
+    f.Q.value = 8;
+    const gg = c.createGain();
+    gg.gain.setValueAtTime(0.06, t);
+    gg.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    src.connect(f).connect(gg).connect(bus);
+    src.start(t);
+    src.stop(t + 0.06);
+  }
+}
+
 export function setEnabled(v: boolean) { enabled = !!v; }
 export function init() { getCtx(); }
 

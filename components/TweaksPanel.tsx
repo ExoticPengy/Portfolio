@@ -33,6 +33,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
           style={{
             position: "fixed", right: 24, bottom: 110, zIndex: 50,
             width: 280, padding: 18,
+            maxHeight: "calc(100vh - 134px)", overflowY: "auto",
             background: "color-mix(in oklab, var(--bg-0) 92%, transparent)",
             border: "1px solid color-mix(in oklab, var(--accent) 35%, transparent)",
             color: "var(--fg)", fontFamily: "var(--font-mono)", fontSize: 11,
@@ -58,10 +59,10 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
           <Section label="MOTION" />
           <Row label={`Intensity · ${tweaks.motionIntensity}`}>
             <input
-              type="range" min={1} max={10} step={1}
+              type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.motionIntensity}
               onChange={(e) => setTweak("motionIntensity", Number(e.target.value))}
-              style={{ flex: 1 }}
+              style={{ width: 120, flex: "none" }}
             />
           </Row>
 
@@ -69,20 +70,40 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
           <Toggle label="UI Sounds" value={tweaks.soundEnabled} onChange={(v) => setTweak("soundEnabled", v)} />
           <Row label={`SFX Vol · ${tweaks.sfxVolume}`}>
             <input
-              type="range" min={0} max={100} step={5}
+              type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.sfxVolume}
               onChange={(e) => setTweak("sfxVolume", Number(e.target.value))}
-              style={{ flex: 1 }}
+              style={{ width: 120, flex: "none" }}
             />
           </Row>
           <Toggle label="Music"     value={tweaks.musicEnabled} onChange={(v) => setTweak("musicEnabled", v)} />
           <Row label={`Music Vol · ${tweaks.musicVolume}`}>
             <input
-              type="range" min={0} max={100} step={5}
+              type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.musicVolume}
               onChange={(e) => setTweak("musicVolume", Number(e.target.value))}
-              style={{ flex: 1 }}
+              style={{ width: 120, flex: "none" }}
             />
+          </Row>
+
+          <Section label="INTRO" />
+          <Row label="Boot Video">
+            <button
+              type="button"
+              onClick={() => { try { sessionStorage.removeItem("booted"); } catch { /* ignore */ } location.reload(); }}
+              style={{
+                background: "transparent",
+                color: "var(--fg)",
+                border: "1px solid color-mix(in oklab, var(--accent) 55%, transparent)",
+                padding: "3px 10px",
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                cursor: "pointer",
+                letterSpacing: "0.1em",
+              }}
+            >
+              REPLAY
+            </button>
           </Row>
 
           {onResetLevel && (

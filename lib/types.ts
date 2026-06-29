@@ -43,11 +43,11 @@ export type Tweaks = {
   sunburst: boolean;
   scanlines: boolean;
   grain: boolean;
-  motionIntensity: number; // 1..10
+  motionIntensity: number; // 0..10
   soundEnabled: boolean;
   musicEnabled: boolean;
-  sfxVolume: number;   // 0..100
-  musicVolume: number; // 0..100
+  sfxVolume: number;   // 0..10
+  musicVolume: number; // 0..10
   shiny: boolean; // konami easter egg
 };
 
@@ -59,7 +59,7 @@ export const DEFAULT_TWEAKS: Tweaks = {
   motionIntensity: 8,
   soundEnabled: true,
   musicEnabled: true,
-  sfxVolume: 80,
-  musicVolume: 25,
+  sfxVolume: 8,
+  musicVolume: 3,
   shiny: false,
 };
