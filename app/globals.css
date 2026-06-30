@@ -1283,6 +1283,158 @@ html, body {
   transform: translateX(4px);
 }
 
+/* === Grid card stats strip === */
+.project-card-stats {
+  display: flex;
+  gap: 18px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed color-mix(in oklab, var(--fg-dim) 20%, transparent);
+}
+.card-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-stat-value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+}
+.card-stat-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.15em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+
+/* === Detail · HIGH SCORES === */
+.project-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+}
+.detail-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  background: var(--panel);
+  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+  transition: border-color 250ms, box-shadow 250ms;
+}
+.detail-stat:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+.detail-stat-value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 34px;
+  line-height: 0.95;
+  color: var(--accent);
+}
+.detail-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+
+/* === Detail · TECH LOADOUT === */
+.project-detail-stack {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.stack-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+  transition: border-color 250ms, transform 250ms;
+}
+.stack-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.stack-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-transform: uppercase;
+}
+.stack-dot { color: var(--accent); }
+.stack-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+
+/* === Detail · FEATURE UNLOCKS === */
+.project-detail-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 4px 24px;
+}
+.feature-item {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px dashed color-mix(in oklab, var(--fg-dim) 18%, transparent);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.feature-star {
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+/* === Detail · SCREENSHOTS gallery === */
+.project-detail-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.gallery-shot {
+  display: block;
+  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+  overflow: hidden;
+  transition: border-color 250ms, transform 250ms, box-shadow 250ms;
+}
+.gallery-shot:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px -20px color-mix(in oklab, var(--accent) 45%, transparent);
+}
+.gallery-shot img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: top;
+}
+
 @media (max-width: 639px) {
   .project-detail-hero {
     grid-template-columns: 1fr;

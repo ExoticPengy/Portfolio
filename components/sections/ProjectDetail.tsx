@@ -32,8 +32,51 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         </div>
       </div>
 
-      {project.involvements && project.involvements.length > 0 && (
+      {project.stats && project.stats.length > 0 && (
         <div className="project-detail-section reveal d2">
+          <h2 className="project-detail-section-title">HIGH SCORES</h2>
+          <div className="project-detail-stats">
+            {project.stats.map((s) => (
+              <div key={s.label} className="detail-stat">
+                <span className="detail-stat-value">{s.value}</span>
+                <span className="detail-stat-label">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {project.stack && project.stack.length > 0 && (
+        <div className="project-detail-section reveal d2">
+          <h2 className="project-detail-section-title">TECH LOADOUT</h2>
+          <ul className="project-detail-stack">
+            {project.stack.map((s) => (
+              <li key={s.name} className="stack-item">
+                <span className="stack-name">{s.name}</span>
+                <span className="stack-dot">·</span>
+                <span className="stack-role">{s.role}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {project.features && project.features.length > 0 && (
+        <div className="project-detail-section reveal d3">
+          <h2 className="project-detail-section-title">FEATURE UNLOCKS</h2>
+          <ul className="project-detail-features">
+            {project.features.map((f, i) => (
+              <li key={i} className="feature-item">
+                <span className="feature-star">★</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {project.involvements && project.involvements.length > 0 && (
+        <div className="project-detail-section reveal d3">
           <h2 className="project-detail-section-title">INVOLVEMENT LOG</h2>
           <ul className="project-detail-log">
             {project.involvements.map((item, i) => (
@@ -43,6 +86,25 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {project.screenshots && project.screenshots.length > 0 && (
+        <div className="project-detail-section reveal d3">
+          <h2 className="project-detail-section-title">SCREENSHOTS</h2>
+          <div className="project-detail-gallery">
+            {project.screenshots.map((src, i) => (
+              <a
+                key={i}
+                href={src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gallery-shot"
+              >
+                <img src={src} alt={`${project.title} screenshot ${i + 1}`} />
+              </a>
+            ))}
+          </div>
         </div>
       )}
 

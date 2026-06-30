@@ -10,6 +10,10 @@ export interface ProjectData {
   live?: string;
   favicon?: string;
   involvements?: string[];
+  stats?: { value: string; label: string }[];   // HIGH SCORES
+  stack?: { name: string; role: string }[];      // TECH LOADOUT
+  features?: string[];                           // FEATURE UNLOCKS
+  screenshots?: string[];                        // SCREENSHOTS gallery (optional)
 }
 
 export type PaletteName =

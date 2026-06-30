@@ -18,6 +18,27 @@ const PROJECTS: ProjectData[] = [
       "Implemented booking flow and responsive navigation with mobile support",
       "Deployed to production at tiandi.app",
     ],
+    stats: [
+      { value: "500+", label: "PERFORMANCES" },
+      { value: "8", label: "PAGES" },
+      { value: "LIVE", label: "DEPLOYED" },
+    ],
+    stack: [
+      { name: "Next.js 16", role: "framework" },
+      { name: "React 19", role: "UI" },
+      { name: "TypeScript", role: "language" },
+      { name: "Tailwind CSS", role: "styling" },
+      { name: "Radix UI", role: "components" },
+      { name: "Supabase", role: "backend" },
+      { name: "Framer Motion", role: "animation" },
+    ],
+    features: [
+      "Multi-page site: home, about, services, pricing, gallery, FAQ, contact",
+      "Booking and contact flow to reserve performances",
+      "Admin panel with Supabase-backed gallery management",
+      "Testimonials, team, and FAQ sections",
+    ],
+    screenshots: [],
   },
   {
     num: "02",
@@ -31,6 +52,28 @@ const PROJECTS: ProjectData[] = [
       "Implemented MVVM architecture with Flow-based reactive ViewModels across 15+ Compose screens",
       "Integrated Firebase Authentication for email/password sign-in with navigation routing",
     ],
+    stats: [
+      { value: "15+", label: "SCREENS" },
+      { value: "6", label: "DB ENTITIES" },
+      { value: "OFFLINE", label: "FIRST" },
+    ],
+    stack: [
+      { name: "Kotlin", role: "language" },
+      { name: "Jetpack Compose", role: "UI" },
+      { name: "Material 3", role: "design" },
+      { name: "Room", role: "database" },
+      { name: "Firebase Auth", role: "auth" },
+      { name: "yCharts", role: "charts" },
+    ],
+    features: [
+      "Transaction tracking with categories, dates, and descriptions",
+      "Yearly budgeting with spend-vs-target monitoring",
+      "Financial goals with milestones and progress",
+      "Debt management with rates, schedules, and balances",
+      "Recurring bill reminders",
+      "Spending analysis with interactive charts",
+    ],
+    screenshots: [],
   },
   {
     num: "03",
@@ -41,9 +84,29 @@ const PROJECTS: ProjectData[] = [
     github: "https://github.com/ExoticPengy/HAndMaybe",
     involvements: [
       "Implemented Stripe Checkout Sessions in MYR with receipt emails via PHPMailer",
-      "Designed 10-table MySQL schema covering products, variations, cart, orders, and auth tokens",
+      "Designed 12-table MySQL schema covering products, variations, cart, orders, and auth tokens",
       "Built admin panel for product/category/order CRUD and role-based access control",
     ],
+    stats: [
+      { value: "130", label: "COMMITS" },
+      { value: "12", label: "DB TABLES" },
+      { value: "9", label: "PRODUCTS" },
+    ],
+    stack: [
+      { name: "PHP", role: "backend" },
+      { name: "MySQL", role: "database" },
+      { name: "Stripe", role: "payments" },
+      { name: "PHPMailer", role: "email" },
+      { name: "jQuery", role: "frontend" },
+    ],
+    features: [
+      "Stripe Checkout in Malaysian Ringgit with email receipts",
+      "Product variations (size, colour, stock) per item",
+      "Shopping cart and order history with tracking",
+      "Email verification and password reset flows",
+      "Full admin panel: product, category, and order CRUD",
+    ],
+    screenshots: [],
   },
   {
     num: "04",
@@ -57,6 +120,27 @@ const PROJECTS: ProjectData[] = [
       "Trained an ML regression model to predict charging time and integrated it via joblib",
       "Integrated Google Maps Directions API for route polyline, distance, and duration",
     ],
+    stats: [
+      { value: "3-TIER", label: "SEARCH" },
+      { value: "18", label: "STATIONS" },
+      { value: "ML", label: "MODEL" },
+    ],
+    stack: [
+      { name: "Python", role: "language" },
+      { name: "FastAPI", role: "framework" },
+      { name: "scikit-learn", role: "ML" },
+      { name: "PostgreSQL", role: "database" },
+      { name: "Google Maps", role: "routing" },
+    ],
+    features: [
+      "ML-predicted charging time per stop and battery",
+      "3-tier charger search with emergency fallbacks",
+      "Cost estimation in MYR by connector and power",
+      "Range-aware filtering on safe driveable distance",
+      "Real route data from Google Maps Directions API",
+      "Top-5 ranking by detour, availability, and power",
+    ],
+    screenshots: [],
   },
   {
     num: "05",
@@ -71,6 +155,26 @@ const PROJECTS: ProjectData[] = [
       "Built the client-side prompt-to-image flow with vanilla JavaScript",
       "Deployed to Vercel for a publicly accessible live demo",
     ],
+    stats: [
+      { value: "ASYNC", label: "JOB QUEUE" },
+      { value: "9", label: "API ROUTES" },
+      { value: "LIVE", label: "DEPLOYED" },
+    ],
+    stack: [
+      { name: "Next.js 15", role: "framework" },
+      { name: "Supabase", role: "backend" },
+      { name: "OpenAI", role: "AI" },
+      { name: "Stripe", role: "billing" },
+      { name: "Vercel", role: "hosting" },
+    ],
+    features: [
+      "Google sign-in with a credit-based usage system",
+      "Prompt-to-image generation via OpenAI",
+      "Edit studio with presets and image import",
+      "Monthly Stripe subscription that refills credits",
+      "Async job queue with a Supabase Edge worker",
+    ],
+    screenshots: [],
   },
   {
     num: "06",
@@ -86,6 +190,26 @@ const PROJECTS: ProjectData[] = [
       "Implemented profile editing with drag-and-drop link reordering and public/private toggle",
       "Set up Firebase Authentication with server-side session cookies for SSR-protected routes",
     ],
+    stats: [
+      { value: "8", label: "ROUTES" },
+      { value: "SSR", label: "AUTH" },
+      { value: "LIVE", label: "DEPLOYED" },
+    ],
+    stack: [
+      { name: "SvelteKit 2", role: "framework" },
+      { name: "TypeScript", role: "language" },
+      { name: "Tailwind + DaisyUI", role: "styling" },
+      { name: "Firebase", role: "backend" },
+      { name: "Vercel", role: "hosting" },
+    ],
+    features: [
+      "Google sign-in with server-side session cookies",
+      "Unique username claim with live availability checks",
+      "Drag-and-drop link reordering",
+      "Profile photo upload with live preview",
+      "Public/private publish toggle and bio editor",
+    ],
+    screenshots: [],
   },
   {
     num: "07",
@@ -98,6 +222,23 @@ const PROJECTS: ProjectData[] = [
       "Implemented full blackjack game logic — dealing, hitting, standing, and win conditions",
       "Built as a single-file C++ program with no external dependencies",
     ],
+    stats: [
+      { value: "1", label: "SOURCE FILE" },
+      { value: "0", label: "DEPENDENCIES" },
+      { value: "C++", label: "NATIVE" },
+    ],
+    stack: [
+      { name: "C++", role: "language" },
+      { name: "<random>", role: "RNG (Mersenne Twister)" },
+    ],
+    features: [
+      "Full hit/stand gameplay loop",
+      "Blackjack (natural 21) detection",
+      "Smart ace handling — valued at 1 or 11",
+      "Dealer AI that draws until it beats you",
+      "Play-again loop with a fresh deck each round",
+    ],
+    screenshots: [],
   },
   {
     num: "08",
@@ -111,6 +252,25 @@ const PROJECTS: ProjectData[] = [
       "Implemented heatmap aggregation and a window-sliding algorithm for meeting time recommendations",
       "Designed a dark glassmorphism UI with CSS backdrop-blur and custom animations",
     ],
+    stats: [
+      { value: "7×24", label: "GRID" },
+      { value: "TOP-3", label: "SLOTS" },
+      { value: "NO", label: "BACKEND" },
+    ],
+    stack: [
+      { name: "JavaScript", role: "frontend" },
+      { name: "Vite", role: "build" },
+      { name: "Custom CSS", role: "styling" },
+      { name: "Observer pattern", role: "state" },
+    ],
+    features: [
+      "Per-person availability grids",
+      "Drag-to-select hour blocks",
+      "Live group heatmap of overlaps",
+      "Top-3 meeting-slot recommendations",
+      "Weekly or specific date-range modes",
+    ],
+    screenshots: [],
   },
   {
     num: "09",
@@ -124,6 +284,25 @@ const PROJECTS: ProjectData[] = [
       "Choreographed anime.js timelines for staggered entry animations across KPIs and charts",
       "Authored a visualization plan document defining layout, color strategy, and interactivity",
     ],
+    stats: [
+      { value: "1,338", label: "RECORDS" },
+      { value: "4", label: "CHART TYPES" },
+      { value: "LIVE", label: "DEPLOYED" },
+    ],
+    stack: [
+      { name: "D3.js v7", role: "visualization" },
+      { name: "anime.js v4", role: "animation" },
+      { name: "Vite", role: "build" },
+      { name: "Netlify", role: "hosting" },
+    ],
+    features: [
+      "Scatter plot — age vs. charges by smoking status",
+      "Bar chart — average charges by region",
+      "Box plot — smokers vs. non-smokers",
+      "Histogram — BMI distribution by threshold",
+      "Animated entry transitions and hover effects",
+    ],
+    screenshots: [],
   },
 ];
 
@@ -258,6 +437,16 @@ export default function Projects({ onBack }: { onBack: () => void }) {
                       <span key={tg} className="tag">{tg}</span>
                     ))}
                   </div>
+                  {p.stats && p.stats.length > 0 && (
+                    <div className="project-card-stats">
+                      {p.stats.slice(0, 3).map((s) => (
+                        <div key={s.label} className="card-stat">
+                          <span className="card-stat-value">{s.value}</span>
+                          <span className="card-stat-label">{s.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="project-card-hint">PRESS ENTER · VIEW DETAILS</div>
               </div>
