@@ -32,6 +32,38 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         </div>
       </div>
 
+      {(project.github || project.live) && (
+        <div className="project-detail-section reveal d1">
+          <h2 className="project-detail-section-title">DEPLOYMENT LINKS</h2>
+          <div className="project-detail-links">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link"
+              >
+                <FaGithub className="link-icon-svg" />
+                <span className="link-label">SOURCE CODE</span>
+                <span className="link-arrow">→</span>
+              </a>
+            )}
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link"
+              >
+                {project.favicon ? <img src={project.favicon} alt="" className="link-favicon" /> : <FaGlobe className="link-icon-svg" />}
+                <span className="link-label">LIVE DEPLOYMENT</span>
+                <span className="link-arrow">→</span>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
       {project.stats && project.stats.length > 0 && (
         <div className="project-detail-section reveal d2">
           <h2 className="project-detail-section-title">HIGH SCORES</h2>
@@ -108,35 +140,6 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         </div>
       )}
 
-      <div className="project-detail-section reveal d3">
-        <h2 className="project-detail-section-title">DEPLOYMENT LINKS</h2>
-        <div className="project-detail-links">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-link"
-            >
-              <FaGithub className="link-icon-svg" />
-              <span className="link-label">SOURCE CODE</span>
-              <span className="link-arrow">→</span>
-            </a>
-          )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-link"
-            >
-              {project.favicon ? <img src={project.favicon} alt="" className="link-favicon" /> : <FaGlobe className="link-icon-svg" />}
-              <span className="link-label">LIVE DEPLOYMENT</span>
-              <span className="link-arrow">→</span>
-            </a>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
