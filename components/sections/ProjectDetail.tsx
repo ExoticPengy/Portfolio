@@ -233,6 +233,36 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         </div>
       )}
 
+      {project.collaborators && project.collaborators.length > 0 && (
+        <div className="project-detail-section reveal d3">
+          <h2 className="project-detail-section-title">CO-OP PLAYERS</h2>
+          <ul className="project-detail-collabs">
+            {project.collaborators.map((c) => {
+              const inner = (
+                <>
+                  {c.icon && <img src={c.icon} alt="" className="collab-favicon" />}
+                  <span className="collab-name">{c.name}</span>
+                  {c.role && <span className="collab-role">{c.role}</span>}
+                  {/* Favicon stands in for the external-link arrow when present. */}
+                  {c.url && !c.icon && <span className="collab-arrow">→</span>}
+                </>
+              );
+              return (
+                <li key={c.name} className="collab-item">
+                  {c.url ? (
+                    <a href={c.url} target="_blank" rel="noopener noreferrer" className="collab-link">
+                      {inner}
+                    </a>
+                  ) : (
+                    <span className="collab-link is-static">{inner}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
       {/* Portalled to body: an ancestor creates a containing block, which would
           otherwise anchor this `fixed` overlay to the section instead of the viewport. */}
       {zoomed && createPortal(

@@ -14,6 +14,7 @@ export interface ProjectData {
   live?: string;
   favicon?: string;
   involvements?: string[];
+  collaborators?: { name: string; url?: string; role?: string; icon?: string }[];
   stats?: { value: string; label: string }[];   // HIGH SCORES
   stack?: { name: string; role: string }[];      // TECH LOADOUT
   features?: string[];                           // FEATURE UNLOCKS

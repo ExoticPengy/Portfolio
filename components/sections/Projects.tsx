@@ -208,6 +208,9 @@ const PROJECTS: ProjectData[] = [
       "Email verification and password reset flows",
       "Full admin panel: product, category, and order CRUD",
     ],
+    collaborators: [
+      { name: "Elaine", url: "https://sillycookie.me", role: "Teammate", icon: "/images/sillycookie-favicon.png" },
+    ],
     screenshots: [
       "/images/projects/handmaybe-product.png",
       "/images/projects/handmaybe-cart.png",
@@ -285,6 +288,9 @@ const PROJECTS: ProjectData[] = [
       "Reviewer profiling by review velocity and Local Guide status",
       "One-click scan of a restaurant's reviews from a floating button",
       "Serverless AWS backend — Lambda, API Gateway, and S3",
+    ],
+    collaborators: [
+      { name: "Elaine", url: "https://sillycookie.me", role: "Team Penguining", icon: "/images/sillycookie-favicon.png" },
     ],
     screenshots: [
       "/images/projects/foodtrust-extension.png",
