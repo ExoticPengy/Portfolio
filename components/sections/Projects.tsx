@@ -297,7 +297,7 @@ const PROJECTS: ProjectData[] = [
     desc: "EV charging station recommendation engine — FastAPI microservice with a trained ML model. Enter a trip route, get the best charger stop ranked by detour, cost, and predicted charging time.",
     tags: ["Python", "FastAPI", "scikit-learn", "ML"],
     img: "/images/projects/fyp-api-logo.png",
-    coverAspect: 1.516,
+    coverAspect: 0.9, // clamped: phone shots are 0.449, which would force a 1365px hero
     coverFit: "contain",
     coverBg: "#F2FBF5", // soft mint, complements the green EV mark
     github: "https://github.com/ExoticPengy/FYP-API",
@@ -326,7 +326,10 @@ const PROJECTS: ProjectData[] = [
       "Real route data from Google Maps Directions API",
       "Top-5 ranking by detour, availability, and power",
     ],
-    screenshots: [],
+    screenshots: [
+      "/images/projects/fyp-api-newtrip.png",
+      "/images/projects/fyp-api-route.png",
+    ],
   },
   {
     num: "09",

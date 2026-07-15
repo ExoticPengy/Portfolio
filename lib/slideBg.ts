@@ -19,4 +19,6 @@ export const SLIDE_BG: Record<string, string> = {
   "/images/projects/foodtrust-extension.png": "#1F2123", // 61% of border
   "/images/projects/foodtrust-architecture.png": "#FFFFFF", // 100% of border
   "/images/projects/healthlens-kpis.png": "#0F172A", // 19% of border
+  "/images/projects/fyp-api-newtrip.png": "#F2F2F2", // phone shot: near-white mount
+  "/images/projects/fyp-api-route.png": "#FEFEFE", // phone shot: near-white mount
 };
