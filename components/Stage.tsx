@@ -99,13 +99,28 @@ export default function Stage() {
   // --- Hash route: keep the view in the URL so a refresh lands back here. ---
   // Restored via effect (not lazy initial state) to keep SSR markup and the first
   // client render identical. Deep links skip the fly transition.
+  // Latest values for the listener below, which is registered once on mount.
+  const viewRef = useRef(view);
+  const backRef = useRef(back);
+  useEffect(() => { viewRef.current = view; }, [view]);
+  useEffect(() => { backRef.current = back; }, [back]);
+
   const [routeReady, setRouteReady] = useState(false);
   useEffect(() => {
     const apply = () => {
       const { view: v } = parseHash(window.location.hash);
-      setView(v);
-      setFocusedId(v === "home" ? null : v);
-      setRouteReady(true); // batched with setView, so the writer never sees a stale view
+      const current = viewRef.current;
+      if (current !== v) {
+        if (v === "home" && current !== "home" && current !== "flying") {
+          // Browser Back must run the real return, or the world keeps the flown-in
+          // transform and its transition, and never animates out.
+          backRef.current();
+        } else {
+          setView(v); // deep link / forward: land directly, no fly transition
+          setFocusedId(v === "home" ? null : v);
+        }
+      }
+      setRouteReady(true); // batched above, so the writer never sees a stale view
     };
     apply(); // restore on mount
     window.addEventListener("hashchange", apply); // browser back/forward
