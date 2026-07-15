@@ -10,6 +10,7 @@ import { useKonami } from "@/hooks/useKonami";
 import { useAudio } from "@/hooks/useAudio";
 import { whoosh, click, hover as hoverSfx, thud, jingle, startMusic, stopMusic, setSfxVolume, setMusicVolume } from "@/lib/audio";
 import BootSequence from "./BootSequence";
+import { parseHash, formatHash } from "@/lib/route";
 import type { View } from "@/lib/types";
 import Hero from "./Hero";
 import Decor from "./Decor";
@@ -94,6 +95,33 @@ export default function Stage() {
   });
 
   const effectiveFocusedId = kbActive ? PANELS[keyboardIdx]?.id ?? null : focusedId;
+
+  // --- Hash route: keep the view in the URL so a refresh lands back here. ---
+  // Restored via effect (not lazy initial state) to keep SSR markup and the first
+  // client render identical. Deep links skip the fly transition.
+  const [routeReady, setRouteReady] = useState(false);
+  useEffect(() => {
+    const apply = () => {
+      const { view: v } = parseHash(window.location.hash);
+      setView(v);
+      setFocusedId(v === "home" ? null : v);
+      setRouteReady(true); // batched with setView, so the writer never sees a stale view
+    };
+    apply(); // restore on mount
+    window.addEventListener("hashchange", apply); // browser back/forward
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
+
+  useEffect(() => {
+    // Gate on state, not a ref: StrictMode double-invokes effects on mount and
+    // would burn a ref guard, letting the transient "home" clobber a deep link.
+    if (!routeReady) return;
+    if (view === "flying") return; // transient
+    const current = parseHash(window.location.hash);
+    if (current.view === view) return; // Projects owns the slug segment of #/projects/*
+    const next = formatHash(view);
+    if (window.location.hash !== next) window.location.hash = next;
+  }, [view, routeReady]);
 
   return (
     <div className="app" onMouseMove={onMouseMove}>

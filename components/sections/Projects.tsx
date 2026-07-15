@@ -1,7 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import SectionShell from "./SectionShell";
 import ProjectDetail from "./ProjectDetail";
 import { whoosh, click } from "@/lib/audio";
+import { parseHash, formatHash, slugify } from "@/lib/route";
 import type { ProjectData } from "@/lib/types";
 
 const PROJECTS: ProjectData[] = [
@@ -447,6 +448,30 @@ export default function Projects({ onBack }: { onBack: () => void }) {
       setExiting(false);
     }, 300);
   }, []);
+
+  // --- Hash route: this component owns the slug in #/projects/<slug>. ---
+  // Stage owns the view segment; the two never write the same part.
+  const [routeReady, setRouteReady] = useState(false);
+  useEffect(() => {
+    const apply = () => {
+      const { view, slug } = parseHash(window.location.hash);
+      if (view !== "projects") return; // leaving; Stage handles it
+      const found = slug ? PROJECTS.find((p) => slugify(p.title) === slug) ?? null : null;
+      setSelected(found); // deep link opens the detail directly, no transition
+      setRouteReady(true); // batched with setSelected, so the writer sees the restored slug
+    };
+    apply(); // restore on mount
+    window.addEventListener("hashchange", apply); // browser back/forward
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
+
+  useEffect(() => {
+    // Gate on state, not a ref — see the same guard in Stage.tsx.
+    if (!routeReady) return;
+    if (parseHash(window.location.hash).view !== "projects") return;
+    const next = formatHash("projects", selected ? slugify(selected.title) : null);
+    if (window.location.hash !== next) window.location.hash = next;
+  }, [selected, routeReady]);
 
   let overlay: React.ReactNode = null;
   if (animating) {
