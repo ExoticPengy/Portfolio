@@ -6,6 +6,10 @@ export interface ProjectData {
   desc: string;
   tags: string[];
   img: string;
+  coverFit?: "contain"; // logo covers: fit whole image, never crop (default crops to fill)
+  coverBg?: string; // backdrop behind the cover image (logo mark, or its sampled edge)
+  coverAspect?: number; // frame width/height, reserved for the tallest slide so
+  // switching slides never resizes the frame. See SLIDE_BG in lib/slideBg.ts.
   github?: string;
   live?: string;
   favicon?: string;

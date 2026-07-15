@@ -828,17 +828,28 @@ html, body {
 .project-cover {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
+  background: var(--bg-1);
   position: absolute;
   inset: 0;
 }
 
+/* Covers are never cropped: object-fit: cover was cutting up to 37% off wide
+   screenshots. The slide sits inside a frame reserved for the tallest slide;
+   spare space is filled with the slide's own colour (set inline), not a bar. */
 .project-cover-detail {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Logo art is transparent; `coverBg` supplies a backdrop that suits the mark. */
+.project-cover.is-contain,
+.project-cover-detail.is-logo {
+  padding: 24px;
 }
 
 .project-body { padding: 24px 28px 28px 28px; }
@@ -1123,8 +1134,9 @@ html, body {
   margin-bottom: 48px;
 }
 
+/* No fixed aspect: the frame hugs whatever slide is showing, so nothing is
+   cropped and there are no letterbox bars. Height varies per slide. */
 .project-detail-img {
-  aspect-ratio: 16/10;
   background:
     repeating-linear-gradient(
       135deg,
@@ -1135,10 +1147,10 @@ html, body {
     ),
     color-mix(in oklab, var(--bg-1) 80%, var(--accent));
   border: none;
-  display: flex;
-  align-items: flex-end;
+  display: block;
   padding: 0;
   position: relative;
+  line-height: 0; /* no descender gap under the slide */
 }
 
 .project-detail-meta {
@@ -1411,37 +1423,141 @@ html, body {
 }
 
 /* === Detail · SCREENSHOTS gallery === */
-.project-detail-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-.gallery-shot {
-  display: block;
-  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
-  overflow: hidden;
-  transition: border-color 250ms, transform 250ms, box-shadow 250ms;
-}
-.gallery-shot:hover {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px -20px color-mix(in oklab, var(--accent) 45%, transparent);
-}
-.gallery-shot img {
+/* Cover carousel (cover art + screenshots share one frame) */
+.cover-zoom-btn {
   display: block;
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  object-position: top;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  background: color-mix(in oklab, var(--bg-0) 75%, transparent);
+  color: var(--fg);
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 200ms, border-color 200ms, background 200ms;
+}
+.project-detail-img:hover .carousel-arrow,
+.carousel-arrow:focus-visible {
+  opacity: 1;
+}
+.carousel-arrow:hover {
+  border-color: var(--accent);
+  background: var(--bg-0);
+}
+.carousel-arrow.prev { left: 10px; }
+.carousel-arrow.next { right: 10px; }
+/* Sits under the frame on the page background — no chip needed over the art. */
+.carousel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+.carousel-dots {
+  display: flex;
+  gap: 6px;
+}
+.carousel-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 1px solid color-mix(in oklab, var(--accent) 55%, transparent);
+  background: none;
+  cursor: pointer;
+  transition: background 200ms, transform 200ms;
+}
+.carousel-dot.active {
+  background: var(--accent);
+  transform: scale(1.25);
+}
+.carousel-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+/* Click-to-expand lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 48px;
+  background: color-mix(in oklab, var(--bg-0) 92%, transparent);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+  animation: lightbox-in 180ms ease-out;
+}
+@keyframes lightbox-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: default;
+  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.7);
+}
+.lightbox .carousel-arrow {
+  opacity: 1;
+  width: 44px;
+  height: 44px;
+}
+.lightbox .carousel-arrow.prev { left: 16px; }
+.lightbox .carousel-arrow.next { right: 16px; }
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  background: color-mix(in oklab, var(--bg-0) 75%, transparent);
+  color: var(--fg);
+  cursor: pointer;
+  transition: border-color 200ms;
+}
+.lightbox-close:hover { border-color: var(--accent); }
+.lightbox-count {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--fg-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox { animation: none; }
 }
 
 @media (max-width: 639px) {
   .project-detail-hero {
     grid-template-columns: 1fr;
     gap: 24px;
-  }
-  .project-detail-img {
-    aspect-ratio: 16/9;
   }
   .project-detail-title {
     font-size: clamp(28px, 7vw, 48px);
