@@ -133,7 +133,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         )}
         </div>
         <div className="project-detail-meta">
-          <div className="project-num">STAGE {project.num} · CLEARED</div>
+          <div className="project-num">STAGE {project.num} · {project.status ?? "CLEARED"}</div>
           <h1 className="project-detail-title">{project.title}</h1>
           <p className="project-detail-desc">{project.desc}</p>
           <div className="project-tags">

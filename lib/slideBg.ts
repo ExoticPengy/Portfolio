@@ -2,6 +2,7 @@
 // Used to fill the reserved frame space so it reads as part of the image
 // instead of a letterbox bar. Regenerate if screenshots change.
 export const SLIDE_BG: Record<string, string> = {
+  "/images/projects/bingo.png": "#FFFFFF", // 100% of border
   "/images/projects/tiandi.png": "#661A27", // 9% of border
   "/images/projects/tiandi-services.png": "#F9F7F5", // 66% of border
   "/images/projects/tiandi-gallery.png": "#F9F7F5", // 66% of border

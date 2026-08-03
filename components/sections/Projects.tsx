@@ -9,12 +9,12 @@ const PROJECTS: ProjectData[] = [
   {
     num: "01",
     title: "TIAN DI",
-    desc: "Lion and dragon dance troupe website. Landing page with booking, services, gallery, and contact sections — live at tiandi.app with 500+ performances under their belt.",
+    desc: "Lion and dragon dance troupe website. Landing page with booking, services, gallery, and contact sections. Live at tiandi.app with 500+ performances under their belt.",
     tags: ["Next.js", "Tailwind CSS", "TypeScript", "LIVE"],
     img: "/images/projects/tiandi-logo.png",
     coverAspect: 1.422,
     coverFit: "contain",
-    coverBg: "#F7F2EA", // warm cream — matches tiandi.app, lifts the red/white mark
+    coverBg: "#F7F2EA", // warm cream, matches tiandi.app, lifts the red/white mark
     live: "https://tiandi.app",
     favicon: "/images/tiandi-favicon.png",
     involvements: [
@@ -52,16 +52,71 @@ const PROJECTS: ProjectData[] = [
   },
   {
     num: "02",
+    title: "BINGO",
+    status: "GRINDING",
+    desc: "Conversational BI platform. Ask your warehouse a question in plain language and get charts, findings, and scheduled briefings back. FastAPI + Nuxt 4 + LangGraph, with a multi-agent system over PostgreSQL, MySQL, and BigQuery. Open-source core, live at thebingo.ai. I'm a contributor on the team.",
+    tags: ["Python", "FastAPI", "LangGraph", "LIVE"],
+    img: "/images/projects/bingo-logo.png",
+    coverAspect: 1.6,
+    coverFit: "contain",
+    coverBg: "#F4F1FA", // pale lavender behind the purple wordmark
+    github: "https://github.com/thebingoai/thebingoai",
+    live: "https://thebingo.ai",
+    favicon: "/images/bingo-favicon.png",
+    involvements: [
+      "Built the BigQuery connector plugin with sharded and partitioned table recognition, GA4 event unnesting, and permission checks",
+      "Shipped the Brief Me feature end to end: scheduled briefings, PDF export with segmenting and watermarking, and share links",
+      "Owned the credit/billing path: transactional debits persisted before charging, rollback and auto-refund on failed or undelivered turns, recurring top-up splits, and trial/workspace expiration",
+      "Added the MySQL + DuckDB pipeline with T-n cron scheduling, plus @mention, Langfuse tracing, and GA4 tagging",
+    ],
+    stats: [
+      { value: "89", label: "MY COMMITS" },
+      { value: "5", label: "AI AGENTS" },
+      { value: "LIVE", label: "DEPLOYED" },
+    ],
+    stack: [
+      { name: "FastAPI", role: "backend" },
+      { name: "Nuxt 4 + Vue", role: "frontend" },
+      { name: "LangGraph", role: "agents + RAG" },
+      { name: "PostgreSQL", role: "primary DB" },
+      { name: "Qdrant", role: "vector store" },
+      { name: "Redis + Celery", role: "queue + jobs" },
+      { name: "OpenAI / Anthropic / Ollama", role: "LLM providers" },
+      { name: "Docker Compose", role: "infra" },
+    ],
+    features: [
+      "Natural-language questions answered with generated SQL, charts, and findings",
+      "Drag-and-drop dashboard widgets (GridStack) with live data",
+      "Real-time WebSocket chat with RAG over indexed documents",
+      "Multi-agent orchestration across data, dashboard, RAG, and monitor agents",
+      "Connectors for PostgreSQL, MySQL, and BigQuery",
+      "Scheduled briefings delivered as segmented PDF exports",
+      "Credit-based billing with refunds on failed turns",
+      "Swappable LLM providers: OpenAI, Anthropic, or self-hosted Ollama",
+    ],
+    collaborators: [
+      { name: "Edmund Hee", url: "https://github.com/EdmundHee", role: "Team Lead", icon: "/images/edmundhee-avatar.png" },
+      { name: "notjaman", url: "https://github.com/notjaman", role: "Teammate", icon: "/images/notjaman-avatar.png" },
+      { name: "Kent Chong", url: "https://github.com/Kent-Chong", role: "Teammate", icon: "/images/kent-chong-avatar.png" },
+    ],
+    screenshots: [
+      "/images/projects/bingo.png",
+    ],
+  },
+  {
+    num: "03",
     title: "DREAMFRAME",
-    desc: "Credit-based AI image SaaS — sign in with Google, spend credits to generate and edit images via OpenAI, or bring your own key and skip the meter. Priority job queue, markdown prompt editor, 3D landing scene, live on Vercel.",
+    status: "GRINDING",
+    desc: "Credit-based AI image SaaS. Sign in with Google, spend credits to generate and edit images via OpenAI, or bring your own key and skip the meter. Priority job queue, markdown prompt editor, 3D landing scene, live on Vercel.",
     tags: ["Next.js", "OpenAI", "Stripe", "VERCEL"],
     img: "/images/projects/dreamframe-logo.png",
     coverAspect: 1.422,
     coverFit: "contain",
     coverBg: "#F2F0FA", // pale lavender behind the purple sparkle mark
     live: "https://ai-image-generator.exoticpengy.me",
+    favicon: "/images/dreamframe-favicon.png",
     involvements: [
-      "Built a credit-based pricing system — COGS pegged to the OpenAI price list, markup as one constant, charged transactionally with the job insert",
+      "Built a credit-based pricing system: COGS pegged to the OpenAI price list, markup as one constant, charged transactionally with the job insert",
       "Implemented a priority job queue with a Supabase Edge Function worker, in-flight caps, auto-refunds, and stale-job rescue",
       "Added BYOK (encrypted at rest), an edit studio, a markdown prompt editor, and a 3D landing scene with Three.js + GSAP",
     ],
@@ -83,10 +138,10 @@ const PROJECTS: ProjectData[] = [
     ],
     features: [
       "Google sign-in with 300 free credits on signup",
-      "Quality tiers — low / medium / high cost 15 / 150 / 600 credits",
+      "Quality tiers: low / medium / high cost 15 / 150 / 600 credits",
       "Bring your own OpenAI key, encrypted at rest, and run jobs for free",
       "Edit studio with up to 4 labelled inputs, categorised presets, and gallery import",
-      "Image options — aspect ratio, transparent background, detail preservation",
+      "Image options: aspect ratio, transparent background, detail preservation",
       "Markdown prompt editor with live preview, plus ✨ Enhance to structure a rough prompt",
       "Gallery of past generations served via short-lived signed URLs",
       "Monthly Stripe plan refills credits each cycle, cancel via the billing portal",
@@ -99,7 +154,7 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "03",
+    num: "04",
     title: "TIMESYNC",
     desc: "Scheduling coordination tool for finding the best meeting time across groups. Share a sync link, each person marks their hours on a day × hour grid, and a live Firebase-backed heatmap overlays everyone's input to surface the top 3 slots.",
     tags: ["JavaScript", "Vite", "Firebase", "SCHEDULING"],
@@ -111,7 +166,7 @@ const PROJECTS: ProjectData[] = [
     involvements: [
       "Built a multi-person availability grid with drag-to-select interaction, week and day-by-day layouts",
       "Implemented heatmap aggregation and a window-sliding algorithm for meeting time recommendations",
-      "Wired Firebase Realtime Database for live shared syncs — no accounts, no server code",
+      "Wired Firebase Realtime Database for live shared syncs, with no accounts and no server code",
     ],
     stats: [
       { value: "LIVE", label: "SYNC" },
@@ -125,7 +180,7 @@ const PROJECTS: ProjectData[] = [
       { name: "Firebase RTDB", role: "backend" },
     ],
     features: [
-      "Shared sync links — participants join by name, no accounts",
+      "Shared sync links, participants join by name, no accounts",
       "Drag-to-select hour blocks with a live group heatmap",
       "Top-3 recommendations in 'best effort' or 'everyone free' mode",
       "Adjustable 1–8 hour meeting duration",
@@ -138,9 +193,9 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "04",
+    num: "05",
     title: "PROFILES · SVELTEKIT",
-    desc: "Link-in-bio profile builder — like Linktree — built with SvelteKit. Google sign-in, claim a username, upload a photo, and manage social links with drag-and-drop reordering. Deployed on Vercel.",
+    desc: "Link-in-bio profile builder, like Linktree, built with SvelteKit. Google sign-in, claim a username, upload a photo, and manage social links with drag-and-drop reordering. Deployed on Vercel.",
     tags: ["SvelteKit", "TypeScript", "Firebase", "Vercel"],
     img: "/images/projects/profiles-sveltekit.png",
     coverAspect: 1.488,
@@ -178,9 +233,9 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "05",
+    num: "06",
     title: "H & MAYBE",
-    desc: "Full-stack fashion e-commerce app built on plain PHP — no framework, just a clean layered structure. Browse clothing by category, add to cart, pay with Stripe, get email receipts, and track orders, with an admin panel behind it all.",
+    desc: "Full-stack fashion e-commerce app built on plain PHP, no framework, just a clean layered structure. Browse clothing by category, add to cart, pay with Stripe, get email receipts, and track orders, with an admin panel behind it all.",
     tags: ["PHP", "Stripe", "MySQL", "E-COMMERCE"],
     img: "/images/projects/handmaybe-logo.png",
     coverAspect: 2.019,
@@ -223,9 +278,9 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "06",
+    num: "07",
     title: "HEALTHLENS",
-    desc: "Medical charges dashboard visualizing the classic insurance dataset. Scatter plot, bar chart, box plot, and histogram built with D3.js — animated entry transitions and hover effects via anime.js. Deployed on Netlify.",
+    desc: "Medical charges dashboard visualizing the classic insurance dataset. Scatter plot, bar chart, box plot, and histogram built with D3.js, with animated entry transitions and hover effects via anime.js. Deployed on Netlify.",
     tags: ["D3.js", "anime.js", "Vite", "Netlify"],
     img: "/images/projects/healthlens.png",
     coverAspect: 0.926,
@@ -233,7 +288,7 @@ const PROJECTS: ProjectData[] = [
     github: "https://github.com/ExoticPengy/data-visualization",
     live: "https://pengyhealthlens.netlify.app",
     involvements: [
-      "Built 4 D3.js chart types from scratch — scatter, bar, box plot, and histogram — all from CSV data",
+      "Built 4 D3.js chart types from scratch (scatter, bar, box plot, and histogram) all from CSV data",
       "Choreographed anime.js timelines for staggered entry animations across KPIs and charts",
       "Authored a visualization plan document defining layout, color strategy, and interactivity",
     ],
@@ -249,10 +304,10 @@ const PROJECTS: ProjectData[] = [
       { name: "Netlify", role: "hosting" },
     ],
     features: [
-      "Scatter plot — age vs. charges by smoking status",
-      "Bar chart — average charges by region",
-      "Box plot — smokers vs. non-smokers",
-      "Histogram — BMI distribution by threshold",
+      "Scatter plot: age vs. charges by smoking status",
+      "Bar chart: average charges by region",
+      "Box plot: smokers vs. non-smokers",
+      "Histogram: BMI distribution by threshold",
       "Animated entry transitions and hover effects",
     ],
     screenshots: [
@@ -260,7 +315,7 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "07",
+    num: "08",
     title: "FOODTRUST",
     desc: "Browser extension that brings transparency to Google Maps restaurant reviews. Scans a listing in real time, flags suspicious reviews with an AI-written reason and probability, and paints an overall trust score onto the page. Built at the Great AI Hackathon 2025 with Team Penguining.",
     tags: ["Python", "scikit-learn", "AWS Bedrock", "HACKATHON"],
@@ -269,9 +324,9 @@ const PROJECTS: ProjectData[] = [
     coverBg: "#291A29", // sampled edge of the screenshot
     github: "https://github.com/ExoticPengy/FoodTrust",
     involvements: [
-      "Built the review preprocessing pipeline in SageMaker Studio — text cleaning, train/test split, and S3 dataset staging",
-      "Engineered reviewer-behaviour features for account profiling — review velocity per active day, lifetime review count, and Local Guide status",
-      "Trained the review models on 33K labelled reviews — a TF-IDF + logistic-regression classifier and TF-IDF + K-Means reviewer clustering, exported with joblib",
+      "Built the review preprocessing pipeline in SageMaker Studio: text cleaning, train/test split, and S3 dataset staging",
+      "Engineered reviewer-behaviour features for account profiling: review velocity per active day, lifetime review count, and Local Guide status",
+      "Trained the review models on 33K labelled reviews, a TF-IDF + logistic-regression classifier and TF-IDF + K-Means reviewer clustering, exported with joblib",
     ],
     stats: [
       { value: "33K", label: "LABELLED REVIEWS" },
@@ -289,10 +344,10 @@ const PROJECTS: ProjectData[] = [
     ],
     features: [
       "Overall trust score rendered straight onto the Google Maps listing",
-      "Per-review AI verdict — category, reasoning, and suspicion probability",
+      "Per-review AI verdict: category, reasoning, and suspicion probability",
       "Reviewer profiling by review velocity and Local Guide status",
       "One-click scan of a restaurant's reviews from a floating button",
-      "Serverless AWS backend — Lambda, API Gateway, and S3",
+      "Serverless AWS backend: Lambda, API Gateway, and S3",
     ],
     collaborators: [
       { name: "Elaine", url: "https://sillycookie.me", role: "Team Penguining", icon: "/images/sillycookie-favicon.png" },
@@ -303,9 +358,9 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "08",
+    num: "09",
     title: "FYP API",
-    desc: "EV charging station recommendation engine — FastAPI microservice with a trained ML model. Enter a trip route, get the best charger stop ranked by detour, cost, and predicted charging time.",
+    desc: "EV charging station recommendation engine. FastAPI microservice with a trained ML model. Enter a trip route, get the best charger stop ranked by detour, cost, and predicted charging time.",
     tags: ["Python", "FastAPI", "scikit-learn", "ML"],
     img: "/images/projects/fyp-api-logo.png",
     coverAspect: 0.9, // clamped: phone shots are 0.449, which would force a 1365px hero
@@ -343,9 +398,9 @@ const PROJECTS: ProjectData[] = [
     ],
   },
   {
-    num: "09",
+    num: "10",
     title: "ARCTIC VAULT",
-    desc: "Personal finance tracker for Android with 15+ screens. Track transactions, set budgets, plan financial goals, manage debts, and get bill reminders — all offline-first with a Room database and Jetpack Compose UI.",
+    desc: "Personal finance tracker for Android with 15+ screens. Track transactions, set budgets, plan financial goals, manage debts, and get bill reminders, all offline-first with a Room database and Jetpack Compose UI.",
     tags: ["Kotlin", "Jetpack Compose", "Room", "Firebase"],
     img: "/images/projects/arcticvault.svg",
     coverAspect: 1.6,
@@ -376,37 +431,6 @@ const PROJECTS: ProjectData[] = [
       "Debt management with rates, schedules, and balances",
       "Recurring bill reminders",
       "Spending analysis with interactive charts",
-    ],
-    screenshots: [],
-  },
-  {
-    num: "10",
-    title: "BLACKJACK",
-    desc: "Command-line Blackjack simulation written in C++. A compact, self-contained game — hit, stand, and play against the dealer right from the terminal.",
-    tags: ["C++", "CLI", "GAME"],
-    img: "/images/projects/blackjack.svg",
-    coverAspect: 1.6,
-    coverBg: "#0D1117", // matches the placeholder gradient
-    github: "https://github.com/ExoticPengy/Blackjack",
-    involvements: [
-      "Implemented full blackjack game logic — dealing, hitting, standing, and win conditions",
-      "Built as a single-file C++ program with no external dependencies",
-    ],
-    stats: [
-      { value: "1", label: "SOURCE FILE" },
-      { value: "0", label: "DEPENDENCIES" },
-      { value: "C++", label: "NATIVE" },
-    ],
-    stack: [
-      { name: "C++", role: "language" },
-      { name: "<random>", role: "RNG (Mersenne Twister)" },
-    ],
-    features: [
-      "Full hit/stand gameplay loop",
-      "Blackjack (natural 21) detection",
-      "Smart ace handling — valued at 1 or 11",
-      "Dealer AI that draws until it beats you",
-      "Play-again loop with a fresh deck each round",
     ],
     screenshots: [],
   },
@@ -470,7 +494,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
   }, []);
 
   useEffect(() => {
-    // Gate on state, not a ref — see the same guard in Stage.tsx.
+    // Gate on state, not a ref. See the same guard in Stage.tsx.
     if (!routeReady) return;
     if (parseHash(window.location.hash).view !== "projects") return;
     const next = formatHash("projects", selected ? slugify(selected.title) : null);
@@ -564,7 +588,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
                   />
                 </div>
                 <div className="project-body">
-                  <div className="project-num">STAGE {p.num} · CLEARED</div>
+                  <div className="project-num">STAGE {p.num} · {p.status ?? "CLEARED"}</div>
                   <h3 className="project-title">{p.title}</h3>
                   <p className="project-desc">{p.desc}</p>
                   <div className="project-tags">

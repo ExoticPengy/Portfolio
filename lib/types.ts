@@ -10,6 +10,7 @@ export interface ProjectData {
   coverBg?: string; // backdrop behind the cover image (logo mark, or its sampled edge)
   coverAspect?: number; // frame width/height, reserved for the tallest slide so
   // switching slides never resizes the frame. See SLIDE_BG in lib/slideBg.ts.
+  status?: string; // stage badge; defaults to "CLEARED" for finished projects
   github?: string;
   live?: string;
   favicon?: string;
