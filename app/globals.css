@@ -674,6 +674,9 @@ html, body {
   align-items: start;
   overflow: visible;
 }
+/* Grid items default to min-width:auto, so one wide child (the 520px commit
+   heatmap) stretches the whole column past the viewport. Let them shrink. */
+.section-body > * { min-width: 0; }
 
 /* About */
 .about-bio {
@@ -2067,13 +2070,16 @@ a.collab-link:hover {
   .deco { display: none; }
 
   /* Hero — condensed, visible */
+  /* width:max-content shrink-wraps the hero, so it sat narrower than the panel
+     cards and hugged the left edge of the column. Match the cards instead. */
   .hero {
     position: relative;
     top: auto; left: auto;
     transform: none;
+    width: 100%;
     max-width: 100%;
     margin-bottom: 16px;
-    padding: 0 8px;
+    padding: 0;
   }
   .hero.fading { opacity: 1; }
   .hero .name {
@@ -2129,8 +2135,8 @@ a.collab-link:hover {
   .panel-num { font-size: 11px; }
   .panel-card .panel-corner { display: none; }
 
-  /* Section views */
-  .section-inner { padding: 40px 16px 32px 16px; }
+  /* Section views — top padding clears the fixed HUD row */
+  .section-inner { padding: 64px 16px 32px 16px; }
   .section-body { grid-template-columns: 1fr !important; gap: 24px !important; }
 
   /* Section head */
@@ -2187,12 +2193,21 @@ a.collab-link:hover {
     padding: 14px 20px;
   }
 
-  /* HUD */
+  /* HUD — tl and tr each get half the bar, or they overlap mid-screen.
+     Trim each down to what still fits: section name left, level right. */
   .hud { font-size: 10px; }
-  .hud .corner { max-width: calc(100vw - 32px); }
+  .hud .corner { max-width: calc(50vw - 34px); }
+  .hud .tl > span:last-child,
+  .hud .tr > span:nth-child(-n + 2) { display: none; }
   .hud .corner.br { display: none; }
   .hud .corner.bl { display: none; }
   .hud .bracket { font-size: 12px; }
+
+  /* Activity log — 4 columns don't fit; stack repo/detail under the verb */
+  .activity-log a { grid-template-columns: 58px minmax(0, 1fr); gap: 4px 12px; }
+  .activity-log .repo,
+  .activity-log .detail { grid-column: 2; }
+  .activity-log .detail { overflow-wrap: anywhere; }
 
   /* Pokemon track */
   .poke-track { height: 60px; }
@@ -2319,6 +2334,11 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
   height: 100%;
   object-fit: cover;
   background: #000;
+}
+/* intro.mp4 is 1888×1080 — on anything narrower, cover crops the "PRESS START"
+   title clean off both sides. Letterbox instead; .boot is already black. */
+@media (max-aspect-ratio: 236 / 135) {
+  .boot-video { object-fit: contain; }
 }
 
 /* Idle "insert coin" screen, sits over the video's first frame until clicked */
