@@ -1,4 +1,5 @@
 import SectionShell from "./SectionShell";
+import CommitLog from "./CommitLog";
 
 export default function About({ onBack }: { onBack: () => void }) {
   return (
@@ -49,6 +50,7 @@ export default function About({ onBack }: { onBack: () => void }) {
           <img src="/headshot.png" alt="Chong Ming Li" className="headshot-img" />
         </div>
       </div>
+      <CommitLog user="ExoticPengy" />
     </SectionShell>
   );
 }

@@ -1778,6 +1778,111 @@ a.collab-link:hover {
   transform: translateX(4px);
 }
 
+/* About — GitHub contribution heatmap + activity feed */
+.commit-log {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 56px;
+}
+.commit-log-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+}
+/* ponytail: 53 columns can't shrink below ~8px and stay legible, so narrow
+   viewports scroll sideways instead of squashing the grid into mush */
+.commit-log-scroll { overflow-x: auto; padding-bottom: 4px; }
+.commit-log-months,
+.commit-log-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(8px, 1fr));
+  gap: 3px;
+  min-width: 520px;
+}
+.commit-log-months {
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--fg-dim);
+}
+.commit-log-months span { overflow: visible; white-space: nowrap; }
+.commit-log-grid {
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+}
+.commit-log-grid i,
+.commit-log-legend i {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--lvl);
+  transition: filter 150ms;
+}
+.commit-log-grid i:hover { filter: brightness(1.6); }
+.commit-log-grid i.empty { background: transparent; }
+/* Sequential ramp: ONE hue (--accent), lightness climbing monotonically against
+   the dark surface. A second hue at the top would read as a category change, not
+   as "more" — which is why level 4 lightens the accent instead of jumping to
+   --accent-2. Steps are ~0.14 OKLCH L apart so adjacent levels stay tellable. */
+.commit-log [data-level="0"] { --lvl: color-mix(in oklab, var(--accent) 12%, var(--bg-0)); }
+.commit-log [data-level="1"] { --lvl: color-mix(in oklab, var(--accent) 34%, var(--bg-0)); }
+.commit-log [data-level="2"] { --lvl: color-mix(in oklab, var(--accent) 60%, var(--bg-0)); }
+.commit-log [data-level="3"] { --lvl: color-mix(in oklab, var(--accent) 88%, var(--bg-0)); }
+.commit-log [data-level="4"] { --lvl: color-mix(in oklab, var(--accent) 62%, #fff); }
+.commit-log-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+.commit-log-foot b { color: var(--accent-2); font-size: 13px; }
+.commit-log-legend { display: flex; align-items: center; gap: 4px; }
+.commit-log-legend i { width: 10px; }
+
+.activity-log-title { margin-top: 44px; }
+.activity-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.activity-log a {
+  display: grid;
+  /* last column takes the slack so `detail` sits beside the repo, not flung right */
+  grid-template-columns: 58px 150px minmax(0, max-content) minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  padding: 9px 4px;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 12%, transparent);
+  text-decoration: none;
+  color: var(--fg-dim);
+  transition: background 150ms, border-color 150ms;
+}
+.activity-log a:hover {
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+  border-color: color-mix(in oklab, var(--accent) 35%, transparent);
+}
+.activity-log .date { color: var(--fg-dim); opacity: 0.7; }
+.activity-log .verb { color: var(--accent-2); text-transform: uppercase; }
+/* long org/repo names truncate rather than pushing the branch column off-row */
+.activity-log .repo { color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.activity-log a:hover .repo { color: var(--accent); }
+.activity-log .detail { color: var(--fg-dim); opacity: 0.65; }
+
 /* --- Fly transition flash --- */
 .flash {
   position: absolute;
