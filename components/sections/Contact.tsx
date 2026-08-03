@@ -5,6 +5,10 @@ export default function Contact({ onBack }: { onBack: () => void }) {
     <SectionShell num="04" title="CONNECT" ghost="HI!" onBack={onBack}>
       <div className="contact-body">
         <div className="contact-lines reveal d1">
+          <a className="contact-row" href="mailto:minglilau9@gmail.com">
+            <span className="k">▶ EMAIL</span>
+            <span className="v">minglilau9@gmail.com</span>
+          </a>
           <a className="contact-row" href="https://github.com/ExoticPengy">
             <span className="k">▶ GITHUB</span>
             <span className="v">@ExoticPengy</span>
