@@ -3,6 +3,14 @@
 // instead of a letterbox bar. Regenerate if screenshots change.
 export const SLIDE_BG: Record<string, string> = {
   "/images/projects/bingo.png": "#FFFFFF", // 100% of border
+  "/images/projects/arcticvault-home.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-transactions.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-analysis.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-debt.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-budgeting.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-goals.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-bills.png": "#FFFFFF", // phone mockup: white mount
+  "/images/projects/arcticvault-income.png": "#FFFFFF", // phone mockup: white mount
   "/images/projects/tiandi.png": "#661A27", // 9% of border
   "/images/projects/tiandi-services.png": "#F9F7F5", // 66% of border
   "/images/projects/tiandi-gallery.png": "#F9F7F5", // 66% of border

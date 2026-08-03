@@ -402,9 +402,10 @@ const PROJECTS: ProjectData[] = [
     title: "ARCTIC VAULT",
     desc: "Personal finance tracker for Android with 15+ screens. Track transactions, set budgets, plan financial goals, manage debts, and get bill reminders, all offline-first with a Room database and Jetpack Compose UI.",
     tags: ["Kotlin", "Jetpack Compose", "Room", "Firebase"],
-    img: "/images/projects/arcticvault.svg",
-    coverAspect: 1.6,
-    coverBg: "#0D1117", // matches the placeholder gradient
+    img: "/images/projects/arcticvault-splash.png",
+    coverAspect: 0.9, // clamped: phone shots are 0.462, which would force a tall hero
+    coverFit: "contain",
+    coverBg: "#FFFFFF", // phone mockups sit on white
     github: "https://github.com/ExoticPengy/ArcticVault",
     involvements: [
       "Built 6 Room entities (transactions, budgets, goals, debts, reminders, categories) with full CRUD via repository pattern",
@@ -432,7 +433,17 @@ const PROJECTS: ProjectData[] = [
       "Recurring bill reminders",
       "Spending analysis with interactive charts",
     ],
-    screenshots: [],
+    // One slide per feature, in the same order as the FEATURE UNLOCKS list.
+    screenshots: [
+      "/images/projects/arcticvault-home.png",
+      "/images/projects/arcticvault-transactions.png",
+      "/images/projects/arcticvault-income.png",
+      "/images/projects/arcticvault-budgeting.png",
+      "/images/projects/arcticvault-goals.png",
+      "/images/projects/arcticvault-debt.png",
+      "/images/projects/arcticvault-bills.png",
+      "/images/projects/arcticvault-analysis.png",
+    ],
   },
 ];
 
