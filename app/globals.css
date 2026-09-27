@@ -342,18 +342,18 @@ html, body {
     0 0 60px -10px color-mix(in oklab, var(--accent) 60%, transparent);
   transition: border-color 200ms, box-shadow 200ms, filter 200ms;
   overflow: hidden;
-  top: 0;
   animation: float-card 5s ease-in-out infinite;
 }
 
+/* translate, not top: compositor-only, no layout per frame */
 @keyframes float-card {
-  0%, 100% { top: 0; }
-  50%     { top: -16px; }
+  0%, 100% { translate: 0 0; }
+  50%     { translate: 0 -16px; }
 }
 
 .panel:hover .panel-card {
   animation-play-state: paused;
-  top: -6px;
+  translate: 0 -6px;
 }
 
 .panel-stage {
@@ -2035,7 +2035,7 @@ a.collab-link:hover {
   .panel-corner { pointer-events: none; }
   .panel:hover .panel-card {
     animation-play-state: running;
-    top: auto;
+    translate: none;
   }
   .panel:active .panel-card {
     border-color: var(--accent);
@@ -2497,3 +2497,22 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
 }
 .tw-range:hover::-webkit-slider-thumb { background: var(--accent); }
 .tw-range:hover::-moz-range-thumb { background: var(--accent); }
+
+/* === Lite mode: set on <html data-lite> by the probe in app/layout.tsx when the
+   browser renders in software (no GPU) or frames run slow. Drops full-screen
+   animated/blended layers, which a CPU rasterizer repaints every frame. === */
+html[data-lite] .bg-burst,
+html[data-lite] .bg-noise,
+html[data-lite] .bg-scanlines,
+html[data-lite] .cursor-glow { display: none; }
+html[data-lite] .bg-grid { mask-image: none; }
+html[data-lite] .panel-card,
+html[data-lite] .hud .dot,
+html[data-lite] .cta { animation: none; }
+html[data-lite] .panel-card {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.6) inset, 0 12px 24px -8px rgba(0,0,0,0.8);
+  transition: border-color 200ms;
+}
+html[data-lite] .flash { mix-blend-mode: normal; }
+html[data-lite] .streak { filter: none; }
+html[data-lite] .lightbox { backdrop-filter: none; background: var(--bg-0); }

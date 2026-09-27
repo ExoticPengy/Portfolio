@@ -179,15 +179,9 @@ export default function PokemonRunners({ level, onPokemonClick }: PokemonRunners
         }
 
         const flip = s.dir === 1 ? -1 : 1; // sprite faces left natively
-        const idle = s.isStopped ? " grayscale(0.2)" : "";
 
         wrapper.style.transform =
           `translateX(${s.x}px) scale(${POKEMON[i].scale}) scaleX(${flip})`;
-
-        if (!img.classList.contains("evo-flash")) {
-          img.style.filter =
-            `drop-shadow(0 2px 4px rgba(0,0,0,0.5))${idle}`;
-        }
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -226,6 +220,7 @@ export default function PokemonRunners({ level, onPokemonClick }: PokemonRunners
         }
         .poke-sprite {
           image-rendering: pixelated;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
           opacity: 0.85;
           transition: opacity 0.3s;
           display: block;

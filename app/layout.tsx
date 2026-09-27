@@ -30,9 +30,30 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.png" },
 };
 
+// Runs before first paint. Flags <html data-lite> when the page renders in
+// software (no WebGL, or a CPU renderer like SwiftShader/llvmpipe), or when a
+// frame-time probe over the first 15s sees sustained lag (catches weak GPUs too).
+// ponytail: one-way switch per load; add a Tweaks toggle if users want to override.
+const LITE_PROBE = `(function(){
+var d=document.documentElement,lite=function(){d.dataset.lite=""};
+try{var g=document.createElement("canvas").getContext("webgl");
+if(!g)lite();else{var r=String(g.getParameter(g.RENDERER)),x=g.getExtension("WEBGL_debug_renderer_info");
+if(x)r+=g.getParameter(x.UNMASKED_RENDERER_WEBGL);
+if(/swiftshader|llvmpipe|softpipe|software|basic render/i.test(r))lite();
+var l=g.getExtension("WEBGL_lose_context");if(l)l.loseContext();}}catch(e){}
+var t=performance.now(),end=t+15000,n=0,slow=0;
+requestAnimationFrame(function f(now){
+if("lite" in d.dataset)return;
+if(now-t>40)slow++;t=now;
+if(++n===60){if(slow>20)return lite();n=slow=0}
+if(now<end&&!document.hidden)requestAnimationFrame(f)})})()`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivoBlack.variable} ${spaceGrotesk.variable} ${spaceMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${archivoBlack.variable} ${spaceGrotesk.variable} ${spaceMono.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: LITE_PROBE }} />
+      </head>
       <body data-palette="purple">
         <TweaksProvider>{children}</TweaksProvider>
       </body>
