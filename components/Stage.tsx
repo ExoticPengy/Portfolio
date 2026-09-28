@@ -48,7 +48,7 @@ export default function Stage() {
 
   // Section wrappers stay mounted, so their scrollTop survives a round trip home. Start each visit at the top.
   useEffect(() => {
-    document.querySelectorAll<HTMLElement>(".section-view").forEach((el) => { el.scrollTop = 0; });
+    document.querySelectorAll<HTMLElement>(".section-view .crt-scroll").forEach((el) => { el.scrollTop = 0; });
   }, [view]);
 
   useEffect(() => { setSfxVolume(tweaks.sfxVolume / 10); }, [tweaks.sfxVolume]);

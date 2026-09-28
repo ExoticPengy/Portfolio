@@ -5,35 +5,35 @@ export default function Contact({ onBack }: { onBack: () => void }) {
     <SectionShell num="04" title="CONNECT" ghost="HI!" onBack={onBack}>
       <div className="contact-body">
         <div className="contact-lines reveal d1">
-          <a className="contact-row" href="mailto:minglilau9@gmail.com">
+          <a className="contact-row dlg pick" href="mailto:minglilau9@gmail.com">
             <span className="k">▶ EMAIL</span>
             <span className="v">minglilau9@gmail.com</span>
           </a>
-          <a className="contact-row" href="https://github.com/ExoticPengy">
+          <a className="contact-row dlg pick" href="https://github.com/ExoticPengy">
             <span className="k">▶ GITHUB</span>
             <span className="v">@ExoticPengy</span>
           </a>
-          <a className="contact-row" href="https://www.linkedin.com/in/exoticpengy/">
+          <a className="contact-row dlg pick" href="https://www.linkedin.com/in/exoticpengy/">
             <span className="k">▶ LINKEDIN</span>
             <span className="v">/in/exoticpengy</span>
           </a>
-          <a className="contact-row" href="https://www.instagram.com/SillyPengy/">
+          <a className="contact-row dlg pick" href="https://www.instagram.com/SillyPengy/">
             <span className="k">▶ INSTAGRAM</span>
             <span className="v">@SillyPengy</span>
           </a>
-          <div className="contact-row">
+          <div className="contact-row dlg">
             <span className="k">◆ LOCATION</span>
             <span className="v">
               <span className="loc-full">Kuala Lumpur, </span>
               <span className="loc-short">KL, </span>Malaysia
             </span>
           </div>
-          <div className="contact-row">
+          <div className="contact-row dlg more">
             <span className="k">◆ REMOTE</span>
             <span className="v">UTC+8</span>
           </div>
         </div>
-        <div className="contact-cta reveal d2">
+        <div className="contact-cta dlg reveal d2">
           <div className="big">PRESS START.<br />LET&rsquo;S BUILD<br />SOMETHING.</div>
           <div className="small">
             Open to project-based engagements, n8n workflow automation,

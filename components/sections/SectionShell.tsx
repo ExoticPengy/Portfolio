@@ -11,17 +11,22 @@ type Props = {
 
 export default function SectionShell({ num, title, ghost, onBack, children, overlay }: Props) {
   return (
-    <div className="section-inner">
-      {ghost && <div className="section-ghost">{ghost}</div>}
-      {overlay}
-      <div className="section-head reveal">
-        <div>
-          <div className="meta">STAGE {num} · NOW LOADED</div>
-          <h1>{title}</h1>
+    // The CRT screen. .section-view around it is the bezel; .crt-scroll is the scroll container.
+    <div className="crt">
+      <div className="crt-scroll">
+        <div className="section-inner">
+          {ghost && <div className="section-ghost">{ghost}</div>}
+          {overlay}
+          <div className="section-head reveal">
+            <div>
+              <div className="meta">STAGE {num} · NOW LOADED</div>
+              <h1>{title}</h1>
+            </div>
+            <button className="back" onClick={onBack}>◀ BACK TO MENU</button>
+          </div>
+          <div className="section-body">{children}</div>
         </div>
-        <button className="back" onClick={onBack}>◀ BACK TO MENU</button>
       </div>
-      <div className="section-body">{children}</div>
     </div>
   );
 }

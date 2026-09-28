@@ -591,12 +591,55 @@ html, body {
   z-index: 4;
   opacity: 0;
   pointer-events: none;
-  background: var(--bg-0);
+  background: color-mix(in oklab, var(--bg-1) 94%, var(--accent)); /* bezel */
   transition: opacity 350ms;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
+  padding: 14px;
 }
 .section-view.visible { opacity: 1; pointer-events: auto; }
+/* === CRT screen: every section sits inside one. Curvature is faked with radius + inset shadow. === */
+.crt {
+  position: relative;
+  height: 100%;
+  border-radius: 18px / 26px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, var(--bg-1), var(--bg-0) 75%);
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--accent) 25%, transparent),
+    0 0 40px color-mix(in oklab, var(--accent) 22%, transparent);
+}
+.crt-scroll { height: 100%; overflow-x: hidden; overflow-y: auto; }
+/* Scanlines + vignette + inner shadow, above content, never catching clicks. */
+.crt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6));
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.85);
+}
+/* Only the big title gets the RGB fringe; body copy stays clean. */
+.section-head h1 {
+  text-shadow:
+    0 0 22px color-mix(in oklab, var(--accent) 55%, transparent),
+    1px 0 rgba(255, 60, 120, 0.5),
+    -1px 0 rgba(60, 220, 255, 0.5);
+}
+/* Power-on: dot, thin line, full picture. Transform only, so no flash and cheap in lite mode. */
+.section-view.visible .crt { animation: crt-on 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes crt-on {
+  0% { transform: scale(0.02, 0.004); }
+  35% { transform: scale(1, 0.006); }
+  70% { transform: scale(1, 1); }
+  100% { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-view.visible .crt { animation: none; }
+}
 .section-view .bg-grid-inner {
   position: absolute;
   inset: -10%;
@@ -696,8 +739,6 @@ html, body {
   gap: 18px;
 }
 .stat-card {
-  background: var(--panel);
-  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
   padding: 22px;
   position: relative;
 }
@@ -737,7 +778,6 @@ html, body {
       transparent 18px
     ),
     color-mix(in oklab, var(--bg-1) 80%, var(--accent));
-  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
 }
 .headshot .placeholder-label {
   position: absolute;
@@ -769,17 +809,13 @@ html, body {
   grid-column: 1 / -1;
 }
 .project-card {
-  background: var(--panel);
-  border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
   padding: 0;
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform 300ms, box-shadow 300ms, border-color 300ms;
   cursor: pointer;
 }
 .project-card:hover {
-  border-color: var(--accent);
   transform: translateY(-4px);
   box-shadow: 0 30px 80px -20px color-mix(in oklab, var(--accent) 50%, transparent);
 }
@@ -1459,9 +1495,7 @@ a.collab-link:hover {
   grid-column: 1 / -1;
 }
 .skill-cat {
-  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
   padding: 24px;
-  background: var(--panel);
   position: relative;
 }
 .skill-cat h3 {
@@ -1539,11 +1573,7 @@ a.collab-link:hover {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
-  padding-bottom: 14px;
-  transition: border-color 200ms;
 }
-.contact-row:hover { border-color: var(--accent); }
 .contact-row .k {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1564,8 +1594,6 @@ a.collab-link:hover {
 .loc-short { display: none; }
 
 .contact-cta {
-  background: var(--panel);
-  border: 1px solid color-mix(in oklab, var(--accent) 30%, transparent);
   padding: 36px;
   display: flex;
   flex-direction: column;
@@ -1961,6 +1989,8 @@ a.collab-link:hover {
 
   /* Section views — top padding clears the fixed HUD row */
   .section-inner { padding: 64px 16px 32px 16px; }
+  .section-view { padding: 8px; }
+  .crt { border-radius: 12px / 16px; }
   .section-body { grid-template-columns: 1fr !important; gap: 24px !important; }
 
   /* Section head */
@@ -2342,6 +2372,77 @@ body[data-shiny="true"] .cursor-glow { animation: shinyHue 6s linear infinite; }
 .tw-range:hover::-webkit-slider-thumb { background: var(--accent); }
 .tw-range:hover::-moz-range-thumb { background: var(--accent); }
 
+/* === Pokémon dialogue box: the one content-block style inside sections. === */
+.dlg {
+  background: color-mix(in oklab, var(--bg-0) 88%, var(--accent));
+  border: 3px double var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--bg-0), 0 0 14px color-mix(in oklab, var(--accent) 30%, transparent);
+}
+/* Bobbing ▼ "more text" prompt, only on last-line blocks. */
+.dlg.more { position: relative; }
+.dlg.more::after {
+  content: "\25BC\FE0E";
+  font-family: var(--font-mono); /* has the glyph; the body font falls back to emoji */
+  position: absolute;
+  right: 12px;
+  bottom: 6px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--accent-2);
+  animation: dlg-bob 1s steps(2) infinite;
+}
+@keyframes dlg-bob { 50% { transform: translateY(2px); } }
+/* Clickable boxes: brighter border and a ▶ cursor, like picking a menu option. */
+.dlg.pick { position: relative; transition: border-color 200ms, transform 300ms, box-shadow 300ms; }
+.dlg.pick::before {
+  content: "\25B6\FE0E"; /* text-style ▶; macOS otherwise draws the emoji */
+  font-family: var(--font-mono); /* has the glyph; the body font falls back to emoji */
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--accent-2);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.dlg.pick:hover, .dlg.pick:focus-visible { border-color: var(--accent-2); }
+/* Focus ring as a shadow: a real outline would also wrap the ▶ sitting outside the box. */
+.dlg.pick:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 4px var(--accent-2); }
+.dlg.pick:hover::before, .dlg.pick:focus-visible::before { opacity: 1; }
+/* Card cover corners follow the box radius (the card itself can't clip: the ▶ sits outside it). */
+.dlg > .project-img { border-radius: 5px 5px 0 0; overflow: hidden; }
+/* Box padding where the old style had none or only a bottom rule. */
+.about-bio.dlg { padding: 22px 26px; max-width: none; }
+.contact-row.dlg { padding: 14px 32px 14px 18px; }
+.project-detail-desc.dlg { padding: 16px 32px 16px 20px; }
+/* Photos get a screen frame, not a dialogue box. */
+.crt-frame {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 2px var(--bg-0),
+    0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent),
+    0 0 24px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+.crt-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+/* The frame clips outlines at its edge, so the full-size zoom button draws its focus ring inside. */
+.crt-frame .cover-zoom-btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: -4px; }
+@media (prefers-reduced-motion: reduce) {
+  .dlg.more::after { animation: none; }
+}
+@media (max-width: 639px) {
+  .dlg.pick::before { display: none; } /* no hover on touch; would sit in the bezel */
+}
+
 /* === Lite mode: set on <html data-lite> by the probe in app/layout.tsx when the
    browser renders in software (no GPU) or frames run slow. Drops full-screen
    animated/blended layers, which a CPU rasterizer repaints every frame. === */
@@ -2360,3 +2461,8 @@ html[data-lite] .panel-card {
 html[data-lite] .flash { mix-blend-mode: normal; }
 html[data-lite] .streak { filter: none; }
 html[data-lite] .lightbox { backdrop-filter: none; background: var(--bg-0); }
+html[data-lite] .crt { box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 25%, transparent); }
+html[data-lite] .crt::after { background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6)); }
+html[data-lite] .section-head h1 { text-shadow: none; }
+html[data-lite] .dlg { box-shadow: 0 0 0 2px var(--bg-0); }
+html[data-lite] .crt-frame { box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent); }

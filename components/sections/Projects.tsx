@@ -97,9 +97,9 @@ const PROJECTS: ProjectData[] = [
       "Swappable LLM providers: OpenAI, Anthropic, or self-hosted Ollama",
     ],
     collaborators: [
-      { name: "Edmund Hee", url: "https://github.com/EdmundHee", role: "Team Lead", icon: "/images/edmundhee-avatar.png" },
-      { name: "notjaman", url: "https://github.com/notjaman", role: "Teammate", icon: "/images/notjaman-avatar.png" },
-      { name: "Kent Chong", url: "https://github.com/Kent-Chong", role: "Teammate", icon: "/images/kent-chong-avatar.png" },
+      { name: "Edmund Hee", url: "https://edmundhee.com", role: "Team Lead", icon: "/images/edmundhee-avatar.png" },
+      { name: "Tan Ja Man", url: "https://tanjaman.com", role: "Teammate", icon: "/images/notjaman-avatar.png" },
+      { name: "Kent Chong", url: "https://kentchong.com", role: "Teammate", icon: "/images/kent-chong-avatar.png" },
     ],
     screenshots: [
       "/images/projects/bingo.png",
@@ -272,6 +272,7 @@ const PROJECTS: ProjectData[] = [
     ],
     collaborators: [
       { name: "Elaine", url: "https://sillycookie.me", role: "Teammate", icon: "/images/sillycookie-favicon.png" },
+      { name: "mingshen0118", url: "https://github.com/mingshen0118", role: "Teammate", icon: "/images/mingshen0118-avatar.png" },
     ],
     screenshots: [
       "/images/projects/handmaybe-product.png",
@@ -353,6 +354,8 @@ const PROJECTS: ProjectData[] = [
     ],
     collaborators: [
       { name: "Elaine", url: "https://sillycookie.me", role: "Team Penguining", icon: "/images/sillycookie-favicon.png" },
+      { name: "Loke Keat Yee", url: "https://keatyee.github.io/", role: "Team Penguining", icon: "/images/keatyee-avatar.jpg" },
+      { name: "Tay Ernest", url: "https://portfolio-mu-peach-83.vercel.app/", role: "Team Penguining", icon: "/images/yanlok-avatar.jpg" },
     ],
     screenshots: [
       "/images/projects/foodtrust-extension.png",
@@ -464,7 +467,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
 
   // Layout effect so the encounter reveal measures the detail cover after the scroll reset, not before.
   useLayoutEffect(() => {
-    const view = document.querySelector<HTMLElement>(".section-view.visible");
+    const view = document.querySelector<HTMLElement>(".section-view.visible .crt-scroll");
     if (view) view.scrollTop = 0;
   }, [selected]);
 
@@ -536,7 +539,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
               <div
                 key={p.num}
                 className={[
-                  "project-card",
+                  "project-card dlg pick",
                   !animating ? `reveal d${i + 1}` : "",
                 ].filter(Boolean).join(" ")}
                 onClick={(e) => handleSelect(p, e.currentTarget.querySelector("img"))}

@@ -140,7 +140,7 @@ export default function Skills({ onBack }: { onBack: () => void }) {
     <SectionShell num="03" title="ABILITIES" ghost="POW" onBack={onBack}>
       <div className="skills-grid">
         {SKILLS.map((cat, i) => (
-          <div key={cat.name} className={`skill-cat reveal d${i + 1}`}>
+          <div key={cat.name} className={`skill-cat dlg reveal d${i + 1}`}>
             <h3>{cat.name}</h3>
             <ul>
               {cat.items.map(([n, lvl]) => {

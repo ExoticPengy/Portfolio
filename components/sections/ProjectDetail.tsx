@@ -65,7 +65,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         {/* Frame is locked to the tallest slide, so moving between slides never
             resizes it (heights used to swing by up to 273px). */}
         <div
-          className="project-detail-img"
+          className="project-detail-img crt-frame"
           style={project.coverAspect ? { aspectRatio: String(project.coverAspect) } : undefined}
         >
           <button
@@ -135,7 +135,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         <div className="project-detail-meta">
           <div className="project-num">STAGE {project.num} · {project.status ?? "CLEARED"}</div>
           <h1 className="project-detail-title">{project.title}</h1>
-          <p className="project-detail-desc">{project.desc}</p>
+          <p className="project-detail-desc dlg more">{project.desc}</p>
           <div className="project-tags">
             {project.tags.map((tg) => (
               <span key={tg} className="tag">{tg}</span>
