@@ -11,7 +11,7 @@ import {
 import { FaAws, FaDatabase, FaCloud, FaJava, FaCode } from "react-icons/fa";
 import SectionShell from "./SectionShell";
 
-const SKILLS = [
+export const SKILLS = [
   {
     name: "LANGUAGES",
     items: [
@@ -53,7 +53,7 @@ const SKILLS = [
   },
 ];
 
-const ICONS: Record<string, ComponentType<{ className?: string; color?: string }>> = {
+export const ICONS: Record<string, ComponentType<{ className?: string; color?: string }>> = {
   Python: SiPython,
   TypeScript: SiTypescript,
   Kotlin: SiKotlin,
@@ -94,7 +94,7 @@ const ICONS: Record<string, ComponentType<{ className?: string; color?: string }
   Supabase: SiSupabase,
 };
 
-const COLORS: Record<string, string> = {
+export const COLORS: Record<string, string> = {
   Python: "#3776AB",
   TypeScript: "#3178C6",
   Kotlin: "#7F52FF",

@@ -7,7 +7,7 @@ import { parseHash, formatHash, slugify } from "@/lib/route";
 import { WIPES } from "@/lib/pixels";
 import type { ProjectData } from "@/lib/types";
 
-const PROJECTS: ProjectData[] = [
+export const PROJECTS: ProjectData[] = [
   {
     num: "01",
     title: "TIAN DI",

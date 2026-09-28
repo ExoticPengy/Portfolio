@@ -160,6 +160,7 @@ export default function Stage() {
                 key={p.id}
                 panel={p}
                 focused={view === "home" && (focusedId === p.id || (kbActive && keyboardIdx === i))}
+                live={view === "home"}
                 onActivate={fly}
                 onHover={() => { hoverSfx(); setFocusedId(p.id); setKbActive(false); }}
                 onLeave={() => setFocusedId((cur) => (cur === p.id ? null : cur))}

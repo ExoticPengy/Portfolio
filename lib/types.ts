@@ -37,9 +37,11 @@ export type PanelData = {
   id: Exclude<View, "home" | "flying">;
   num: string;
   label: string;
-  sub: string;
-  img: string;
   glyph: string;
+  hp: number;
+  strip: string;
+  attack: { name: string; desc: string; value: string };
+  flavour: string;
   x: number;
   y: number;
   z: number;

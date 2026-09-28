@@ -334,13 +334,21 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
-  background: var(--panel);
-  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  background: linear-gradient(160deg, color-mix(in oklab, var(--panel) 82%, var(--accent)), var(--panel));
+  border: 3px solid color-mix(in oklab, var(--accent) 70%, transparent);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  box-sizing: border-box;
+  --hx: 0.5;
+  --hy: 0.5;
   box-shadow:
     0 0 0 1px rgba(0,0,0,0.6) inset,
     0 30px 80px -20px rgba(0,0,0,0.8),
     0 0 60px -10px color-mix(in oklab, var(--accent) 60%, transparent);
-  transition: border-color 200ms, box-shadow 200ms, filter 200ms;
+  transition: border-color 200ms, box-shadow 200ms, filter 200ms, transform 150ms ease-out;
   overflow: hidden;
   animation: float-card 5s ease-in-out infinite;
 }
@@ -356,141 +364,138 @@ html, body {
   translate: 0 -6px;
 }
 
-.panel-stage {
-  position: absolute;
-  top: -34px;
-  right: -14px;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 220px;
-  line-height: 0.85;
-  letter-spacing: -0.05em;
-  color: color-mix(in oklab, var(--accent) 14%, transparent);
-  pointer-events: none;
-  z-index: 0;
-  user-select: none;
-}
-
 .panel:hover .panel-card {
-  border-color: var(--accent);
+  border-color: var(--accent-2);
   box-shadow:
     0 0 0 1px rgba(0,0,0,0.6) inset,
     0 40px 100px -10px rgba(0,0,0,0.9),
     0 0 100px -5px var(--accent);
   filter: brightness(1.1);
 }
-.panel:hover .panel-stage {
-  color: color-mix(in oklab, var(--accent-2) 32%, transparent);
-}
 
-.panel-num {
-  position: absolute;
-  top: 16px;
-  left: 18px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  color: var(--accent);
-  font-weight: 700;
-  z-index: 2;
-}
-.panel-num::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+/* ponytail: fixed per-stage hues, intentional clash with palette theming */
+.panel-card[data-stage="about"]    { --stage-tint: #4aa3ff; }
+.panel-card[data-stage="projects"] { --stage-tint: #ff4d9d; }
+.panel-card[data-stage="skills"]   { --stage-tint: #ffc83d; }
+.panel-card[data-stage="contact"]  { --stage-tint: #3ddc84; }
 
-.panel-glyph {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Trading-card anatomy: name + HP + type, art, strip, one attack, flavour, footer. */
+.tcg-top { display: flex; justify-content: space-between; align-items: center; }
+.tcg-name {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 18px;
-  color: var(--bg-0);
-  background: var(--accent-2);
-  z-index: 2;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 78%, 78% 100%, 0% 100%);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  white-space: nowrap;
 }
-
-.panel-img {
-  position: absolute;
-  top: 50px; left: 16px; right: 16px;
-  height: 160px;
-  --stage-tint: var(--accent);
+.tcg-hp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff7aa8;
+  white-space: nowrap;
+}
+.tcg-type {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--stage-tint);
+  color: var(--bg-0);
+  font-family: var(--font-mono); /* has the glyphs; the display font falls back to emoji */
+  font-size: 11px;
+  box-shadow: 0 0 10px var(--stage-tint);
+}
+.card-art {
+  position: relative;
+  height: 170px;
+  flex-shrink: 0;
+  border: 2px solid #e8d38a;
+  border-radius: 3px;
+  overflow: hidden;
   background:
     radial-gradient(circle at 50% 38%, color-mix(in oklab, var(--stage-tint) 55%, transparent), transparent 70%),
     color-mix(in oklab, var(--bg-1) 70%, var(--stage-tint));
-  border: 1px solid color-mix(in oklab, var(--stage-tint) 45%, transparent);
+}
+.card-art img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* New cover fades in over the previous one. Opacity only, no flash. */
+.card-art img.on { z-index: 1; animation: card-art-in 500ms ease-out; }
+@keyframes card-art-in { from { opacity: 0; } }
+.card-art-icons {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  z-index: 1;
-  overflow: hidden;
+  align-content: center;
+  gap: 14px 18px;
+  padding: 12px;
+  background: #F4F1FA;
 }
-
-/* ponytail: fixed per-stage hues, intentional clash with palette theming */
-.panel-img[data-stage="about"]    { --stage-tint: #4aa3ff; }
-.panel-img[data-stage="projects"] { --stage-tint: #ff4d9d; }
-.panel-img[data-stage="skills"]   { --stage-tint: #ffc83d; }
-.panel-img[data-stage="contact"]  { --stage-tint: #3ddc84; }
-
-.panel-img-icon {
-  width: 56px;
-  height: 56px;
-  color: color-mix(in oklab, var(--stage-tint) 75%, white);
-  filter: drop-shadow(0 0 12px color-mix(in oklab, var(--stage-tint) 60%, transparent));
-}
-
-.panel-label { z-index: 2; }
-
-.panel-label {
+.card-art-icons svg { width: 36px; height: 36px; }
+/* Holo foil: a soft band placed by --hx/--hy (Panel sets them on pointer move). Peak 20% white, never animates on its own. */
+.card-art::after,
+.panel-card::after {
+  content: "";
   position: absolute;
-  bottom: 16px;
-  left: 0;
-  right: 0;
-  padding: 0 14px;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  --hc: calc((var(--hx) + var(--hy)) * 50%);
+  background: linear-gradient(115deg,
+    transparent calc(var(--hc) - 22%),
+    rgba(255, 255, 255, 0.2) calc(var(--hc) - 6%),
+    rgba(120, 220, 255, 0.16) var(--hc),
+    rgba(255, 150, 230, 0.14) calc(var(--hc) + 6%),
+    transparent calc(var(--hc) + 22%));
 }
-.panel-label .big {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 38px;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  color: var(--fg);
-  text-transform: uppercase;
-  margin: 0;
-  white-space: nowrap;
+.card-art::after { z-index: 2; }
+.panel-card::after { opacity: 0.35; z-index: 3; transition: opacity 200ms; }
+/* Hover: tilt toward the pointer like a held holo card; the foil brightens (card-wide peak stays ~12% white). */
+.panel:hover .panel-card {
+  transform: rotateX(calc((0.5 - var(--hy)) * 14deg)) rotateY(calc((var(--hx) - 0.5) * 18deg));
 }
-.panel-label .sub {
+.panel:hover .panel-card::after { opacity: 0.6; }
+.tcg-strip {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9px;
+  letter-spacing: 0.15em;
   color: var(--fg-dim);
-  margin-top: 10px;
+  background: rgba(232, 211, 138, 0.12);
+  padding: 3px 6px;
+  border-radius: 2px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tcg-atk {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  padding: 4px 2px 6px;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
 }
-.panel-label .sub .arrow {
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-style: italic;
+.tcg-atk b { display: block; font-family: var(--font-display); font-style: italic; font-size: 15px; color: var(--fg); }
+.tcg-atk i { display: block; font-style: normal; font-family: var(--font-mono); font-size: 10px; color: var(--fg-dim); margin-top: 2px; }
+.tcg-dmg { font-family: var(--font-display); font-style: italic; font-size: 28px; line-height: 1; color: var(--accent); }
+.tcg-flav { margin: 0; font-family: var(--font-body); font-style: italic; font-size: 12px; line-height: 1.35; color: var(--fg-dim); }
+.tcg-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--fg-dim);
 }
-
-.panel-corner {
-  position: absolute;
-  width: 18px; height: 18px;
-  border-color: var(--accent);
-  border-style: solid;
-  border-width: 0;
-}
-.panel-corner.tl { top: 6px; left: 6px; border-top-width: 2px; border-left-width: 2px; }
-.panel-corner.tr { top: 6px; right: 6px; border-top-width: 2px; border-right-width: 2px; }
-.panel-corner.bl { bottom: 6px; left: 6px; border-bottom-width: 2px; border-left-width: 2px; }
-.panel-corner.br { bottom: 6px; right: 6px; border-bottom-width: 2px; border-right-width: 2px; }
+.tcg-foot .arrow { color: var(--accent); font-family: var(--font-display); font-size: 20px; font-style: italic; display: inline-block; transition: transform 200ms; }
 
 /* --- Center hero on home --- */
 .hero {
@@ -1840,13 +1845,7 @@ a.collab-link:hover {
 }
 .hud .corner .kbd { letter-spacing: 0.04em; }
 
-/* hover focus glow on panel num */
-.panel:hover .panel-num { color: var(--fg); text-shadow: 0 0 20px var(--accent); }
-.panel:hover .panel-label .arrow {
-  transform: translateX(6px);
-  transition: transform 200ms;
-}
-.panel-label .arrow { display: inline-block; transition: transform 200ms; }
+.panel:hover .tcg-foot .arrow { transform: translateX(6px); }
 
 @media (prefers-reduced-motion: reduce) {
   .panel-card,
@@ -1880,14 +1879,11 @@ a.collab-link:hover {
 /* === Responsive: Touch devices === */
 @media (pointer: coarse) {
   .hud .corner.bl { display: none; }
-  .panel-stage,
-  .panel-glyph,
-  .panel-img,
-  .panel-label,
-  .panel-corner { pointer-events: none; }
+  .panel-card > * { pointer-events: none; }
   .panel:hover .panel-card {
     animation-play-state: running;
     translate: none;
+    transform: none;
   }
   .panel:active .panel-card {
     border-color: var(--accent);
@@ -1897,9 +1893,7 @@ a.collab-link:hover {
       0 0 100px -5px var(--accent);
     filter: brightness(1.1);
   }
-  .panel:active .panel-num { color: var(--fg); text-shadow: 0 0 20px var(--accent); }
-  .panel:active .panel-label .arrow { transform: translateX(6px); }
-  .panel:active .panel-stage { color: color-mix(in oklab, var(--accent-2) 32%, transparent); }
+  .panel:active .tcg-foot .arrow { transform: translateX(6px); }
 }
 
 /* === Responsive: Phones (sm ≤ 639px) === */
@@ -1977,15 +1971,9 @@ a.collab-link:hover {
     margin: 0;
     animation: none;
   }
-  .panel-img { height: 140px; }
-  .panel-stage {
-    font-size: 160px;
-    top: -28px;
-    right: -8px;
-  }
-  .panel-label .big { font-size: clamp(32px, 9vw, 42px); }
-  .panel-num { font-size: 11px; }
-  .panel-card .panel-corner { display: none; }
+  .card-art { height: 140px; }
+  .tcg-name { font-size: clamp(26px, 8vw, 34px); }
+  .tcg-atk i, .tcg-flav { display: none; }
 
   /* Section views — top padding clears the fixed HUD row */
   .section-inner { padding: 64px 16px 32px 16px; }
@@ -2105,9 +2093,6 @@ a.collab-link:hover {
   .hud { font-size: 10px; }
 }
 
-/* === Pixel stage sprites === */
-.panel-glyph-icon { width: 16px; height: 16px; display: block; }
-/* .panel-img-icon keeps existing size/color/drop-shadow rules */
 
 /* === Cursor spotlight (home scene) === */
 .cursor-glow {
@@ -2466,3 +2451,5 @@ html[data-lite] .crt::after { background: radial-gradient(ellipse at center, tra
 html[data-lite] .section-head h1 { text-shadow: none; }
 html[data-lite] .dlg { box-shadow: 0 0 0 2px var(--bg-0); }
 html[data-lite] .crt-frame { box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent); }
+/* Lite: pin the foil and tilt at centre, even if the pointer moved before lite switched on. */
+html[data-lite] .panel-card { --hx: 0.5 !important; --hy: 0.5 !important; }
