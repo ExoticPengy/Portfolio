@@ -2453,3 +2453,63 @@ html[data-lite] .dlg { box-shadow: 0 0 0 2px var(--bg-0); }
 html[data-lite] .crt-frame { box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent); }
 /* Lite: pin the foil and tilt at centre, even if the pointer moved before lite switched on. */
 html[data-lite] .panel-card { --hx: 0.5 !important; --hy: 0.5 !important; }
+
+/* --- Sections as gameplay --- */
+html[data-lite] .shiny-toast { animation: none; }
+@media (prefers-reduced-motion: reduce) { .shiny-toast { animation: none; } }
+.narrator {
+  position: absolute; left: 50%; bottom: 16px; z-index: 20;
+  translate: -50% 0;
+  width: min(520px, calc(100% - 24px));
+  box-sizing: border-box;
+  padding: 12px 40px 12px 16px;
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.5; color: var(--fg);
+  cursor: pointer;
+  opacity: 0; visibility: hidden;
+  transition: opacity 200ms, visibility 200ms;
+}
+.narrator.on { opacity: 1; visibility: visible; }
+.narrator-x {
+  position: absolute; top: 6px; right: 8px; padding: 4px;
+  background: none; border: 0; cursor: pointer;
+  font: 12px var(--font-mono); color: var(--fg-dim);
+}
+.narrator-x:hover, .narrator-x:focus-visible { color: var(--accent-2); }
+/* Keep the last content reachable above the box. Keyed on the narrator being enabled, not shown,
+   so auto-hide never shrinks the page under a reader scrolled to the bottom. */
+.crt:has(.narrator) .section-inner { padding-bottom: 110px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+/* Encounters: unseen items are silhouettes with ???; the box stays, its content goes dark. */
+[data-enc]:not([data-seen]) { position: relative; }
+[data-enc]:not([data-seen]) > * { filter: brightness(0) blur(2px); }
+[data-enc]:not([data-seen])::after {
+  content: "???" / ""; /* visual only; the real text stays readable */
+  position: absolute; inset: 0; right: 0; bottom: 0;
+  display: grid; place-items: center;
+  animation: none; /* overrides .dlg.more's bobbing ▼ until seen */
+  font: 700 20px var(--font-mono); letter-spacing: 0.3em; color: var(--accent-2);
+}
+[data-seen=""] { animation: enc-pop 350ms ease-out; }
+@keyframes enc-pop {
+  from { transform: scale(0.96); box-shadow: 0 0 28px color-mix(in oklab, white 30%, transparent); }
+}
+
+/* Skill bars fill once their category is seen, staggered per row. */
+.skill-cat li .bar::after { width: 0; transition: width 600ms ease-out calc(var(--i, 0) * 40ms); }
+.skill-cat[data-seen] li .bar::after { width: var(--lvl, 70%); }
+
+/* Stat count-up: a registered integer transitions to --to and prints through counter(). */
+@property --n { syntax: "<integer>"; inherits: false; initial-value: 0; }
+.count { counter-reset: n var(--n); transition: --n 800ms ease-out; }
+.count::before { content: counter(n) attr(data-suffix) / ""; }
+.count.pad::before { content: counter(n, decimal-leading-zero) attr(data-suffix) / ""; }
+[data-seen] .count { --n: var(--to); }
+
+html[data-lite] .count, html[data-lite] .skill-cat li .bar::after { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .count, .skill-cat li .bar::after { transition: none; }
+}

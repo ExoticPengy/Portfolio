@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { FaGithub, FaGlobe } from "react-icons/fa";
 import { SLIDE_BG } from "@/lib/slideBg";
 import type { ProjectData } from "@/lib/types";
+import { unlock } from "@/hooks/useAchievements";
 
 type Props = {
   project: ProjectData;
@@ -154,6 +155,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="project-link"
+                onClick={() => unlock("source")}
               >
                 <FaGithub className="link-icon-svg" />
                 <span className="link-label">SOURCE CODE</span>
@@ -166,6 +168,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="project-link"
+                onClick={() => unlock("source")}
               >
                 {project.favicon ? <img src={project.favicon} alt="" className="link-favicon" /> : <FaGlobe className="link-icon-svg" />}
                 <span className="link-label">LIVE DEPLOYMENT</span>

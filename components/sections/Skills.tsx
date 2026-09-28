@@ -137,17 +137,17 @@ export const COLORS: Record<string, string> = {
 
 export default function Skills({ onBack }: { onBack: () => void }) {
   return (
-    <SectionShell num="03" title="ABILITIES" ghost="POW" onBack={onBack}>
+    <SectionShell num="03" title="ABILITIES" ghost="POW" line={`ABILITIES loaded. ${SKILLS.reduce((n, c) => n + c.items.length, 0)} moves learned.`} onBack={onBack}>
       <div className="skills-grid">
         {SKILLS.map((cat, i) => (
-          <div key={cat.name} className={`skill-cat dlg reveal d${i + 1}`}>
+          <div key={cat.name} className="skill-cat dlg" data-enc={cat.name} data-line={i === 0 ? "PYTHON used DATA WRANGLE!" : undefined}>
             <h3>{cat.name}</h3>
             <ul>
-              {cat.items.map(([n, lvl]) => {
+              {cat.items.map(([n, lvl], j) => {
                 const Icon = ICONS[n];
                 const clr = COLORS[n];
                 return (
-                  <li key={n}>
+                  <li key={n} style={{ "--i": j } as React.CSSProperties}>
                     <span className="skill-label">
                       {Icon ? <Icon className="skill-icon" color={clr} /> : <span className="skill-icon ph" />}
                       {n}

@@ -3,7 +3,7 @@ import CommitLog from "./CommitLog";
 
 export default function About({ onBack }: { onBack: () => void }) {
   return (
-    <SectionShell num="01" title="CHARACTER" ghost="WHO" onBack={onBack}>
+    <SectionShell num="01" title="CHARACTER" ghost="WHO" line="CHONG MING LI joined the party!" onBack={onBack}>
       <div className="reveal d1">
         <div className="about-bio dlg more">
           <p>
@@ -23,22 +23,22 @@ export default function About({ onBack }: { onBack: () => void }) {
           </p>
         </div>
         <div className="about-stats" style={{ marginTop: 36 }}>
-          <div className="stat-card dlg">
+          <div className="stat-card dlg" data-enc="shipped" data-line="It's super effective! Stats maxed.">
             <div className="label">Products Shipped</div>
-            <div className="value">5+</div>
+            <div className="value count" data-suffix="+" style={{ "--to": 5 } as React.CSSProperties}><span className="sr-only">5+</span></div>
             <div className="unit">in production</div>
           </div>
-          <div className="stat-card dlg">
+          <div className="stat-card dlg" data-enc="years">
             <div className="label">XP · Years Coding</div>
-            <div className="value">05</div>
+            <div className="value count pad" style={{ "--to": 5 } as React.CSSProperties}><span className="sr-only">05</span></div>
             <div className="unit">and counting</div>
           </div>
-          <div className="stat-card dlg">
+          <div className="stat-card dlg" data-enc="drinks">
             <div className="label">Energy Drinks / Day</div>
-            <div className="value">03</div>
+            <div className="value count pad" style={{ "--to": 3 } as React.CSSProperties}><span className="sr-only">03</span></div>
             <div className="unit">averaged · cal.</div>
           </div>
-          <div className="stat-card dlg">
+          <div className="stat-card dlg" data-enc="oss">
             <div className="label">Open Source</div>
             <div className="value">∞</div>
             <div className="unit">always shipping</div>

@@ -62,6 +62,7 @@ export type Tweaks = {
   musicVolume: number; // 0..10
   shiny: boolean; // konami easter egg
   lite: "auto" | "on" | "off"; // auto = the probe in app/layout.tsx decides
+  narrator: boolean; // section dialogue box
 };
 
 export const DEFAULT_TWEAKS: Tweaks = {
@@ -76,4 +77,5 @@ export const DEFAULT_TWEAKS: Tweaks = {
   musicVolume: 3,
   shiny: false,
   lite: "auto",
+  narrator: true,
 };

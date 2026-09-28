@@ -6,6 +6,7 @@ import { whoosh, click } from "@/lib/audio";
 import { parseHash, formatHash, slugify } from "@/lib/route";
 import { WIPES } from "@/lib/pixels";
 import type { ProjectData } from "@/lib/types";
+import { unlock } from "@/hooks/useAchievements";
 
 export const PROJECTS: ProjectData[] = [
   {
@@ -471,6 +472,8 @@ export default function Projects({ onBack }: { onBack: () => void }) {
     if (view) view.scrollTop = 0;
   }, [selected]);
 
+  useEffect(() => { if (selected) unlock("deepdive"); }, [selected]);
+
   const handleSelect = useCallback((p: ProjectData, cover: HTMLImageElement | null) => {
     if (busy.current) return;
     click(900);
@@ -529,19 +532,21 @@ export default function Projects({ onBack }: { onBack: () => void }) {
   }, [selected, routeReady]);
 
   return (
-    <SectionShell num="02" title="STAGES" ghost="WORK" onBack={onBack} overlay={<PixelCanvas ref={pixRef} z={9500} />}>
+    <SectionShell
+      num="02" title="STAGES" ghost="WORK" onBack={onBack}
+      line={selected ? `${selected.title.toUpperCase()} · STAGE ${selected.num}. Inspect away.` : `${PROJECTS.length} stages cleared. Pick one to replay.`}
+      overlay={<PixelCanvas ref={pixRef} z={9500} />}>
       <div className={`project-detail-wrapper ${selected ? "active" : ""} ${exiting ? "exiting" : ""}`}>
         {selected ? (
           <ProjectDetail project={selected} onBack={handleBack} exiting={exiting} />
         ) : (
           <div className="projects-grid">
-            {PROJECTS.map((p, i) => (
+            {PROJECTS.map((p) => (
               <div
                 key={p.num}
-                className={[
-                  "project-card dlg pick",
-                  !animating ? `reveal d${i + 1}` : "",
-                ].filter(Boolean).join(" ")}
+                className="project-card dlg pick"
+                data-enc={p.num}
+                data-wild={p.title.toUpperCase()}
                 onClick={(e) => handleSelect(p, e.currentTarget.querySelector("img"))}
                 role="button"
                 tabIndex={animating ? -1 : 0}

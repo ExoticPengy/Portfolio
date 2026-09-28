@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useTweaks } from "@/hooks/useTweaks";
 import { PALETTE_OPTIONS } from "@/lib/palettes";
 import type { PaletteName, Tweaks } from "@/lib/types";
+import { ACHIEVEMENTS } from "@/lib/achievements";
+import { useAchievements, resetAchievements } from "@/hooks/useAchievements";
 
 export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => void }) {
   const { tweaks, setTweak } = useTweaks();
   const [open, setOpen] = useState(false);
+  const { state: ach } = useAchievements();
 
   return (
     <>
@@ -98,6 +101,23 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
             />
           </Row>
 
+          <Section label="PLAY" />
+          <Toggle label="Narrator" value={tweaks.narrator} onChange={(v) => setTweak("narrator", v)} />
+
+          <Section label="ACHIEVEMENTS" />
+          {ACHIEVEMENTS.map((a) => {
+            const got = ach.unlocked.includes(a.id);
+            return (
+              <div key={a.id} style={{ display: "flex", justifyContent: "space-between", gap: 10, opacity: got ? 1 : 0.5 }}>
+                <span>{got ? `★ ${a.name}` : "☆ ???"}</span>
+                <span style={{ opacity: 0.7, textAlign: "right" }}>{a.hint}</span>
+              </div>
+            );
+          })}
+          <Row label="Progress">
+            <button type="button" onClick={resetAchievements} style={btnStyle}>RESET</button>
+          </Row>
+
           <Section label="INTRO" />
           <Row label="Boot Video">
             <button
@@ -151,6 +171,13 @@ const selectStyle: React.CSSProperties = {
   background: "var(--bg-0)", color: "var(--fg)",
   border: "1px solid color-mix(in oklab, var(--accent) 35%, transparent)",
   padding: "4px 8px", fontFamily: "var(--font-mono)", fontSize: 11,
+};
+
+const btnStyle: React.CSSProperties = {
+  background: "transparent", color: "var(--fg)",
+  border: "1px solid color-mix(in oklab, var(--accent) 55%, transparent)",
+  padding: "3px 10px", fontFamily: "var(--font-mono)", fontSize: 10,
+  cursor: "pointer", letterSpacing: "0.1em",
 };
 
 function Section({ label }: { label: string }) {

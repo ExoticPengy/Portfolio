@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { PANELS, TICKER_BITS } from "@/lib/panels";
 import type { View } from "@/lib/types";
+import { ACHIEVEMENTS } from "@/lib/achievements";
+import { useAchievements } from "@/hooks/useAchievements";
 
 type Props = {
   focused: boolean;
@@ -13,6 +15,7 @@ type Props = {
 };
 
 export default function Hud({ focused, focusedId, view, level, onTick }: Props) {
+  const { state: ach } = useAchievements();
   const activePanel = PANELS.find((p) => p.id === focusedId);
   const sectionPanel = view !== "home" && view !== "flying" ? PANELS.find((p) => p.id === view) : null;
   useEffect(() => {
@@ -31,6 +34,8 @@ export default function Hud({ focused, focusedId, view, level, onTick }: Props) 
         <span>PLAYER · PENGY</span>
         <span style={{ opacity: 0.5 }}>|</span>
         <span>LV. {String(level).padStart(2, "0")}</span>
+        <span style={{ opacity: 0.5 }}>|</span>
+        <span title="Achievements · list in ⚙ Tweaks">★ {ach.unlocked.length}/{ACHIEVEMENTS.length}</span>
       </div>
       <div className="corner bl">
         <span className="kbd">←</span>

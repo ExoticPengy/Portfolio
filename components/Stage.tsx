@@ -8,7 +8,7 @@ import { useFlyTransition } from "@/hooks/useFlyTransition";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import { useKonami } from "@/hooks/useKonami";
 import { useAudio } from "@/hooks/useAudio";
-import { whoosh, click, hover as hoverSfx, thud, jingle, startMusic, stopMusic, setSfxVolume, setMusicVolume } from "@/lib/audio";
+import { whoosh, click, hover as hoverSfx, thud, startMusic, stopMusic, setSfxVolume, setMusicVolume } from "@/lib/audio";
 import BootSequence from "./BootSequence";
 import { parseHash, formatHash } from "@/lib/route";
 import type { View } from "@/lib/types";
@@ -21,6 +21,8 @@ import PokemonRunners from "./PokemonRunners";
 import MoveFx, { type MoveFxHandle } from "./MoveFx";
 import { BackgroundBurst, BackgroundFx } from "./Background";
 import FxOverlays from "./FxOverlays";
+import AchievementToast from "./AchievementToast";
+import { unlock, visit } from "@/hooks/useAchievements";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
@@ -36,13 +38,12 @@ export default function Stage() {
   const [keyboardIdx, setKeyboardIdx] = useState<number>(0);
   const [kbActive, setKbActive] = useState<boolean>(false);
   const [level, setLevel] = useState(1);
-  const [shinyToast, setShinyToast] = useState(false);
   const [introDone, setIntroDone] = useState(false);
 
   const onKonami = useCallback(() => {
     const next = !tweaks.shiny;
     setTweak("shiny", next);
-    if (next) { jingle(); setShinyToast(true); setTimeout(() => setShinyToast(false), 2600); }
+    if (next) unlock("shiny"); // toast + jingle on first unlock only
   }, [tweaks.shiny, setTweak]);
   useKonami(onKonami);
 
@@ -50,6 +51,8 @@ export default function Stage() {
   useEffect(() => {
     document.querySelectorAll<HTMLElement>(".section-view .crt-scroll").forEach((el) => { el.scrollTop = 0; });
   }, [view]);
+
+  useEffect(() => { if (view !== "home" && view !== "flying") visit(view); }, [view]);
 
   useEffect(() => { setSfxVolume(tweaks.sfxVolume / 10); }, [tweaks.sfxVolume]);
   useEffect(() => { setMusicVolume(tweaks.musicVolume / 10); }, [tweaks.musicVolume]);
@@ -197,13 +200,14 @@ export default function Stage() {
       <PokemonRunners
         level={level}
         onPokemonClick={(name, x, y) => {
+          unlock("catch");
           handleLevelUp();
           moveFxRef.current?.trigger(x, y, name);
         }}
       />
       <MoveFx ref={moveFxRef} />
 
-      {shinyToast && <div className="shiny-toast">✦ SHINY MODE UNLOCKED</div>}
+      <AchievementToast />
       <BootSequence onFinish={() => setIntroDone(true)} />
     </div>
   );
