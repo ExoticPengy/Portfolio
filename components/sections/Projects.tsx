@@ -1,8 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import SectionShell from "./SectionShell";
 import ProjectDetail from "./ProjectDetail";
+import PixelCanvas, { motionOk, type PixelHandle } from "../PixelCanvas";
 import { whoosh, click } from "@/lib/audio";
 import { parseHash, formatHash, slugify } from "@/lib/route";
+import { WIPES } from "@/lib/pixels";
 import type { ProjectData } from "@/lib/types";
 
 const PROJECTS: ProjectData[] = [
@@ -447,40 +449,51 @@ const PROJECTS: ProjectData[] = [
   },
 ];
 
-const TRANSITIONS = ["tear", "mosaic", "blinds", "slash", "cascade"] as const;
-type Transition = (typeof TRANSITIONS)[number];
-
-const TRANSITION_TIMINGS: Record<Transition, number> = {
-  tear: 1300,
-  mosaic: 950,
-  blinds: 1300,
-  slash: 900,
-  cascade: 1200,
-};
-
-function pickTransition(): Transition {
-  return TRANSITIONS[Math.floor(Math.random() * TRANSITIONS.length)];
+function pickTransition() {
+  return WIPES[Math.floor(Math.random() * WIPES.length)];
 }
+
+const detailCover = () => document.querySelector<HTMLImageElement>(".project-detail-img img");
 
 export default function Projects({ onBack }: { onBack: () => void }) {
   const [selected, setSelected] = useState<ProjectData | null>(null);
   const [animating, setAnimating] = useState(false);
-  const [transition, setTransition] = useState<Transition>("tear");
   const [exiting, setExiting] = useState(false);
+  const pixRef = useRef<PixelHandle | null>(null);
+  const busy = useRef(false); // sync guard; `animating` state lags a render behind a fast double click
 
-  const handleSelect = useCallback((p: ProjectData) => {
+  // Layout effect so the encounter reveal measures the detail cover after the scroll reset, not before.
+  useLayoutEffect(() => {
+    const view = document.querySelector<HTMLElement>(".section-view.visible");
+    if (view) view.scrollTop = 0;
+  }, [selected]);
+
+  const handleSelect = useCallback((p: ProjectData, cover: HTMLImageElement | null) => {
+    if (busy.current) return;
     click(900);
-    whoosh(0.6);
-    const t = pickTransition();
-    setTransition(t);
-    setSelected(p);
+    const pix = pixRef.current;
+    if (!pix || !cover || !motionOk()) { setSelected(p); return; }
+    busy.current = true;
     setAnimating(true);
-    setTimeout(() => setAnimating(false), TRANSITION_TIMINGS[t]);
+    whoosh(0.6);
+    pix.encounter(pickTransition(), cover, () => setSelected(p), detailCover, () => click(1200))
+      .catch(() => setSelected(p))
+      .finally(() => { busy.current = false; setAnimating(false); });
   }, []);
 
   const handleBack = useCallback(() => {
+    if (busy.current) return;
     click(440);
     whoosh(0.4);
+    const pix = pixRef.current, img = detailCover();
+    if (pix && img && motionOk()) {
+      // busy only, not `animating`: toggling that re-adds the grid's reveal classes and makes the cards blink.
+      busy.current = true;
+      pix.reverse(img, () => setSelected(null))
+        .catch(() => setSelected(null))
+        .finally(() => { busy.current = false; });
+      return;
+    }
     setExiting(true);
     setTimeout(() => {
       setSelected(null);
@@ -512,65 +525,8 @@ export default function Projects({ onBack }: { onBack: () => void }) {
     if (window.location.hash !== next) window.location.hash = next;
   }, [selected, routeReady]);
 
-  let overlay: React.ReactNode = null;
-  if (animating) {
-    switch (transition) {
-      case "tear":
-        overlay = (
-          <div className="poke-overlay" style={{ display: "flex", flexDirection: "column" }}>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="tear-strip tearing" />
-            ))}
-          </div>
-        );
-        break;
-      case "mosaic":
-        overlay = (
-          <div
-            className="poke-overlay"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gridTemplateRows: "repeat(3, 1fr)",
-            }}
-          >
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="mosaic-tile shattering" />
-            ))}
-          </div>
-        );
-        break;
-      case "blinds":
-        overlay = (
-          <div className="poke-overlay" style={{ display: "flex", flexDirection: "row" }}>
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="blind-strip opening" />
-            ))}
-          </div>
-        );
-        break;
-      case "slash":
-        overlay = (
-          <div className="poke-overlay">
-            <div className="slash-half top slashing" />
-            <div className="slash-half bottom slashing" />
-          </div>
-        );
-        break;
-      case "cascade":
-        overlay = (
-          <div className="poke-overlay" style={{ display: "flex", flexDirection: "column" }}>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="cascade-strip falling" />
-            ))}
-          </div>
-        );
-        break;
-    }
-  }
-
   return (
-    <SectionShell num="02" title="STAGES" ghost="WORK" onBack={onBack} overlay={overlay}>
+    <SectionShell num="02" title="STAGES" ghost="WORK" onBack={onBack} overlay={<PixelCanvas ref={pixRef} z={9500} />}>
       <div className={`project-detail-wrapper ${selected ? "active" : ""} ${exiting ? "exiting" : ""}`}>
         {selected ? (
           <ProjectDetail project={selected} onBack={handleBack} exiting={exiting} />
@@ -583,11 +539,11 @@ export default function Projects({ onBack }: { onBack: () => void }) {
                   "project-card",
                   !animating ? `reveal d${i + 1}` : "",
                 ].filter(Boolean).join(" ")}
-                onClick={() => !animating && handleSelect(p)}
+                onClick={(e) => handleSelect(p, e.currentTarget.querySelector("img"))}
                 role="button"
                 tabIndex={animating ? -1 : 0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !animating) handleSelect(p);
+                  if (e.key === "Enter") handleSelect(p, e.currentTarget.querySelector("img"));
                 }}
               >
                 <div className="project-img">

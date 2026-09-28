@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTweaks } from "@/hooks/useTweaks";
 import { PALETTE_OPTIONS } from "@/lib/palettes";
-import type { PaletteName } from "@/lib/types";
+import type { PaletteName, Tweaks } from "@/lib/types";
 
 export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => void }) {
   const { tweaks, setTweak } = useTweaks();
@@ -64,6 +64,18 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
               onChange={(e) => setTweak("motionIntensity", Number(e.target.value))}
               style={{ width: 120, flex: "none" }}
             />
+          </Row>
+
+          <Row label="Lite Mode">
+            <select
+              value={tweaks.lite}
+              onChange={(e) => setTweak("lite", e.target.value as Tweaks["lite"])}
+              style={selectStyle}
+            >
+              <option value="auto">Auto</option>
+              <option value="on">On</option>
+              <option value="off">Off</option>
+            </select>
           </Row>
 
           <Section label="AUDIO" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { DEFAULT_TWEAKS, type Tweaks } from "@/lib/types";
 
 const STORAGE_KEY = "portfolio.tweaks";
@@ -51,6 +51,17 @@ export function TweaksProvider({ children }: { children: ReactNode }) {
     if (tweaks.shiny) document.body.dataset.shiny = "true";
     else delete document.body.dataset.shiny;
   }, [tweaks.shiny]);
+
+  // Lite mode switch. The first run is skipped: the head probe already applied the stored choice before paint.
+  // ponytail: picking Auto after On/Off at load has no verdict to restore until the next reload re-probes.
+  const liteInit = useRef(true);
+  useEffect(() => {
+    if (liteInit.current) { liteInit.current = false; return; }
+    const d = document.documentElement.dataset;
+    const on = tweaks.lite === "on" || (tweaks.lite === "auto" && "liteAuto" in d);
+    if (on) d.lite = "";
+    else delete d.lite;
+  }, [tweaks.lite]);
 
   const setTweak: Ctx["setTweak"] = (key, value) => {
     setTweaks((prev) => ({ ...prev, [key]: value }));

@@ -59,6 +59,7 @@ export type Tweaks = {
   sfxVolume: number;   // 0..10
   musicVolume: number; // 0..10
   shiny: boolean; // konami easter egg
+  lite: "auto" | "on" | "off"; // auto = the probe in app/layout.tsx decides
 };
 
 export const DEFAULT_TWEAKS: Tweaks = {
@@ -72,4 +73,5 @@ export const DEFAULT_TWEAKS: Tweaks = {
   sfxVolume: 8,
   musicVolume: 3,
   shiny: false,
+  lite: "auto",
 };
