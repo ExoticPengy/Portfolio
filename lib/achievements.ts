@@ -39,13 +39,13 @@ export function visit(s: AchState, section: string): Result {
   return { state: b.state, fresh: [...a.fresh, ...b.fresh] };
 }
 
-// Stored progress may be corrupt or from an older id list: keep only what is still valid.
+// Stored progress may be corrupt or from an older id list: keep only what is still valid, once.
 export function load(raw: string | null): AchState {
   try {
     const p = JSON.parse(raw ?? "") as Partial<AchState>;
     return {
-      unlocked: (p.unlocked ?? []).filter((id): id is AchId => IDS.includes(id)),
-      visited: (p.visited ?? []).filter((v) => SECTIONS.includes(v)),
+      unlocked: [...new Set((p.unlocked ?? []).filter((id): id is AchId => IDS.includes(id)))],
+      visited: [...new Set((p.visited ?? []).filter((v) => SECTIONS.includes(v)))],
     };
   } catch {
     return EMPTY;

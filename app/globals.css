@@ -2483,15 +2483,18 @@ html[data-lite] .shiny-toast { animation: none; }
   clip-path: inset(50%); white-space: nowrap;
 }
 
-/* Encounters: unseen items are silhouettes with ???; the box stays, its content goes dark. */
-[data-enc]:not([data-seen]) { position: relative; }
-[data-enc]:not([data-seen]) > * { filter: brightness(0) blur(2px); }
-[data-enc]:not([data-seen])::after {
-  content: "???" / ""; /* visual only; the real text stays readable */
-  position: absolute; inset: 0; right: 0; bottom: 0;
-  display: grid; place-items: center;
-  animation: none; /* overrides .dlg.more's bobbing ▼ until seen */
-  font: 700 20px var(--font-mono); letter-spacing: 0.3em; color: var(--accent-2);
+/* Encounters: unseen items are silhouettes with ???; the box stays, its content goes dark.
+   Motion only: lite and reduced motion mark all seen after mount, so never paint a silhouette frame. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-lite]) [data-enc]:not([data-seen]) { position: relative; }
+  html:not([data-lite]) [data-enc]:not([data-seen]) > * { filter: brightness(0) blur(2px); }
+  html:not([data-lite]) [data-enc]:not([data-seen])::after {
+    content: "???" / ""; /* visual only; the real text stays readable */
+    position: absolute; inset: 0; right: 0; bottom: 0;
+    display: grid; place-items: center;
+    animation: none; /* overrides .dlg.more's bobbing ▼ until seen */
+    font: 700 20px var(--font-mono); letter-spacing: 0.3em; color: var(--accent-2);
+  }
 }
 [data-seen=""] { animation: enc-pop 350ms ease-out; }
 @keyframes enc-pop {
@@ -2509,7 +2512,10 @@ html[data-lite] .shiny-toast { animation: none; }
 .count.pad::before { content: counter(n, decimal-leading-zero) attr(data-suffix) / ""; }
 [data-seen] .count { --n: var(--to); }
 
-html[data-lite] .count, html[data-lite] .skill-cat li .bar::after { transition: none; }
+/* Lite and reduced motion: final values from the first paint, not after the seen mark. */
+html[data-lite] .count { transition: none; --n: var(--to); }
+html[data-lite] .skill-cat li .bar::after { transition: none; width: var(--lvl, 70%); }
 @media (prefers-reduced-motion: reduce) {
-  .count, .skill-cat li .bar::after { transition: none; }
+  .count { transition: none; --n: var(--to); }
+  .skill-cat li .bar::after { transition: none; width: var(--lvl, 70%); }
 }

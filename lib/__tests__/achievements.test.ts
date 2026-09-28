@@ -51,4 +51,9 @@ describe("load", () => {
     expect(load(JSON.stringify({ unlocked: ["first", "gone"], visited: ["about", "home"] })))
       .toEqual({ unlocked: ["first"], visited: ["about"] });
   });
+  it("dedupes, so a tampered list cannot fake a 7th unlock or 4th visit", () => {
+    const s = load(JSON.stringify({ unlocked: Array(7).fill("first"), visited: Array(4).fill("about") }));
+    expect(s).toEqual({ unlocked: ["first"], visited: ["about"] });
+    expect(unlock(s, "hello").fresh).toEqual(["hello"]);
+  });
 });

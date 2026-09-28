@@ -9,6 +9,8 @@ import { wildLine } from "@/lib/encounter";
 // already seen this visit (back from a project detail). Items seen together make one narrator line:
 // their data-wild names merge ("Wild A and B appeared!"), else the first data-line wins. Lines from items
 // already in view on arrival are held until the first scroll, so the enter line plays first.
+const ARRIVE_MS = 1000; // longest .reveal: d2's 300ms delay + 700ms
+
 export function useSeen(root: RefObject<HTMLElement | null>, onLine: (text: string) => void) {
   useEffect(() => {
     const r = root.current;
@@ -57,12 +59,18 @@ export function useSeen(root: RefObject<HTMLElement | null>, onLine: (text: stri
       if (el) { mark(el); flush(); }
     };
 
-    scan();
     const mo = new MutationObserver(scan); // grid remounts when leaving a project detail
-    mo.observe(r, { childList: true, subtree: true });
+    const start = () => {
+      scan();
+      mo.observe(r, { childList: true, subtree: true });
+    };
+    // Items already in view sit inside the entry .reveal fade; pop them once it has finished, not under it.
+    if (quiet) start();
+    const t = quiet ? undefined : setTimeout(start, ARRIVE_MS);
     r.addEventListener("scroll", onScroll, { once: true, passive: true });
     r.addEventListener("focusin", onFocus);
     return () => {
+      clearTimeout(t);
       io?.disconnect();
       mo.disconnect();
       r.removeEventListener("scroll", onScroll);

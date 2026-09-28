@@ -47,7 +47,7 @@ export default function About({ onBack }: { onBack: () => void }) {
       </div>
       <div className="reveal d2">
         <div className="headshot crt-frame">
-          <img src="/headshot.png" alt="Chong Ming Li" className="headshot-img" />
+          <img src="/headshot.webp" alt="Chong Ming Li" className="headshot-img" />
         </div>
       </div>
       <CommitLog user="ExoticPengy" />

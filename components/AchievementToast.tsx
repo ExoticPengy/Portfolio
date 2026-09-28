@@ -13,5 +13,10 @@ export default function AchievementToast() {
     const t = setTimeout(nextToast, 2600);
     return () => clearTimeout(t);
   }, [toast]);
-  return toast ? <div key={toast.id} className="shiny-toast" role="status">{toast.text}</div> : null;
+  // The live region stays mounted; screen readers skip regions that arrive already filled.
+  return (
+    <div role="status">
+      {toast && <div key={toast.id} className="shiny-toast">{toast.text}</div>}
+    </div>
+  );
 }

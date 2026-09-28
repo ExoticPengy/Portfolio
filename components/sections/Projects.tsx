@@ -14,7 +14,7 @@ export const PROJECTS: ProjectData[] = [
     title: "TIAN DI",
     desc: "Lion and dragon dance troupe website. Landing page with booking, services, gallery, and contact sections. Live at tiandi.app with 500+ performances under their belt.",
     tags: ["Next.js", "Tailwind CSS", "TypeScript", "LIVE"],
-    img: "/images/projects/tiandi-logo.png",
+    img: "/images/projects/tiandi-logo.webp",
     coverAspect: 1.422,
     coverFit: "contain",
     coverBg: "#F7F2EA", // warm cream, matches tiandi.app, lifts the red/white mark
@@ -47,10 +47,10 @@ export const PROJECTS: ProjectData[] = [
       "Testimonials, team, and FAQ sections",
     ],
     screenshots: [
-      "/images/projects/tiandi.png",
-      "/images/projects/tiandi-services.png",
-      "/images/projects/tiandi-gallery.png",
-      "/images/projects/tiandi-contact.png",
+      "/images/projects/tiandi.webp",
+      "/images/projects/tiandi-services.webp",
+      "/images/projects/tiandi-gallery.webp",
+      "/images/projects/tiandi-contact.webp",
     ],
   },
   {
@@ -59,7 +59,7 @@ export const PROJECTS: ProjectData[] = [
     status: "GRINDING",
     desc: "Conversational BI platform. Ask your warehouse a question in plain language and get charts, findings, and scheduled briefings back. FastAPI + Nuxt 4 + LangGraph, with a multi-agent system over PostgreSQL, MySQL, and BigQuery. Open-source core, live at thebingo.ai. I'm a contributor on the team.",
     tags: ["Python", "FastAPI", "LangGraph", "LIVE"],
-    img: "/images/projects/bingo-logo.png",
+    img: "/images/projects/bingo-logo.webp",
     coverAspect: 1.6,
     coverFit: "contain",
     coverBg: "#F4F1FA", // pale lavender behind the purple wordmark
@@ -103,7 +103,7 @@ export const PROJECTS: ProjectData[] = [
       { name: "Kent Chong", url: "https://kentchong.com", role: "Teammate", icon: "/images/kent-chong-avatar.png" },
     ],
     screenshots: [
-      "/images/projects/bingo.png",
+      "/images/projects/bingo.webp",
     ],
   },
   {
@@ -112,7 +112,7 @@ export const PROJECTS: ProjectData[] = [
     status: "GRINDING",
     desc: "Credit-based AI image SaaS. Sign in with Google, spend credits to generate and edit images via OpenAI, or bring your own key and skip the meter. Priority job queue, markdown prompt editor, 3D landing scene, live on Vercel.",
     tags: ["Next.js", "OpenAI", "Stripe", "VERCEL"],
-    img: "/images/projects/dreamframe-logo.png",
+    img: "/images/projects/dreamframe-logo.webp",
     coverAspect: 1.422,
     coverFit: "contain",
     coverBg: "#F2F0FA", // pale lavender behind the purple sparkle mark
@@ -151,9 +151,9 @@ export const PROJECTS: ProjectData[] = [
       "Priority job queue with in-flight caps, daily abuse guards, and stale-job rescue",
     ],
     screenshots: [
-      "/images/projects/dreamframe.png",
-      "/images/projects/dreamframe-howitworks.png",
-      "/images/projects/dreamframe-cta.png",
+      "/images/projects/dreamframe.webp",
+      "/images/projects/dreamframe-howitworks.webp",
+      "/images/projects/dreamframe-cta.webp",
     ],
   },
   {
@@ -161,7 +161,7 @@ export const PROJECTS: ProjectData[] = [
     title: "TIMESYNC",
     desc: "Scheduling coordination tool for finding the best meeting time across groups. Share a sync link, each person marks their hours on a day × hour grid, and a live Firebase-backed heatmap overlays everyone's input to surface the top 3 slots.",
     tags: ["JavaScript", "Vite", "Firebase", "SCHEDULING"],
-    img: "/images/projects/timesync.png",
+    img: "/images/projects/timesync.webp",
     coverAspect: 1.103,
     coverBg: "#FAFAFA", // sampled edge of the screenshot
     github: "https://github.com/ExoticPengy/timesync",
@@ -191,8 +191,8 @@ export const PROJECTS: ProjectData[] = [
       "Doodle-style day polls and editable post-creation settings",
     ],
     screenshots: [
-      "/images/projects/timesync-monthmode.png",
-      "/images/projects/timesync-daypoll.png",
+      "/images/projects/timesync-monthmode.webp",
+      "/images/projects/timesync-daypoll.webp",
     ],
   },
   {
@@ -200,7 +200,7 @@ export const PROJECTS: ProjectData[] = [
     title: "PROFILES · SVELTEKIT",
     desc: "Link-in-bio profile builder, like Linktree, built with SvelteKit. Google sign-in, claim a username, upload a photo, and manage social links with drag-and-drop reordering. Deployed on Vercel.",
     tags: ["SvelteKit", "TypeScript", "Firebase", "Vercel"],
-    img: "/images/projects/profiles-sveltekit.png",
+    img: "/images/projects/profiles-sveltekit.webp",
     coverAspect: 1.488,
     coverBg: "#0F0D18", // sampled edge of the screenshot
     github: "https://github.com/ExoticPengy/Profiles-Sveltekit",
@@ -231,8 +231,8 @@ export const PROJECTS: ProjectData[] = [
       "Public/private publish toggle and bio editor",
     ],
     screenshots: [
-      "/images/projects/profiles-profile.png",
-      "/images/projects/profiles-login.png",
+      "/images/projects/profiles-profile.webp",
+      "/images/projects/profiles-login.webp",
     ],
   },
   {
@@ -240,7 +240,7 @@ export const PROJECTS: ProjectData[] = [
     title: "H & MAYBE",
     desc: "Full-stack fashion e-commerce app built on plain PHP, no framework, just a clean layered structure. Browse clothing by category, add to cart, pay with Stripe, get email receipts, and track orders, with an admin panel behind it all.",
     tags: ["PHP", "Stripe", "MySQL", "E-COMMERCE"],
-    img: "/images/projects/handmaybe-logo.png",
+    img: "/images/projects/handmaybe-logo.webp",
     coverAspect: 2.019,
     coverFit: "contain",
     coverBg: "#FFFFFF", // storefront white behind the H&M-red script
@@ -276,9 +276,9 @@ export const PROJECTS: ProjectData[] = [
       { name: "mingshen0118", url: "https://github.com/mingshen0118", role: "Teammate", icon: "/images/mingshen0118-avatar.png" },
     ],
     screenshots: [
-      "/images/projects/handmaybe-product.png",
-      "/images/projects/handmaybe-cart.png",
-      "/images/projects/handmaybe-order.png",
+      "/images/projects/handmaybe-product.webp",
+      "/images/projects/handmaybe-cart.webp",
+      "/images/projects/handmaybe-order.webp",
     ],
   },
   {
@@ -286,7 +286,7 @@ export const PROJECTS: ProjectData[] = [
     title: "HEALTHLENS",
     desc: "Medical charges dashboard visualizing the classic insurance dataset. Scatter plot, bar chart, box plot, and histogram built with D3.js, with animated entry transitions and hover effects via anime.js. Deployed on Netlify.",
     tags: ["D3.js", "anime.js", "Vite", "Netlify"],
-    img: "/images/projects/healthlens.png",
+    img: "/images/projects/healthlens.webp",
     coverAspect: 0.926,
     coverBg: "#0F172A", // sampled edge of the screenshot
     github: "https://github.com/ExoticPengy/data-visualization",
@@ -315,7 +315,7 @@ export const PROJECTS: ProjectData[] = [
       "Animated entry transitions and hover effects",
     ],
     screenshots: [
-      "/images/projects/healthlens-kpis.png",
+      "/images/projects/healthlens-kpis.webp",
     ],
   },
   {
@@ -323,7 +323,7 @@ export const PROJECTS: ProjectData[] = [
     title: "FOODTRUST",
     desc: "Browser extension that brings transparency to Google Maps restaurant reviews. Scans a listing in real time, flags suspicious reviews with an AI-written reason and probability, and paints an overall trust score onto the page. Built at the Great AI Hackathon 2025 with Team Penguining.",
     tags: ["Python", "scikit-learn", "AWS Bedrock", "HACKATHON"],
-    img: "/images/projects/foodtrust-analysis.png",
+    img: "/images/projects/foodtrust-analysis.webp",
     coverAspect: 1.189,
     coverBg: "#291A29", // sampled edge of the screenshot
     github: "https://github.com/ExoticPengy/FoodTrust",
@@ -359,8 +359,8 @@ export const PROJECTS: ProjectData[] = [
       { name: "Tay Ernest", url: "https://portfolio-mu-peach-83.vercel.app/", role: "Team Penguining", icon: "/images/yanlok-avatar.jpg" },
     ],
     screenshots: [
-      "/images/projects/foodtrust-extension.png",
-      "/images/projects/foodtrust-architecture.png",
+      "/images/projects/foodtrust-extension.webp",
+      "/images/projects/foodtrust-architecture.webp",
     ],
   },
   {
@@ -368,7 +368,7 @@ export const PROJECTS: ProjectData[] = [
     title: "FYP API",
     desc: "EV charging station recommendation engine. FastAPI microservice with a trained ML model. Enter a trip route, get the best charger stop ranked by detour, cost, and predicted charging time.",
     tags: ["Python", "FastAPI", "scikit-learn", "ML"],
-    img: "/images/projects/fyp-api-logo.png",
+    img: "/images/projects/fyp-api-logo.webp",
     coverAspect: 0.9, // clamped: phone shots are 0.449, which would force a 1365px hero
     coverFit: "contain",
     coverBg: "#F2FBF5", // soft mint, complements the green EV mark
@@ -399,8 +399,8 @@ export const PROJECTS: ProjectData[] = [
       "Top-5 ranking by detour, availability, and power",
     ],
     screenshots: [
-      "/images/projects/fyp-api-newtrip.png",
-      "/images/projects/fyp-api-route.png",
+      "/images/projects/fyp-api-newtrip.webp",
+      "/images/projects/fyp-api-route.webp",
     ],
   },
   {
@@ -408,7 +408,7 @@ export const PROJECTS: ProjectData[] = [
     title: "ARCTIC VAULT",
     desc: "Personal finance tracker for Android with 15+ screens. Track transactions, set budgets, plan financial goals, manage debts, and get bill reminders, all offline-first with a Room database and Jetpack Compose UI.",
     tags: ["Kotlin", "Jetpack Compose", "Room", "Firebase"],
-    img: "/images/projects/arcticvault-splash.png",
+    img: "/images/projects/arcticvault-splash.webp",
     coverAspect: 0.9, // clamped: phone shots are 0.462, which would force a tall hero
     coverFit: "contain",
     coverBg: "#FFFFFF", // phone mockups sit on white
@@ -441,14 +441,14 @@ export const PROJECTS: ProjectData[] = [
     ],
     // One slide per feature, in the same order as the FEATURE UNLOCKS list.
     screenshots: [
-      "/images/projects/arcticvault-home.png",
-      "/images/projects/arcticvault-transactions.png",
-      "/images/projects/arcticvault-income.png",
-      "/images/projects/arcticvault-budgeting.png",
-      "/images/projects/arcticvault-goals.png",
-      "/images/projects/arcticvault-debt.png",
-      "/images/projects/arcticvault-bills.png",
-      "/images/projects/arcticvault-analysis.png",
+      "/images/projects/arcticvault-home.webp",
+      "/images/projects/arcticvault-transactions.webp",
+      "/images/projects/arcticvault-income.webp",
+      "/images/projects/arcticvault-budgeting.webp",
+      "/images/projects/arcticvault-goals.webp",
+      "/images/projects/arcticvault-debt.webp",
+      "/images/projects/arcticvault-bills.webp",
+      "/images/projects/arcticvault-analysis.webp",
     ],
   },
 ];
@@ -493,7 +493,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
     whoosh(0.4);
     const pix = pixRef.current, img = detailCover();
     if (pix && img && motionOk()) {
-      // busy only, not `animating`: toggling that re-adds the grid's reveal classes and makes the cards blink.
+      // busy only, not `animating`: the grid is not mounted until the reverse ends, so no tab order to drop.
       busy.current = true;
       pix.reverse(img, () => setSelected(null))
         .catch(() => setSelected(null))
@@ -558,6 +558,7 @@ export default function Projects({ onBack }: { onBack: () => void }) {
                   <img
                     src={p.img}
                     alt={p.title}
+                    loading="lazy"
                     style={p.coverBg ? { background: p.coverBg } : undefined}
                     className={`project-cover${p.coverFit === "contain" ? " is-contain" : ""}`}
                   />

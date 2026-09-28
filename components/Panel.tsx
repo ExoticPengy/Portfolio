@@ -19,20 +19,20 @@ type Props = {
 };
 
 const ART: Record<PanelData["id"], { sources?: ArtSource[]; icons?: ReactNode[] }> = {
-  about: { sources: [{ src: "/headshot.png" }] },
+  about: { sources: [{ src: "/headshot.webp" }] },
   projects: { sources: PROJECTS.map((p) => ({ src: p.img, fit: p.coverFit ?? "cover", bg: p.coverBg })) },
   skills: {
     icons: topSkills(SKILLS).flatMap((n) => {
       const Icon = ICONS[n];
-      return Icon ? [<Icon key={n} color={COLORS[n]} />] : [];
+      return Icon ? [<Icon key={n} color={COLORS[n]} aria-hidden />] : [];
     }),
   },
   contact: {
     icons: [
-      <FaEnvelope key="mail" color="#EA4335" />,
-      <FaGithub key="gh" color="#181717" />,
-      <FaLinkedin key="li" color="#0A66C2" />,
-      <FaInstagram key="ig" color="#E4405F" />,
+      <FaEnvelope key="mail" color="#EA4335" aria-hidden />,
+      <FaGithub key="gh" color="#181717" aria-hidden />,
+      <FaLinkedin key="li" color="#0A66C2" aria-hidden />,
+      <FaInstagram key="ig" color="#E4405F" aria-hidden />,
     ],
   },
 };

@@ -13,13 +13,15 @@ export default function Narrator({ line }: { line: Line | null }) {
   const { tweaks, setTweak } = useTweaks();
   const [shown, setShown] = useState(0);
   const [open, setOpen] = useState(false);
+  const [cur, setCur] = useState(line);
   const text = line?.text ?? "";
 
-  useEffect(() => {
-    if (!line) return;
-    setOpen(true);
-    setShown(motionOk() ? 0 : line.text.length);
-  }, [line]);
+  // Reset during render, not in an effect, so a new line never paints with the old line's count.
+  if (line !== cur) {
+    setCur(line);
+    setOpen(!!line);
+    setShown(motionOk() ? 0 : text.length);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -43,6 +45,8 @@ export default function Narrator({ line }: { line: Line | null }) {
           title="Hide narrator (turn back on in ⚙ Tweaks)"
           onClick={(e) => {
             e.stopPropagation();
+            // The box unmounts; hand focus to the section's back button instead of dropping it to body.
+            e.currentTarget.closest(".crt")?.querySelector<HTMLElement>(".back")?.focus();
             setTweak("narrator", false);
             notify("NARRATOR OFF · TURN BACK ON IN ⚙ TWEAKS");
           }}

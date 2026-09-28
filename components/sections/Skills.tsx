@@ -149,7 +149,7 @@ export default function Skills({ onBack }: { onBack: () => void }) {
                 return (
                   <li key={n} style={{ "--i": j } as React.CSSProperties}>
                     <span className="skill-label">
-                      {Icon ? <Icon className="skill-icon" color={clr} /> : <span className="skill-icon ph" />}
+                      {Icon ? <Icon className="skill-icon" color={clr} aria-hidden /> : <span className="skill-icon ph" />}
                       {n}
                     </span>
                     <span className="bar" style={{ "--lvl": lvl + "%" } as React.CSSProperties} />
