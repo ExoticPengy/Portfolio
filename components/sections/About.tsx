@@ -1,5 +1,8 @@
 import SectionShell from "./SectionShell";
 import CommitLog from "./CommitLog";
+import { PROJECTS } from "./Projects";
+
+const LIVE = PROJECTS.filter((p) => p.live).length;
 
 export default function About({ onBack }: { onBack: () => void }) {
   return (
@@ -10,16 +13,19 @@ export default function About({ onBack }: { onBack: () => void }) {
             <span className="dim">{"// player profile"}</span>
             <span className="accent">Chong Ming Li</span> — Software Developer · Data Scientist
             <br />
-            Building things that ship and making sure they keep running.
+            Based in Malaysia, remote OK. I build full-stack products and the data work behind
+            them, and I care that they stay up after launch.
           </p>
           <p>
             <span className="dim">{"// current quest"}</span>
-            Full-stack generalist. Currently grinding through web systems,
-            data pipelines, and whatever interesting problem lands on my desk next.
+            Building developer tools and AI data products. Lately: supaswap, a Homebrew CLI
+            that switches Supabase accounts in one command; a one-paste installer for
+            self-hosted n8n on Docker; and BigQuery connectors and scheduled briefings for BINGO.
           </p>
           <p>
             <span className="dim">{"// loadout"}</span>
-            Ship early. Delete ruthlessly. Add only what you need.
+            Next.js and TypeScript up front, Python and FastAPI behind, SQL and ML for the data.
+            Ship it, then make it better.
           </p>
         </div>
         <div className="about-stats" style={{ marginTop: 36 }}>
@@ -33,15 +39,15 @@ export default function About({ onBack }: { onBack: () => void }) {
             <div className="value count pad" style={{ "--to": 5 } as React.CSSProperties}><span className="sr-only">05</span></div>
             <div className="unit">and counting</div>
           </div>
-          <div className="stat-card dlg" data-enc="drinks">
-            <div className="label">Energy Drinks / Day</div>
-            <div className="value count pad" style={{ "--to": 3 } as React.CSSProperties}><span className="sr-only">03</span></div>
-            <div className="unit">averaged · cal.</div>
+          <div className="stat-card dlg" data-enc="live">
+            <div className="label">Live Sites</div>
+            <div className="value count pad" style={{ "--to": LIVE } as React.CSSProperties}><span className="sr-only">{String(LIVE).padStart(2, "0")}</span></div>
+            <div className="unit">try them in Projects</div>
           </div>
-          <div className="stat-card dlg" data-enc="oss">
-            <div className="label">Open Source</div>
-            <div className="value">∞</div>
-            <div className="unit">always shipping</div>
+          <div className="stat-card dlg" data-enc="repos">
+            <div className="label">Public Repos</div>
+            <div className="value count" style={{ "--to": 25 } as React.CSSProperties}><span className="sr-only">25</span></div>
+            <div className="unit">on GitHub</div>
           </div>
         </div>
       </div>

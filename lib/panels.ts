@@ -9,7 +9,7 @@ export const PANELS: PanelData[] = [
     id: "about", num: "01", label: "ABOUT", glyph: "◆", hp: 150,
     strip: "CHARACTER · DEV × DATA SCIENTIST",
     attack: { name: "Ship It", desc: "products in production", value: "5+" },
-    flavour: "Delete ruthlessly. Add only what you need.",
+    flavour: "Ship it, then make it better.",
     x: -380, y: -215, z: 100, ry: 16, rx: -3, delay: 0,
   },
   {

@@ -24,10 +24,17 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
+const TITLE = "Chong Ming Li — Software Developer · Data Scientist";
+const DESCRIPTION = "Software developer and data scientist. An arcade-style portfolio of shipped web apps, AI products, and dev tools. Press start.";
+
+// The share image comes from app/opengraph-image.jpg (Next file convention).
 export const metadata: Metadata = {
-  title: "Chong Ming Li — Software Developer · Data Scientist",
-  description: "Personal portfolio. Stage select.",
+  metadataBase: new URL("https://exoticpengy.me"),
+  title: TITLE,
+  description: DESCRIPTION,
   icons: { icon: "/favicon.png" },
+  openGraph: { type: "website", url: "/", siteName: "Chong Ming Li", title: TITLE, description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 // Runs before first paint. Flags <html data-lite> when the page renders in

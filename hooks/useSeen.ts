@@ -3,6 +3,7 @@
 import { useEffect, type RefObject } from "react";
 import { motionOk } from "@/components/PixelCanvas";
 import { wildLine } from "@/lib/encounter";
+import { encounter } from "@/lib/audio";
 
 // Marks [data-enc] items in the scroll box with data-seen the first time they are 25% in view.
 // data-seen="" pops (CSS); "old" shows without a pop: lite, reduced motion, or a remount of a key
@@ -35,6 +36,7 @@ export function useSeen(root: RefObject<HTMLElement | null>, onLine: (text: stri
     const flush = () => {
       if (!scrolled) return;
       const text = wildLine(wild) ?? lines[0];
+      if (wild.length) encounter();
       lines = [];
       wild = [];
       if (text) onLine(text);

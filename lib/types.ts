@@ -74,7 +74,7 @@ export const DEFAULT_TWEAKS: Tweaks = {
   soundEnabled: true,
   musicEnabled: true,
   sfxVolume: 8,
-  musicVolume: 3,
+  musicVolume: 2,
   shiny: false,
   lite: "auto",
   narrator: true,

@@ -8,7 +8,7 @@ import { useFlyTransition } from "@/hooks/useFlyTransition";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
 import { useKonami } from "@/hooks/useKonami";
 import { useAudio } from "@/hooks/useAudio";
-import { whoosh, click, hover as hoverSfx, thud, startMusic, stopMusic, setSfxVolume, setMusicVolume } from "@/lib/audio";
+import { whoosh, click, hover as hoverSfx, thud, startMusic, stopMusic, hit, setSfxVolume, setMusicVolume } from "@/lib/audio";
 import BootSequence from "./BootSequence";
 import { parseHash, formatHash } from "@/lib/route";
 import type { View } from "@/lib/types";
@@ -201,6 +201,7 @@ export default function Stage() {
         level={level}
         onPokemonClick={(name, x, y) => {
           unlock("catch");
+          hit();
           handleLevelUp();
           moveFxRef.current?.trigger(x, y, name);
         }}

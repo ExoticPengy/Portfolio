@@ -1,3 +1,5 @@
+import { SCALE, walk } from "./music";
+
 let ctx: AudioContext | null = null;
 let enabled = true;
 let sfxBus: GainNode | null = null;
@@ -205,100 +207,113 @@ export function coinDrop() {
 export function setEnabled(v: boolean) { enabled = !!v; }
 export function init() { getCtx(); }
 
-// --- Background music: procedural chiptune loop ---
-// ponytail: 16-bar / 64-step loop (~8.3s). Lengthen MELODY/CHORDS further if needed.
+// Tiny single-tone blip on the SFX bus; the building block for the short UI sounds below.
+function blip(c: AudioContext, freq: number, t: number, dur: number, type: OscillatorType, vol: number, to = freq) {
+  const osc = c.createOscillator();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t);
+  if (to !== freq) osc.frequency.exponentialRampToValueAtTime(to, t + dur);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.connect(g).connect(getSfxBus(c));
+  osc.start(t);
+  osc.stop(t + dur + 0.01);
+}
+
+function sfx(): AudioContext | null {
+  return enabled ? getCtx() : null;
+}
+
+export function tick() {
+  const c = sfx();
+  if (c) blip(c, 1500, c.currentTime, 0.03, "sine", 0.05);
+}
+
+// Dialogue text blip, pitch jittered so a long line does not drone.
+export function typeBlip() {
+  const c = sfx();
+  if (c) blip(c, 560 + Math.random() * 80, c.currentTime, 0.025, "square", 0.02);
+}
+
+// "A wild X appeared!": a quick up-down flutter, then a held high note.
+export function encounter() {
+  const c = sfx();
+  if (!c) return;
+  [330, 660, 330, 660].forEach((f, i) => blip(c, f, c.currentTime + i * 0.05, 0.05, "square", 0.05));
+  blip(c, 880, c.currentTime + 0.2, 0.3, "square", 0.05);
+}
+
+// Pokémon attack: a hit that drops in pitch plus a short burst of noise.
+export function hit() {
+  const c = sfx();
+  if (!c) return;
+  blip(c, 600, c.currentTime, 0.15, "square", 0.08, 90);
+  const buf = noiseBuffer(0.12);
+  if (!buf) return;
+  const src = c.createBufferSource();
+  src.buffer = buf;
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.12, c.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.12);
+  src.connect(g).connect(getSfxBus(c));
+  src.start();
+}
+
+// --- Background music: slow generative chiptune ---
+// A fixed chord loop under a melody that random-walks the pentatonic scale, so it never repeats note for note.
 let musicOn = false;
 let musicTimer: ReturnType<typeof setInterval> | null = null;
 let musicGain: GainNode | null = null;
 let nextStepTime = 0;
 let step = 0;
+let note = 4;
+let padFilter: BiquadFilterNode | null = null;
 
-const STEP_DUR = 0.13;                 // seconds per 8th note (snappier tempo)
-const SEMI = (n: number) => 261.63 * Math.pow(2, n / 12); // base C4
+const STEP_DUR = 0.43; // 8th note at ~70 BPM
+const BAR = 8;
+const SEMI = (n: number) => 261.63 * Math.pow(2, n / 12); // from C4
 
-// 16 bars, one chord root per bar (4 steps each). C major, upbeat pop motion.
-const CHORDS = [
-  0, 7, 9, 5,  0, 7, 5, 7,   // C G Am F  C G F G
-  9, 5, 0, 7,  5, 0, 7, 7,   // Am F C G  F C G G
-];
+// Two bars per chord: F  C  G  Am, as semitones from C4.
+const CHORDS = [[5, 9, 12], [0, 4, 7], [7, 11, 14], [9, 12, 16]];
 
-// 64-step lead melody (semitone from C4, REST = silence). Outlines the chords
-// with passing tones + register shifts so the loop sounds composed, not looped.
-const REST = -99;
-const MELODY = [
-  12, 4, 7, 4,    14, 11, 7, 11,   16, 12, 9, 12,   12, 9, 5, 9,    // bars 1-4
-  7, 4, 0, 4,     11, 7, 11, 14,   12, 9, 12, 17,   14, 11, 7, REST, // bars 5-8
-  21, 16, 12, 16, 17, 12, 9, 12,   16, 12, 7, 12,   14, 11, 7, 11,  // bars 9-12
-  17, 12, 9, 5,   12, 7, 4, 0,     11, 14, 11, 7,   7, 11, 14, REST, // bars 13-16
-];
-const TOTAL = MELODY.length;
-
-function voice(c: AudioContext, freq: number, t: number, dur: number, type: OscillatorType, vol: number) {
-  if (!musicGain) return;
+function tone(c: AudioContext, freq: number, t: number, attack: number, dur: number, type: OscillatorType, vol: number, dest: AudioNode) {
   const osc = c.createOscillator();
   osc.type = type;
   osc.frequency.setValueAtTime(freq, t);
   const g = c.createGain();
   g.gain.setValueAtTime(0.0001, t);
-  g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+  g.gain.exponentialRampToValueAtTime(vol, t + attack);
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  osc.connect(g).connect(musicGain);
+  osc.connect(g).connect(dest);
   osc.start(t);
-  osc.stop(t + dur + 0.02);
+  osc.stop(t + dur + 0.05);
 }
 
-function kick(c: AudioContext, t: number) {
-  if (!musicGain) return;
-  const osc = c.createOscillator();
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(150, t);
-  osc.frequency.exponentialRampToValueAtTime(45, t + 0.12);
-  const g = c.createGain();
-  g.gain.setValueAtTime(0.5, t);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-  osc.connect(g).connect(musicGain);
-  osc.start(t);
-  osc.stop(t + 0.16);
-}
-
-function noiseHit(c: AudioContext, t: number, dur: number, vol: number, hp: number) {
-  if (!musicGain) return;
-  const buf = noiseBuffer(dur);
-  if (!buf) return;
-  const src = c.createBufferSource();
-  src.buffer = buf;
-  const f = c.createBiquadFilter();
-  f.type = "highpass";
-  f.frequency.value = hp;
-  const g = c.createGain();
-  g.gain.setValueAtTime(vol, t);
-  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  src.connect(f).connect(g).connect(musicGain);
-  src.start(t);
-  src.stop(t + dur);
-}
-
-function scheduleStep(c: AudioContext, t: number) {
-  const root = CHORDS[Math.floor(step / 4) % CHORDS.length];
-  // lead melody
-  const note = MELODY[step % TOTAL];
-  if (note > REST) voice(c, SEMI(note), t, STEP_DUR * 0.85, "square", 0.08);
-  // bouncing bass: root on the beat, fifth on the off-beat
-  const bassSemi = root - 12 + (step % 2 === 1 ? 7 : 0);
-  voice(c, SEMI(bassSemi), t, STEP_DUR * 0.9, "triangle", 0.12);
-  // drums
-  if (step % 4 === 0) kick(c, t);
-  if (step % 8 === 4) noiseHit(c, t, 0.12, 0.18, 1500); // snare backbeat
-  noiseHit(c, t, 0.03, step % 2 === 0 ? 0.05 : 0.09, 7000); // hi-hat, offbeat accent
+function scheduleStep(c: AudioContext, t: number, out: GainNode, pad: BiquadFilterNode) {
+  const chord = CHORDS[Math.floor(step / (BAR * 2)) % CHORDS.length];
+  if (step % (BAR * 2) === 0) {
+    const len = STEP_DUR * BAR * 2;
+    chord.forEach((n) => tone(c, SEMI(n - 12), t, 1.2, len, "sawtooth", 0.03, pad));
+  }
+  if (step % BAR === 0) tone(c, SEMI(chord[0] - 24), t, 0.02, STEP_DUR * BAR, "sine", 0.14, out);
+  // Mostly on the beat, sometimes off it, often silent: space is what keeps it calm.
+  if (Math.random() < (step % 2 === 0 ? 0.55 : 0.12)) {
+    note = walk(note, Math.random);
+    tone(c, SEMI(SCALE[note] + 12), t, 0.03, STEP_DUR * 2.5, "triangle", 0.09, out);
+  }
 }
 
 function scheduler() {
   const c = getCtx();
-  if (!c || !musicOn) return;
-  while (nextStepTime < c.currentTime + 0.1) {
-    scheduleStep(c, nextStepTime);
+  if (!c || !musicOn || !musicGain || !padFilter) return;
+  if (document.hidden) return; // background tab: let the tails ring out, pick up again on return
+  if (nextStepTime < c.currentTime) nextStepTime = c.currentTime + 0.05; // resync after a pause, no burst
+  while (nextStepTime < c.currentTime + 0.2) {
+    scheduleStep(c, nextStepTime, musicGain, padFilter);
     nextStepTime += STEP_DUR;
-    step = (step + 1) % TOTAL;
+    step++;
   }
 }
 
@@ -308,11 +323,30 @@ export function startMusic() {
   musicOn = true;
   musicGain = c.createGain();
   musicGain.gain.setValueAtTime(0.0001, c.currentTime);
-  musicGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, musicVol), c.currentTime + 1.5); // fade in
+  musicGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, musicVol), c.currentTime + 3); // slow fade in
   musicGain.connect(c.destination);
+
+  // Echo: dotted-8th delay, darkened each repeat, fed back at 35%.
+  const delay = c.createDelay(1);
+  delay.delayTime.value = STEP_DUR * 1.5;
+  const fb = c.createGain();
+  fb.gain.value = 0.35;
+  const dark = c.createBiquadFilter();
+  dark.type = "lowpass";
+  dark.frequency.value = 1800;
+  const wet = c.createGain();
+  wet.gain.value = 0.4;
+  musicGain.connect(delay).connect(dark).connect(fb).connect(delay);
+  dark.connect(wet).connect(c.destination);
+
+  padFilter = c.createBiquadFilter();
+  padFilter.type = "lowpass";
+  padFilter.frequency.value = 700;
+  padFilter.connect(musicGain);
+
   step = 0;
   nextStepTime = c.currentTime + 0.1;
-  musicTimer = setInterval(scheduler, 25);
+  musicTimer = setInterval(scheduler, 50);
 }
 
 export function stopMusic() {
@@ -326,5 +360,6 @@ export function stopMusic() {
     g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4); // fade out
     setTimeout(() => { try { g.disconnect(); } catch { /* ignore */ } }, 500);
     musicGain = null;
+    padFilter = null;
   }
 }

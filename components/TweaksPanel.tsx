@@ -6,6 +6,7 @@ import { PALETTE_OPTIONS } from "@/lib/palettes";
 import type { PaletteName, Tweaks } from "@/lib/types";
 import { ACHIEVEMENTS } from "@/lib/achievements";
 import { useAchievements, resetAchievements } from "@/hooks/useAchievements";
+import { tick } from "@/lib/audio";
 
 export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => void }) {
   const { tweaks, setTweak } = useTweaks();
@@ -47,7 +48,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
           <Row label="Palette">
             <select
               value={tweaks.palette}
-              onChange={(e) => setTweak("palette", e.target.value as PaletteName)}
+              onChange={(e) => { tick(); setTweak("palette", e.target.value as PaletteName); }}
               style={selectStyle}
             >
               {PALETTE_OPTIONS.map((o) => (
@@ -64,7 +65,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
             <input
               type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.motionIntensity}
-              onChange={(e) => setTweak("motionIntensity", Number(e.target.value))}
+              onChange={(e) => { tick(); setTweak("motionIntensity", Number(e.target.value)); }}
               style={{ width: 120, flex: "none" }}
             />
           </Row>
@@ -72,7 +73,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
           <Row label="Lite Mode">
             <select
               value={tweaks.lite}
-              onChange={(e) => setTweak("lite", e.target.value as Tweaks["lite"])}
+              onChange={(e) => { tick(); setTweak("lite", e.target.value as Tweaks["lite"]); }}
               style={selectStyle}
             >
               <option value="auto">Auto</option>
@@ -87,7 +88,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
             <input
               type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.sfxVolume}
-              onChange={(e) => setTweak("sfxVolume", Number(e.target.value))}
+              onChange={(e) => { tick(); setTweak("sfxVolume", Number(e.target.value)); }}
               style={{ width: 120, flex: "none" }}
             />
           </Row>
@@ -96,7 +97,7 @@ export default function TweaksPanel({ onResetLevel }: { onResetLevel?: () => voi
             <input
               type="range" className="tw-range" min={0} max={10} step={1}
               value={tweaks.musicVolume}
-              onChange={(e) => setTweak("musicVolume", Number(e.target.value))}
+              onChange={(e) => { tick(); setTweak("musicVolume", Number(e.target.value)); }}
               style={{ width: 120, flex: "none" }}
             />
           </Row>
@@ -198,7 +199,7 @@ function Toggle({ label, value, onChange }: { label: string; value: boolean; onC
     <Row label={label}>
       <button
         type="button"
-        onClick={() => onChange(!value)}
+        onClick={() => { tick(); onChange(!value); }}
         style={{
           background: value ? "var(--accent)" : "transparent",
           color: value ? "var(--bg-0)" : "var(--fg)",

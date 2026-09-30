@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTweaks } from "@/hooks/useTweaks";
 import { notify } from "@/hooks/useAchievements";
 import { motionOk } from "./PixelCanvas";
+import { tick, typeBlip } from "@/lib/audio";
 
 export type Line = { text: string; n: number }; // n bumps so the same text can be said again
 
@@ -25,6 +26,7 @@ export default function Narrator({ line }: { line: Line | null }) {
 
   useEffect(() => {
     if (!open) return;
+    if (shown % 3 === 1 && text[shown - 1] !== " ") typeBlip();
     const t = shown < text.length
       ? setTimeout(() => setShown((s) => s + 1), 28)
       : setTimeout(() => setOpen(false), 4000);
@@ -45,6 +47,7 @@ export default function Narrator({ line }: { line: Line | null }) {
           title="Hide narrator (turn back on in ⚙ Tweaks)"
           onClick={(e) => {
             e.stopPropagation();
+            tick();
             // The box unmounts; hand focus to the section's back button instead of dropping it to body.
             e.currentTarget.closest(".crt")?.querySelector<HTMLElement>(".back")?.focus();
             setTweak("narrator", false);
