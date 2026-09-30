@@ -1,20 +1,57 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { FaGithub, FaGlobe } from "react-icons/fa";
 import { SLIDE_BG } from "@/lib/slideBg";
 import type { ProjectData } from "@/lib/types";
 import { unlock } from "@/hooks/useAchievements";
+import { motionOk } from "../PixelCanvas";
 
 type Props = {
   project: ProjectData;
+  prev?: ProjectData;
+  next?: ProjectData;
+  onGo: (p: ProjectData) => void;
   onBack: () => void;
   exiting?: boolean;
 };
 
-export default function ProjectDetail({ project, onBack, exiting }: Props) {
+export default function ProjectDetail({ project, prev, next, onGo, onBack, exiting }: Props) {
   const slides = [project.img, ...(project.screenshots ?? [])];
   const [idx, setIdx] = useState(0);
   const [zoomed, setZoomed] = useState(false);
+  const topBack = useRef<HTMLButtonElement>(null);
+  const bottomBack = useRef<HTMLButtonElement>(null);
+  const [docked, setDocked] = useState(false); // back button lives at the bottom slot
+
+  // One visible back button: whichever slot is on screen owns it; the top slot wins when both are.
+  useEffect(() => {
+    const top = topBack.current, bottom = bottomBack.current;
+    if (!top || !bottom) return;
+    const onScreen = new Map<Element, boolean>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) onScreen.set(e.target, e.isIntersecting);
+      if (onScreen.get(top)) setDocked(false);
+      else if (onScreen.get(bottom)) setDocked(true);
+    }, { root: top.closest(".crt-scroll") });
+    io.observe(top);
+    io.observe(bottom);
+    return () => io.disconnect();
+  }, []);
+
+  // Fly the new owner in from where the old one sits, pinned to the screen edge if it's scrolled off.
+  const firstDock = useRef(true);
+  useLayoutEffect(() => {
+    if (firstDock.current) { firstDock.current = false; return; }
+    const [from, to] = docked ? [topBack.current, bottomBack.current] : [bottomBack.current, topBack.current];
+    const view = to?.closest(".crt-scroll");
+    if (!from || !to || !view || !motionOk()) return;
+    const a = from.getBoundingClientRect(), b = to.getBoundingClientRect(), v = view.getBoundingClientRect();
+    const y = Math.min(Math.max(a.top, v.top), v.bottom - a.height);
+    to.animate(
+      [{ transform: `translate(${a.left - b.left}px, ${y - b.top}px)` }, { transform: "none" }],
+      { duration: 550, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" },
+    );
+  }, [docked]);
 
   const go = useCallback(
     (dir: number) => setIdx((i) => (i + dir + slides.length) % slides.length),
@@ -34,6 +71,16 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.num]);
 
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") go(1);
+      else if (e.key === "ArrowLeft") go(-1);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [go, slides.length]);
+
   // Capture phase: Escape must close the zoom, not fall through to "back to stages".
   useEffect(() => {
     if (!zoomed) return;
@@ -41,12 +88,6 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
       if (e.key === "Escape") {
         e.stopPropagation();
         setZoomed(false);
-      } else if (e.key === "ArrowRight") {
-        e.stopPropagation();
-        go(1);
-      } else if (e.key === "ArrowLeft") {
-        e.stopPropagation();
-        go(-1);
       }
     };
     window.addEventListener("keydown", handler, true);
@@ -56,7 +97,7 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
   return (
     <div className={`project-detail${exiting ? " exiting" : ""}`}>
       <div className="project-detail-header">
-        <button className="project-detail-back" onClick={onBack}>
+        <button ref={topBack} className={`project-detail-back${docked ? " is-away" : ""}`} onClick={onBack}>
           ◀ BACK TO STAGES
         </button>
       </div>
@@ -193,8 +234,22 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
         </div>
       )}
 
-      {project.stack && project.stack.length > 0 && (
+      {project.features && project.features.length > 0 && (
         <div className="project-detail-section reveal d2">
+          <h2 className="project-detail-section-title">FEATURE UNLOCKS</h2>
+          <ul className="project-detail-features">
+            {project.features.map((f, i) => (
+              <li key={i} className="feature-item">
+                <span className="feature-star">★</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {project.stack && project.stack.length > 0 && (
+        <div className="project-detail-section reveal d3">
           <h2 className="project-detail-section-title">TECH LOADOUT</h2>
           <ul className="project-detail-stack">
             {project.stack.map((s) => (
@@ -202,20 +257,6 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
                 <span className="stack-name">{s.name}</span>
                 <span className="stack-dot">·</span>
                 <span className="stack-role">{s.role}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {project.features && project.features.length > 0 && (
-        <div className="project-detail-section reveal d3">
-          <h2 className="project-detail-section-title">FEATURE UNLOCKS</h2>
-          <ul className="project-detail-features">
-            {project.features.map((f, i) => (
-              <li key={i} className="feature-item">
-                <span className="feature-star">★</span>
-                <span>{f}</span>
               </li>
             ))}
           </ul>
@@ -265,6 +306,24 @@ export default function ProjectDetail({ project, onBack, exiting }: Props) {
           </ul>
         </div>
       )}
+
+      <div className="project-detail-footer">
+        <button ref={bottomBack} className={`project-detail-back${docked ? "" : " is-away"}`} onClick={onBack}>
+          ◀ BACK TO STAGES
+        </button>
+        <div className="project-detail-neighbors">
+          {prev && (
+            <button className="project-detail-back" onClick={() => onGo(prev)}>
+              ◀ {prev.num} · {prev.title}
+            </button>
+          )}
+          {next && (
+            <button className="project-detail-back" onClick={() => onGo(next)}>
+              {next.num} · {next.title} ▶
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Portalled to body: an ancestor creates a containing block, which would
           otherwise anchor this `fixed` overlay to the section instead of the viewport. */}

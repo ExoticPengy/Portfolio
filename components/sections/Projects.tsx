@@ -539,6 +539,7 @@ function pickTransition() {
 }
 
 const detailCover = () => document.querySelector<HTMLImageElement>(".project-detail-img img");
+const scroller = () => document.querySelector<HTMLElement>(".section-view.visible .crt-scroll");
 
 export default function Projects({ onBack }: { onBack: () => void }) {
   const [selected, setSelected] = useState<ProjectData | null>(null);
@@ -546,17 +547,26 @@ export default function Projects({ onBack }: { onBack: () => void }) {
   const [exiting, setExiting] = useState(false);
   const pixRef = useRef<PixelHandle | null>(null);
   const busy = useRef(false); // sync guard; `animating` state lags a render behind a fast double click
+  const gridSpot = useRef<{ top: number; num: string } | null>(null);
 
   // Layout effect so the encounter reveal measures the detail cover after the scroll reset, not before.
   useLayoutEffect(() => {
-    const view = document.querySelector<HTMLElement>(".section-view.visible .crt-scroll");
-    if (view) view.scrollTop = 0;
+    const view = scroller();
+    if (!view) return;
+    if (selected) { view.scrollTop = 0; return; }
+    const spot = gridSpot.current;
+    if (!spot) return;
+    view.scrollTop = spot.top;
+    const card = document.querySelector<HTMLElement>(`[data-enc="${spot.num}"]`);
+    card?.focus({ preventScroll: true });
+    card?.scrollIntoView({ block: "nearest" }); // prev/next may have moved on to a card that is off-screen
   }, [selected]);
 
   useEffect(() => { if (selected) unlock("deepdive"); }, [selected]);
 
   const handleSelect = useCallback((p: ProjectData, cover: HTMLImageElement | null) => {
     if (busy.current) return;
+    gridSpot.current = { top: scroller()?.scrollTop ?? 0, num: p.num };
     click(900);
     const pix = pixRef.current;
     if (!pix || !cover || !motionOk()) { setSelected(p); return; }
@@ -574,6 +584,9 @@ export default function Projects({ onBack }: { onBack: () => void }) {
     whoosh(0.4);
     const pix = pixRef.current, img = detailCover();
     if (pix && img && motionOk()) {
+      // The reverse snapshots the cover where it sits; scrolled off-screen it would pixelate nothing visible.
+      const view = scroller();
+      if (view) view.scrollTop = 0;
       // busy only, not `animating`: the grid is not mounted until the reverse ends, so no tab order to drop.
       busy.current = true;
       pix.reverse(img, () => setSelected(null))
@@ -587,6 +600,26 @@ export default function Projects({ onBack }: { onBack: () => void }) {
       setExiting(false);
     }, 300);
   }, []);
+
+  const handleGo = useCallback((p: ProjectData) => {
+    if (busy.current) return;
+    click(900);
+    if (gridSpot.current) gridSpot.current.num = p.num;
+    setSelected(p);
+  }, []);
+
+  // Document capture sits between the lightbox (window capture, closes zoom first)
+  // and Stage (window bubble, would jump to the menu), so Escape steps back one level.
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      handleBack();
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
+  }, [selected, handleBack]);
 
   // --- Hash route: this component owns the slug in #/projects/<slug>. ---
   // Stage owns the view segment; the two never write the same part.
@@ -619,7 +652,15 @@ export default function Projects({ onBack }: { onBack: () => void }) {
       overlay={<PixelCanvas ref={pixRef} z={9500} />}>
       <div className={`project-detail-wrapper ${selected ? "active" : ""} ${exiting ? "exiting" : ""}`}>
         {selected ? (
-          <ProjectDetail project={selected} onBack={handleBack} exiting={exiting} />
+          <ProjectDetail
+            key={selected.num}
+            project={selected}
+            prev={PROJECTS[PROJECTS.indexOf(selected) - 1]}
+            next={PROJECTS[PROJECTS.indexOf(selected) + 1]}
+            onGo={handleGo}
+            onBack={handleBack}
+            exiting={exiting}
+          />
         ) : (
           <div className="projects-grid">
             {PROJECTS.map((p) => (
@@ -632,7 +673,9 @@ export default function Projects({ onBack }: { onBack: () => void }) {
                 role="button"
                 tabIndex={animating ? -1 : 0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSelect(p, e.currentTarget.querySelector("img"));
+                  if (e.key !== "Enter" && e.key !== " ") return;
+                  e.preventDefault();
+                  handleSelect(p, e.currentTarget.querySelector("img"));
                 }}
               >
                 <div className="project-img">

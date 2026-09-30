@@ -72,7 +72,7 @@ export default function Panel({ panel, focused, live, onActivate, onHover, onLea
       >
         <div className="tcg-top">
           <span className="tcg-name">{panel.label}</span>
-          <span className="tcg-hp">HP {panel.hp}<span className="tcg-type">{panel.glyph}</span></span>
+          <span className="tcg-hp">HP {panel.hp}<span className="tcg-type"><panel.glyph aria-hidden /></span></span>
         </div>
         <CardArt {...ART[panel.id]} hold={focused} live={live} />
         <div className="tcg-strip">{panel.strip}</div>

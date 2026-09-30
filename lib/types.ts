@@ -1,3 +1,4 @@
+import type { IconType } from "react-icons";
 export type View = "home" | "flying" | "about" | "projects" | "skills" | "contact";
 
 export interface ProjectData {
@@ -37,7 +38,7 @@ export type PanelData = {
   id: Exclude<View, "home" | "flying">;
   num: string;
   label: string;
-  glyph: string;
+  glyph: IconType; // TCG energy type, matched to the stage tint
   hp: number;
   strip: string;
   attack: { name: string; desc: string; value: string };

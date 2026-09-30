@@ -408,8 +408,7 @@ html, body {
   border-radius: 50%;
   background: var(--stage-tint);
   color: var(--bg-0);
-  font-family: var(--font-mono); /* has the glyphs; the display font falls back to emoji */
-  font-size: 11px;
+  font-size: 12px;
   box-shadow: 0 0 10px var(--stage-tint);
 }
 .card-art {
@@ -839,7 +838,8 @@ html, body {
   text-transform: uppercase;
   transition: color 200ms;
 }
-.project-card:hover .project-card-hint {
+.project-card:hover .project-card-hint,
+.project-card:focus-visible .project-card-hint {
   color: color-mix(in oklab, var(--accent) 60%, transparent);
 }
 .project-img {
@@ -976,6 +976,15 @@ html, body {
   position: relative;
   z-index: 20;
 }
+.project-detail-footer {
+  margin-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+.project-detail-neighbors { display: flex; flex-wrap: wrap; gap: 12px; }
+.project-detail-back.is-away { visibility: hidden; transition: none; }
 
 .project-detail-back {
   font-family: var(--font-mono);
